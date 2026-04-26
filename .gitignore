@@ -1,0 +1,47 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor / IDE
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# VS Code (local); un-ignore if the team shares checked-in settings
+.vscode/*
+!.vscode/extensions.json
+
+# Python (examples/)
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Env and secrets (never commit)
+.env
+.env.*
+!.env.example
+
+# Logs and temp
+*.log
+tmp/
+temp/
+*.tmp
+
+# Optional Node (if you add tooling later)
+node_modules/

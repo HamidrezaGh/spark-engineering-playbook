@@ -24,3 +24,9 @@ The first public roadmap is the [Advanced Spark Questions](docs/advanced-spark-q
 - [docs/checklists](docs/checklists/README.md): operational review checklists.
 - [examples](examples/README.md): PySpark, SQL, and configuration examples used by the handbook.
 - [diagrams](diagrams/README.md): source files for execution, storage, and platform diagrams.
+
+## License
+
+This repository is under the [MIT License](LICENSE). Others may use, copy, modify, and distribute the content; they should include the copyright and license notice in substantial copies.
+
+As the **copyright holder**, you are not “giving up” your right to publish: you can still create a book (print, ebook, paid course, etc.) from the same material. The MIT License grants broad permissions to **others**; it does not block you from commercial publishing later.
