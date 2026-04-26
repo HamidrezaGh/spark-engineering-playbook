@@ -14,7 +14,7 @@ A Structured Streaming query reads from a source (Kafka, files, Kinesis) one mic
 
 The checkpoint location is the durable single source of truth for "what has been processed and where are we." Lose the checkpoint and the streaming query has to start over from a configured starting offset.
 
-## Mermaid Diagram
+## Structured Streaming Checkpoint and State Flow
 
 ```mermaid
 flowchart LR

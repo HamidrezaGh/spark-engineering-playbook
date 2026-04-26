@@ -13,7 +13,7 @@ The hierarchy is:
 - Stage: a contiguous block of pipelined narrow transformations. Stages are separated by `Exchange` (shuffle) operators.
 - Task: one partition's worth of work in one stage, executed on one executor core.
 
-## Mermaid Diagram
+## Spark Job, Stage, and Task Hierarchy
 
 ```mermaid
 flowchart TB

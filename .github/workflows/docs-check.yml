@@ -17,16 +17,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
+      - name: Run markdownlint-cli2
+        uses: DavidAnson/markdownlint-cli2-action@v23
         with:
-          node-version: "20"
-
-      - name: Install markdownlint-cli2
-        run: npm install -g markdownlint-cli2
-
-      - name: Run markdownlint
-        run: markdownlint-cli2 "**/*.md" "#node_modules"
+          config: .markdownlint.json
+          globs: |
+            **/*.md
+            #node_modules
 
   link-check:
     name: Markdown link check
@@ -38,16 +35,17 @@ jobs:
       - name: Run lychee link checker
         uses: lycheeverse/lychee-action@v2
         with:
+          # Folded string: one space-separated arg list for the lychee binary
           args: >-
             --no-progress
             --exclude-mail
             --exclude-loopback
             --exclude-private
-            --exclude '^https?://localhost'
-            --exclude '^https?://127\.0\.0\.1'
-            --exclude '^s3://'
-            --exclude '^hdfs://'
-            --exclude '^file:'
+            --exclude ^https?://localhost
+            --exclude ^https?://127\.0\.0\.1
+            --exclude ^s3://
+            --exclude ^hdfs://
+            --exclude ^file:
             './**/*.md'
           fail: true
 
@@ -73,7 +71,7 @@ jobs:
           fi
 
   shell-check:
-    name: Shell script syntax
+    name: Shell script syntax and shellcheck
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

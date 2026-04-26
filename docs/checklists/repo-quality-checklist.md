@@ -31,4 +31,4 @@ For each book chapter touched in a change:
 ## Automation
 
 - [ ] `markdownlint-cli2` passes locally: `npx markdownlint-cli2 "**/*.md" "#node_modules"`.
-- [ ] CI: `.github/workflows/markdown-lint.yml` and [`docs-check.yml`](../../.github/workflows/docs-check.yml) are green on the PR.
+- [ ] CI: [`docs-check.yml`](../../.github/workflows/docs-check.yml) (Markdown lint, link check, Python compile, shell checks) is green on the PR.

@@ -1,6 +1,8 @@
 # The Spark Engineering Book
 
-This is the main handbook. Each chapter is written for engineers who are already comfortable with basic Spark and want production-level depth: how Spark behaves internally, what fails in real systems, how to diagnose it from the Spark UI, and how to choose tradeoffs at staff-level.
+This is the main handbook.
+
+Each chapter is written for engineers who are already comfortable with basic Spark and want production-level depth: how Spark behaves internally, what fails in real systems, how to diagnose it from the Spark UI, and how to choose tradeoffs at staff-level.
 
 The chapters can be read in order, but most are also useful as standalone references during incidents or design reviews.
 
