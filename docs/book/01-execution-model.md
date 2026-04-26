@@ -2,6 +2,17 @@
 
 This is the foundation chapter. If you only get one Spark mental model right, get this one right. Almost every production decision — tuning, debugging, design review, cost — is downstream of understanding how Spark turns code into jobs, stages, and tasks, and what runs where.
 
+## When This Chapter Matters
+
+Reach for this chapter when:
+
+- You are tuning or resizing executors without knowing **which stage** is dominant in the Spark UI.
+- An incident report says “Spark was slow” and you need to translate that into **jobs, stages, tasks, shuffle, or driver** behavior.
+- You are reviewing a design and need to predict **where stage boundaries** will appear before the job runs.
+- You are operating on **EMR/YARN** and need to separate “driver died” from “executor lost shuffle” from “YARN killed the container.”
+
+If you already read stages fluently in the UI, skim the **EXPLAIN** section and the EMR notes — those are the production differentiators.
+
 ## What You Should Be Able To Answer
 
 After this chapter, you should be able to answer quickly, from memory:
@@ -30,6 +41,19 @@ The useful production model is:
 - **Task** — one unit of work over one partition of data.
 
 Shuffles sit *between* stages. The upstream stage performs a **shuffle write** (partitioning + writing shuffle files to local disk). The downstream stage performs a **shuffle read** (fetching those files over the network) and continues processing.
+
+### Spark application vs job vs stage vs task
+
+These terms are easy to conflate because people say “the job” when they mean “the Spark application.” In this book:
+
+| Term | What it is | Production handle |
+| --- | --- | --- |
+| **Application** | One running Spark driver plus its executors for a single `SparkSession` / context — from `spark-submit` start until exit | YARN application / EMR step; owns all jobs below |
+| **Job** | Work triggered by **one action** (`count`, `write`, `collect`, …) | Spark UI **Jobs** tab: one row per action |
+| **Stage** | A section of the physical plan that runs without crossing a shuffle boundary | **Stages** tab; count jumps at each `Exchange` |
+| **Task** | One partition’s worth of work inside one stage | Stage detail → **Tasks** table |
+
+Multiple actions → multiple jobs in the same application. Each job has its own stage DAG, but they share executors and cached data for that application.
 
 A simple example: `df.groupBy("k").count()` typically becomes:
 

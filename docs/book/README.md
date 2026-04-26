@@ -67,8 +67,8 @@ Iceberg And Spark
 
 ### 2. [Shuffle And Performance](02-shuffle-and-performance.md)
 
-- **You'll learn:** what a shuffle actually does (map-side write, reduce-side fetch), what `Exchange` means in a plan, how shuffle partitions and AQE interact, what `FetchFailedException` usually means.
-- **Why it matters in production:** shuffle dominates cost and failure modes for most non-trivial Spark jobs.
+- **You'll learn:** map-side shuffle write vs reduce-side read, how shuffle shows up in the Spark UI, when to raise or lower `spark.sql.shuffle.partitions`, skew/spill/AQE interactions, EMR/S3 vs local shuffle storage, and what `FetchFailedException` usually means.
+- **Why it matters in production:** shuffle dominates cost and failure modes for most non-trivial Spark jobs; confusing shuffle bytes with S3 bytes is a common mis-triage.
 
 ### 3. [Partitioning](03-partitioning.md)
 
