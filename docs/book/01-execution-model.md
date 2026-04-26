@@ -296,25 +296,30 @@ Each of these maps to a different fix, which is why "the job is slow" is never a
 
 This is the workflow staff engineers actually run during incidents. It is intentionally repetitive because it works.
 
-1. **Find the bottleneck.**
-   - Spark UI → **Jobs**: which action dominates runtime?
-   - Spark UI → **Stages**: which stage dominates? Compare median vs max task time.
-   - Spark UI → **SQL**: where are the `Exchange` nodes and what join strategy was chosen?
-   - Spark UI → **Executors**: are executors dying, GC heavy, or spilling?
-   - Logs: confirm OOMs, fetch failures, retries, timeouts. On EMR, check YARN container kill reasons.
+### 1. Find the bottleneck
 
-2. **Classify the stage.**
+- Spark UI → **Jobs**: which action dominates runtime?
+- Spark UI → **Stages**: which stage dominates? Compare median vs max task time.
+- Spark UI → **SQL**: where are the `Exchange` nodes and what join strategy was chosen?
+- Spark UI → **Executors**: are executors dying, GC heavy, or spilling?
+- Logs: confirm OOMs, fetch failures, retries, timeouts. On EMR, check YARN container kill reasons.
 
-   | Symptom | Likely Cause | Smallest Safe Fix |
-   | --- | --- | --- |
-   | High shuffle read/write | Wide transformation; check filter/projection placement | Push filter/projection earlier; reduce shuffle volume |
-   | Max task time ≫ median | Skew | AQE skew handling, salt the hot key, or pre-aggregate |
-   | High spill | Per-task working set too large | More partitions; better join strategy; remove unnecessary cache |
-   | High input read time/bytes | Scan-bound | Partition pruning; column pruning; small-files compaction |
-   | Many tiny tasks + scheduler delay | Over-partitioned | Coalesce or reduce shuffle partitions |
-   | Lots of failed/retried tasks | Instability | Fix executor loss/disk/network before tuning SQL |
+### 2. Classify the stage
 
-3. **Change one thing.** Re-run. Compare the same stage metrics: duration, max task time, shuffle bytes, spill, input bytes.
+Match the dominant stage to a symptom, then pick the smallest safe first lever (not the largest config change you can make).
+
+| Symptom | Likely cause | Smallest safe fix |
+| --- | --- | --- |
+| High shuffle read/write | Wide transformation; check filter/projection placement | Push filter/projection earlier; reduce shuffle volume |
+| Max task time ≫ median | Skew | AQE skew handling, salt the hot key, or pre-aggregate |
+| High spill | Per-task working set too large | More partitions; better join strategy; remove unnecessary cache |
+| High input read time/bytes | Scan-bound | Partition pruning; column pruning; small-files compaction |
+| Many tiny tasks + scheduler delay | Over-partitioned | Coalesce or reduce shuffle partitions |
+| Lots of failed/retried tasks | Instability | Fix executor loss, disk, or network before tuning SQL |
+
+### 3. Change one thing
+
+Re-run. Compare the same stage metrics: duration, max task time, shuffle bytes, spill, input bytes.
 
 If you change three things at once, you have not learned anything; you have only changed the wall-clock time. Single-variable change is non-negotiable for real diagnostic work.
 
