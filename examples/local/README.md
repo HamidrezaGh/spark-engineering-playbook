@@ -1,8 +1,12 @@
 # Local Examples
 
-A small, runnable harness for the SQL and PySpark examples in this repo. The goal is to give you something you can launch on a laptop in five minutes, look at the Spark UI, and see plans, stages, and partitions on real (tiny) data.
+A small, runnable harness for the SQL and PySpark examples in this repo. The goal is to give you
+something you can launch on a laptop in five minutes, look at the Spark UI, and see plans, stages, and
+partitions on real (tiny) data.
 
-This is **not** a benchmark. The sample data is intentionally small. The point is to read `EXPLAIN FORMATTED` output, watch tasks in the Spark UI, and build the muscle memory the rest of the handbook expects.
+This is **not** a benchmark. The sample data is intentionally small. The point is to read
+`EXPLAIN FORMATTED` output, watch tasks in the Spark UI, and build the muscle memory the rest of the
+handbook expects.
 
 ## What's Here
 
@@ -12,7 +16,9 @@ This is **not** a benchmark. The sample data is intentionally small. The point i
 | `data/customers_sample.csv` | ~22 dimension-style customer rows with a couple of nulls and edge cases. |
 | `run_examples.sh` | A driver script that registers the CSVs as temp views and runs the SQL examples (and optionally the PySpark scripts). |
 
-The CSVs are tiny on purpose. They show the *shape* of the production patterns the chapters discuss — a hot key, null join keys, a small dimension that may or may not be broadcast — without needing real data.
+The CSVs are tiny on purpose. They show the *shape* of the production patterns the chapters discuss
+— a hot key, null join keys, a small dimension that may or may not be broadcast — without needing
+real data.
 
 ## What You Need
 
@@ -27,7 +33,9 @@ If you do not have Spark installed, the fastest path is:
 pip install pyspark
 ```
 
-That ships a usable local Spark for these examples. You will not get the standalone CLI scripts on PATH unless you also install the binary distribution; for the SQL examples the binary distribution is preferred.
+That ships a usable local Spark for these examples. You will not get the standalone CLI scripts on
+`PATH` unless you also install the binary distribution; for the SQL examples the binary distribution
+is preferred.
 
 ## Running The Examples
 
@@ -44,11 +52,18 @@ From this directory:
 ./run_examples.sh pyspark
 ```
 
-While Spark is running, open `http://localhost:4040` in your browser to inspect the Spark UI. The UI is only alive while a Spark driver is running; for SQL examples each `spark-sql` invocation is a separate driver and a separate UI session.
+While Spark is running, open `http://localhost:4040` in your browser to inspect the Spark UI. The UI
+is only alive while a Spark driver is running; for SQL examples each `spark-sql` invocation is a
+separate driver and a separate UI session.
 
-For a labeled walk-through of what `EXPLAIN FORMATTED` looks like on this shape of query (Exchange, stage boundaries, pruning), see [`docs/assets/screenshots/explain-formatted-shuffle-output.txt`](../../docs/assets/screenshots/explain-formatted-shuffle-output.txt) in the repo root.
+For a labeled walk-through of what `EXPLAIN FORMATTED` looks like on this shape of query (Exchange,
+stage boundaries, pruning), see
+[`docs/assets/screenshots/explain-formatted-shuffle-output.txt`](../../docs/assets/screenshots/explain-formatted-shuffle-output.txt)
+in the repo root.
 
-If you want the UI to survive after the job finishes, set `spark.eventLog.enabled=true` and a writable `spark.eventLog.dir`, then start the History Server separately. That is overkill for these examples.
+If you want the UI to survive after the job finishes, set `spark.eventLog.enabled=true` and a
+writable `spark.eventLog.dir`, then start the History Server separately. That is overkill for these
+examples.
 
 ## What Each Example Demonstrates
 
@@ -60,7 +75,9 @@ If you want the UI to survive after the job finishes, set `spark.eventLog.enable
 | `examples/sql/04-window-vs-groupby.sql` | Chapter 4 (Joins), Chapter 9 (Spark SQL And Catalyst) | Compare the physical plans of a window function vs a `GROUP BY` + `JOIN`. Note where the shuffles are. |
 | `examples/sql/05-partition-pruning.sql` | Chapter 3 (Partitioning), Chapter 8 (File Formats), Chapter 9 (Spark SQL And Catalyst) | `PartitionFilters` and `PushedFilters` in the plan. With the local CSVs there are no real partitions, but the example shows what to expect on a partitioned source. |
 
-The PySpark scripts (`examples/pyspark/inspect_partitions.py`, `examples/pyspark/skew_detector.py`) accept either a registered Spark table (`--table`) or a local file (`--input` plus `--format`). The `run_examples.sh` script invokes them in file-input mode against the sample CSVs.
+The PySpark scripts (`examples/pyspark/inspect_partitions.py`, `examples/pyspark/skew_detector.py`)
+accept either a registered Spark table (`--table`) or a local file (`--input` plus `--format`). The
+`run_examples.sh` script invokes them in file-input mode against the sample CSVs.
 
 ## What To Look For In Spark UI
 
@@ -76,18 +93,28 @@ Once you have a driver running:
    - Shuffle read / write bytes.
 6. Click the **Executors** tab. Confirm there is one local executor and the driver is healthy.
 
-For tiny CSV examples most of these metrics will be small. The point is the *shape* of the plan and the *names* of the operators, not the numeric values. Reading the same shape on a 10× or 1,000× larger dataset is the same skill.
+For tiny CSV examples most of these metrics will be small. The point is the *shape* of the plan and
+the *names* of the operators, not the numeric values. Reading the same shape on a 10× or 1,000× larger
+dataset is the same skill.
 
 ## Optional: docker-compose
 
-For users who do not want to install Spark locally, `docker-compose.yml` (if present) can run a single-node Spark in a container. The CSVs are mounted into the container, and you can `docker exec` into it to run `spark-sql` against the same temp views.
+For users who do not want to install Spark locally, `docker-compose.yml` (if present) can run a
+single-node Spark in a container. The CSVs are mounted into the container, and you can `docker exec`
+into it to run `spark-sql` against the same temp views.
 
 This is intentionally optional. A local `pip install pyspark` is simpler for most readers.
 
 ## Caveats
 
-- These examples will not show interesting AQE behavior on this little data. AQE thresholds default to MB-scale; CSVs in the 1 KB range will not trigger AQE rewrites. To exercise AQE behavior, point the scripts at a real partitioned dataset using the `--input` or `--table` flags.
-- Sort-merge vs broadcast decisions on these CSVs will almost always pick broadcast because everything fits well under the threshold. To force sort-merge, set `spark.sql.autoBroadcastJoinThreshold=-1` in the SQL session and re-run.
-- The `events_sample.csv` is not partitioned by `event_date` on disk; the SQL examples that reference partition pruning describe what would happen on a partitioned source, not what the local CSV actually does.
+- These examples will not show interesting AQE behavior on this little data. AQE thresholds default
+  to MB-scale; CSVs in the 1 KB range will not trigger AQE rewrites. To exercise AQE behavior, point
+  the scripts at a real partitioned dataset using the `--input` or `--table` flags.
+- Sort-merge vs broadcast decisions on these CSVs will almost always pick broadcast because
+  everything fits well under the threshold. To force sort-merge, set
+  `spark.sql.autoBroadcastJoinThreshold=-1` in the SQL session and re-run.
+- The `events_sample.csv` is not partitioned by `event_date` on disk; the SQL examples that
+  reference partition pruning describe what would happen on a partitioned source, not what the local
+  CSV actually does.
 
 The chapters they pair with explain what production-scale behavior looks like; the local examples give you a reproducible plan to read while you learn.

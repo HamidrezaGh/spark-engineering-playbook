@@ -20,6 +20,8 @@
 
 set -euo pipefail
 
+# Paths and mode (all | sql | pyspark) — see top-of-file comment.
+
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${HERE}/../.." && pwd)"
 DATA_DIR="${HERE}/data"
@@ -138,6 +140,8 @@ run_pyspark_examples() {
             --top-n 10 || true
     fi
 }
+
+# Dispatch --------------------------------------------------------------------
 
 case "${MODE}" in
     sql)
