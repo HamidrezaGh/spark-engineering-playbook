@@ -46,6 +46,8 @@ From this directory:
 
 While Spark is running, open `http://localhost:4040` in your browser to inspect the Spark UI. The UI is only alive while a Spark driver is running; for SQL examples each `spark-sql` invocation is a separate driver and a separate UI session.
 
+For a labeled walk-through of what `EXPLAIN FORMATTED` looks like on this shape of query (Exchange, stage boundaries, pruning), see [`docs/assets/screenshots/explain-formatted-shuffle-output.txt`](../../docs/assets/screenshots/explain-formatted-shuffle-output.txt) in the repo root.
+
 If you want the UI to survive after the job finishes, set `spark.eventLog.enabled=true` and a writable `spark.eventLog.dir`, then start the History Server separately. That is overkill for these examples.
 
 ## What Each Example Demonstrates

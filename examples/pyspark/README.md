@@ -22,6 +22,15 @@ spark-submit examples/pyspark/skew_detector.py     --table db.events --key custo
 spark-submit examples/pyspark/file_count_audit.py  --path s3://my-lake/events/
 ```
 
+No cluster or warehouse handy:
+
+```bash
+python3 examples/pyspark/skew_detector.py --demo
+python3 examples/pyspark/file_count_audit.py --demo
+```
+
+Sample terminal output (labeled, regenerable) lives under [`docs/assets/screenshots/`](../../docs/assets/screenshots/README.md).
+
 They are deliberately small. Adapt them rather than try to import them as a library; the goal is to keep the diagnostic logic visible in front of you, not hidden behind a wrapper.
 
 ## Conventions

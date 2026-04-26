@@ -37,6 +37,10 @@ PRODUCTION ISSUES THIS HELPS DIAGNOSE
     * Long-tail aggregations and joins.
     * Single-task OOM during shuffle.
     * Output file size skew when partitioning by a key with hot values.
+
+QUICK LOCAL RUN
+    python3 examples/pyspark/skew_detector.py --demo
+    # Optional: --input examples/local/data/events_sample.csv --format csv --header --key customer_id
 """
 
 from __future__ import annotations
@@ -147,8 +151,21 @@ def print_report(report: SkewReport, key_col: str) -> None:
         print(f"    {str(key)[:40]:40s} {n:>12,}  {pct:5.2f}%")
 
 
+def demo_dataframe(spark: SparkSession) -> DataFrame:
+    """Build a tiny in-memory dataset with deliberate skew (no external files)."""
+    hot = [("cust_hot",)] * 800
+    rest = [(f"cust_{i:03d}",) for i in range(200)]
+    rows = hot + rest
+    return spark.createDataFrame(rows, ["customer_id"])
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--demo",
+        action="store_true",
+        help="Ignore --table/--input; analyze a built-in skewed toy dataset (no files).",
+    )
     parser.add_argument("--table", help="Table name (e.g. db.events).")
     parser.add_argument(
         "--input",
@@ -164,15 +181,28 @@ def main() -> None:
         action="store_true",
         help="For CSV: treat the first line as a header.",
     )
-    parser.add_argument("--key", required=True, help="Key column to analyze.")
+    parser.add_argument(
+        "--key",
+        default=None,
+        help="Key column to analyze. With --demo, defaults to customer_id.",
+    )
     parser.add_argument("--filter", help="Optional WHERE clause (without WHERE).")
     parser.add_argument("--top", "--top-n", dest="top", type=int, default=20)
     args = parser.parse_args()
 
-    if not args.table and not args.input:
-        parser.error("either --table or --input is required")
+    if not args.demo and not args.table and not args.input:
+        parser.error("either --demo, --table, or --input is required")
+    if not args.demo and not args.key:
+        parser.error("--key is required unless you pass --demo")
 
     spark = SparkSession.builder.appName("skew_detector").getOrCreate()
+
+    if args.demo:
+        key_col = args.key or "customer_id"
+        df = demo_dataframe(spark)
+        report = detect_skew(df, key_col, top_n=args.top)
+        print_report(report, key_col)
+        return
 
     if args.input:
         reader = spark.read.format(args.format)
