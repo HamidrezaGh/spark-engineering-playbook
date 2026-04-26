@@ -1,6 +1,5 @@
 # Memory And GC Configs
 
-
 ## Primary Configs
 
 - `spark.executor.memory`

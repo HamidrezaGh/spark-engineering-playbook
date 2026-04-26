@@ -1,6 +1,5 @@
 # Broadcast Joins
 
-
 ## Knob
 
 Broadcast joins are primarily controlled by:

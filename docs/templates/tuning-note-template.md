@@ -2,7 +2,6 @@
 
 Use this template for files under `docs/tuning/`.
 
-
 ## Knob
 
 What setting(s) this note is about and what they control.

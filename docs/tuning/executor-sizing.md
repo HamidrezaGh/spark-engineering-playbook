@@ -1,6 +1,5 @@
 # Executor Sizing
 
-
 ## Knob
 
 Executor sizing is the combination of:

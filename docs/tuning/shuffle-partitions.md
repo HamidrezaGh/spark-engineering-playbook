@@ -1,6 +1,5 @@
 # Shuffle Partitions
 
-
 ## Knob
 
 `spark.sql.shuffle.partitions` sets the default number of reduce-side partitions for Spark SQL / DataFrame shuffles (joins, aggregations, `distinct`, window ops, repartitions) when AQE does not override it.

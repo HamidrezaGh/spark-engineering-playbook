@@ -2,7 +2,6 @@
 
 Use this template for files under `docs/patterns/`.
 
-
 ## Problem
 
 Describe the real production problem this pattern solves.

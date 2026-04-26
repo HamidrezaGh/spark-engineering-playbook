@@ -1,6 +1,5 @@
 # Pre-Deploy Review Checklist
 
-
 ## Code
 
 - Join strategy and shuffle awareness:

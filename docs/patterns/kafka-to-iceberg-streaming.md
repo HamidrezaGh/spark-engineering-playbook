@@ -1,6 +1,5 @@
 # Kafka To Iceberg Streaming
 
-
 ## Problem
 
 You need to ingest Kafka topics into an Iceberg table continuously with correct semantics (exactly-once where possible, or at-least-once with idempotent writes), while managing small files, late data, schema evolution, and operational failures.

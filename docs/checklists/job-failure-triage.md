@@ -1,6 +1,5 @@
 # Job Failure Triage Checklist
 
-
 ## Scope The Failure
 
 - Capture the exact failure mode and where it surfaced:

@@ -1,6 +1,5 @@
 # Joins And Broadcast Configs
 
-
 ## Primary Configs
 
 - `spark.sql.autoBroadcastJoinThreshold`

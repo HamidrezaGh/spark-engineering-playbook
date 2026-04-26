@@ -1,6 +1,5 @@
 # Execution And Parallelism Configs
 
-
 ## Core Idea
 
 Parallelism controls how many tasks can run concurrently and how large each task’s working set becomes.

@@ -1,6 +1,5 @@
 # Top Spark Configs (Practical Cheat Sheet)
 
-
 This page is optimized for interview prep and production reviews: high-leverage configs, what they *really* control, and what to validate in Spark UI.
 
 Also see:

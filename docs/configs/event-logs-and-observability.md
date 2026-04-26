@@ -1,6 +1,5 @@
 # Event Logs And Observability Configs
 
-
 ## Core Idea
 
 If you can’t inspect Spark UI after the cluster terminates, you will debug blind. Persist event logs so you can reconstruct the UI and compare runs.

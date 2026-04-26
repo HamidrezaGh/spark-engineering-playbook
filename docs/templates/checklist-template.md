@@ -2,7 +2,6 @@
 
 Use this template for files under `docs/checklists/`.
 
-
 ## Purpose
 
 One paragraph describing when to use this checklist.

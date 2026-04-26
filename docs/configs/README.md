@@ -1,6 +1,5 @@
 # Spark Configs
 
-
 This section is a practical field manual for Spark configuration in production (with an EMR/YARN/S3 bias).
 
 The goal is not to list every config. The goal is to cover the configs that most often control cost, performance, and failure modes, and to explain **how to validate changes in Spark UI**.

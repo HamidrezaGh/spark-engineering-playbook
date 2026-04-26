@@ -1,6 +1,5 @@
 # Shuffle Configs
 
-
 ## Primary Configs
 
 - `spark.sql.shuffle.partitions`

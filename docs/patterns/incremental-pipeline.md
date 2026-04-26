@@ -1,6 +1,5 @@
 # Incremental Pipeline
 
-
 ## Problem
 
 Full recomputation is too expensive or too slow, but the dataset changes over time. You need to process only the new/changed data while keeping outputs correct and backfillable.

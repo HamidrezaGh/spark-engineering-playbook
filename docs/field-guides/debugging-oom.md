@@ -1,6 +1,5 @@
 # Debugging OOM
 
-
 ## Symptom
 
 The Spark application fails with out-of-memory behavior, commonly:

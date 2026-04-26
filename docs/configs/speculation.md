@@ -1,6 +1,5 @@
 # Speculation And Stragglers
 
-
 ## Core Idea
 
 Speculation reruns slow tasks to reduce tail latency. It can help when stragglers are caused by flaky nodes, but it can also amplify load during shuffle-heavy stages.

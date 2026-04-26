@@ -1,6 +1,5 @@
 # Spark Config Principles
 
-
 ## Core Idea
 
 Treat Spark configs as **hypothesis-driven** levers, not random knobs. A config change should be tied to a specific bottleneck you can see in Spark UI, logs, or metrics.

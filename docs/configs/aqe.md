@@ -1,6 +1,5 @@
 # Adaptive Query Execution (AQE) Configs
 
-
 ## Primary Configs
 
 - `spark.sql.adaptive.enabled`

@@ -1,6 +1,5 @@
 # Memory Overhead
 
-
 ## Knob
 
 On YARN/EMR, executor containers need memory beyond the JVM heap:

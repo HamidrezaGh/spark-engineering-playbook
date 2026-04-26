@@ -2,7 +2,6 @@
 
 Use this template for files under `docs/field-guides/`.
 
-
 ## Symptom
 
 Describe the production symptom in one paragraph.

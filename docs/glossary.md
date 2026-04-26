@@ -1,6 +1,5 @@
 # Glossary
 
-
 ## Terms
 
 - **Job**: A unit of work triggered by a Spark *action* (e.g. `count`, `collect`, `write`). A single Spark application run can have multiple jobs.

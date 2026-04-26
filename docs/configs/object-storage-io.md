@@ -1,6 +1,5 @@
 # S3 / Object Storage IO Configs
 
-
 ## Core Idea
 
 Many “Spark is slow with low CPU” incidents are actually remote storage or metadata overhead (listing many files, slow reads, throttling), not lack of executors.

@@ -1,6 +1,5 @@
 # Debugging Slow Jobs
 
-
 ## Symptom
 
 The job still succeeds, but runtime regresses (often 2×–20×) compared to a known-good baseline, or it intermittently breaches an SLA.

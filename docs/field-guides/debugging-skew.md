@@ -1,6 +1,5 @@
 # Debugging Skew
 
-
 ## Symptom
 
 One stage (usually a shuffle stage) has a long tail: most tasks finish quickly, but a small number of tasks run far longer, often causing the whole job to stall behind a single straggler.

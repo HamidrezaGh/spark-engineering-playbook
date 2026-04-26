@@ -1,6 +1,5 @@
 # Production Readiness Checklist
 
-
 ## Data Correctness
 
 - Idempotent outputs: reruns and retries don’t duplicate or corrupt data.

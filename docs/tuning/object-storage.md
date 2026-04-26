@@ -1,6 +1,5 @@
 # S3 On EMR
 
-
 ## Knob
 
 S3 performance tuning is not one knob. It is a combination of file sizing, table layout, request concurrency, commit behavior, EMR release behavior, S3A/EMRFS configuration, KMS permissions, and Spark parallelism.

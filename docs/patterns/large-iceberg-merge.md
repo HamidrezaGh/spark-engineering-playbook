@@ -1,6 +1,5 @@
 # Large Iceberg Merge
 
-
 ## Problem
 
 You need to apply large upserts (MERGE semantics) into an Iceberg table. Naive merges can be extremely expensive: they can trigger huge shuffles, rewrite many files, create small files, and cause long runtimes or failures.

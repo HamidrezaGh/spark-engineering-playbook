@@ -1,6 +1,5 @@
 # Debugging Index
 
-
 Use this page when you have an incident symptom and need a fast path to the right Spark UI evidence and playbook.
 
 Also see `docs/field-guides/spark-ui-reading-guide.md`.

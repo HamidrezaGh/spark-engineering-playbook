@@ -1,6 +1,5 @@
 # Caching And Persistence
 
-
 ## What You Should Be Able To Answer
 
 After this chapter, you should be able to answer (quickly, from memory or by skimming this page):

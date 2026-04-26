@@ -1,6 +1,5 @@
 # Idempotent Backfill
 
-
 ## Problem
 
 You need to recompute historical data (days/weeks/months) without creating duplicates, corrupting tables, or generating inconsistent results when the backfill is retried, paused, or rerun.

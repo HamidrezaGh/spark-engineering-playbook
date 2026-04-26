@@ -2,7 +2,6 @@
 
 Use this template for files under `docs/book/`.
 
-
 ## Core Idea
 
 Explain the one mental model in 2-5 sentences.

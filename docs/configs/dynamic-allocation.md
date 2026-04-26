@@ -1,6 +1,5 @@
 # Dynamic Allocation And Autoscaling Configs
 
-
 ## Core Idea
 
 Dynamic allocation can reduce cost by scaling executors with workload demand, but it can also introduce latency and instability if shuffle/cache behavior and cluster constraints aren’t compatible.

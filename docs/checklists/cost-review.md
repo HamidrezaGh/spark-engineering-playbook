@@ -1,6 +1,5 @@
 # Cost Review Checklist
 
-
 ## Compute
 
 - What is the steady-state runtime and how variable is it day-to-day?

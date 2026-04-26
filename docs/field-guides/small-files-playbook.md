@@ -1,6 +1,5 @@
 # Small Files Playbook
 
-
 ## Symptom
 
 You see one or more of:

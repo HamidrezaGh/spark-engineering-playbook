@@ -1,6 +1,5 @@
 # Safe Overwrite
 
-
 ## Problem
 
 You need to overwrite a table (or a table partition) safely in production without leaving partial output, corrupting readers, or creating duplicates on retries.
