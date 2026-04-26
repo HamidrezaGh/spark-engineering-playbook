@@ -1,0 +1,60 @@
+=== LABELED SAMPLE OUTPUTS for examples/pyspark/skew_detector.py ===
+
+--- Example A: in-memory demo (no data files) ---
+
+Command:
+  python3 examples/pyspark/skew_detector.py --demo
+
+(Equivalent: spark-submit examples/pyspark/skew_detector.py --demo)
+
+=== Skew report for key: customer_id ===
+  total rows           : 1,000
+  distinct keys        : 201
+  rows/key p50         : 1
+  rows/key p95         : 1
+  rows/key p99         : 1
+  rows/key max         : 800
+  max/median ratio     : 800.0
+  classification       : pathological-skew
+
+  top keys:
+    cust_hot                                          800  80.00%
+    cust_155                                            1   0.10%
+    (... remaining keys with 1 row each ...)
+
+How to interpret
+----------------
+* **classification pathological-skew** — max/median ratio is extreme; expect a long-tail task on
+  the next shuffle grouped by this key (Spark UI: one task with far higher shuffle read/duration).
+* **Top key share (80%)** — A single value dominates; consider salting, two-phase aggregation,
+  AQE skew hints (if applicable), or business-aware splitting before paying for a full shuffle.
+* **distinct keys vs shuffle partitions** — Compare `distinct keys` to `spark.sql.shuffle.partitions`;
+  if partitions >> keys you may be over-sharding; if keys >> partitions, watch merge pressure.
+
+--- Example B: repo sample CSV (skew visible, smaller scale) ---
+
+Command (from repo root, with PySpark on PYTHONPATH):
+  python3 examples/pyspark/skew_detector.py \
+    --input examples/local/data/events_sample.csv \
+    --format csv --header \
+    --key customer_id --top 10
+
+=== Skew report for key: customer_id ===
+  total rows           : 50
+  distinct keys        : 23
+  rows/key p50         : 1
+  rows/key p95         : 4
+  rows/key p99         : 20
+  rows/key max         : 20
+  max/median ratio     : 20.0
+  classification       : moderate-skew
+
+  top keys:
+    cust_flagship                                      20  40.00%
+    cust_001                                            4   8.00%
+    (...)
+
+How to interpret
+----------------
+* **moderate-skew** — Worth planning for before a large join/aggregate on this key; validate in EXPLAIN
+  and in the Spark UI on a representative slice of production data.

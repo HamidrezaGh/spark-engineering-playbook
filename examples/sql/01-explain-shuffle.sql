@@ -70,3 +70,9 @@ GROUP BY customer_id;
 --   * 200 comes from spark.sql.shuffle.partitions; AQE may coalesce at runtime.
 --   * Skew risk lives in this Exchange: a few hot customer_ids will produce
 --     hot reduce partitions.
+--
+-- SAMPLE EXPLAIN OUTPUT (labeled, version-agnostic shape)
+--   See: docs/assets/screenshots/explain-formatted-shuffle-output.txt
+--   That file walks line-by-line through Exchange, partial vs final HashAggregate,
+--   PartitionFilters / ReadSchema, and the Spark UI signals (stages, shuffle I/O,
+--   task duration skew) you should see when you run this query on real data.
