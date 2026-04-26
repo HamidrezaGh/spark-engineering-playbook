@@ -118,6 +118,20 @@ def _example_df(spark: SparkSession) -> DataFrame:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--table", help="Table name to inspect (e.g. db.events).")
+    parser.add_argument(
+        "--input",
+        help="Path to read instead of a table (file or directory). Use with --format.",
+    )
+    parser.add_argument(
+        "--format",
+        default="parquet",
+        help="Reader format when --input is set: parquet, csv, json, orc.",
+    )
+    parser.add_argument(
+        "--header",
+        action="store_true",
+        help="For CSV: treat the first line as a header.",
+    )
     parser.add_argument("--filter", help="Optional WHERE clause (without the WHERE).")
     parser.add_argument("--top", type=int, default=10, help="Top-N partitions to print.")
     parser.add_argument(
@@ -127,12 +141,19 @@ def main() -> None:
 
     spark = SparkSession.builder.appName("inspect_partitions").getOrCreate()
 
-    if args.table:
+    if args.input:
+        reader = spark.read.format(args.format)
+        if args.format == "csv":
+            reader = reader.option("header", "true" if args.header else "false")
+            reader = reader.option("inferSchema", "true")
+        df = reader.load(args.input)
+    elif args.table:
         df = spark.table(args.table)
-        if args.filter:
-            df = df.filter(args.filter)
     else:
         df = _example_df(spark)
+
+    if args.filter:
+        df = df.filter(args.filter)
 
     inspect(df, top_n=args.top, show_plan=not args.no_plan)
 

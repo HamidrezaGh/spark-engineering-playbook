@@ -1,0 +1,107 @@
+name: docs-check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  markdown-lint:
+    name: Markdown lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install markdownlint-cli2
+        run: npm install -g markdownlint-cli2
+
+      - name: Run markdownlint
+        run: markdownlint-cli2 "**/*.md" "#node_modules"
+
+  link-check:
+    name: Markdown link check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run lychee link checker
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --no-progress
+            --exclude-mail
+            --exclude-loopback
+            --exclude-private
+            --exclude '^https?://localhost'
+            --exclude '^https?://127\.0\.0\.1'
+            --exclude '^s3://'
+            --exclude '^hdfs://'
+            --exclude '^file:'
+            './**/*.md'
+          fail: true
+
+  python-syntax:
+    name: Python syntax (py_compile)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Compile all Python under examples/
+        run: |
+          set -euo pipefail
+          if compgen -G "examples/**/*.py" > /dev/null; then
+            python -m compileall -q examples
+          else
+            echo "No Python files under examples/, skipping."
+          fi
+
+  shell-check:
+    name: Shell script syntax
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Bash syntax check
+        run: |
+          set -euo pipefail
+          shopt -s globstar nullglob
+          fail=0
+          for f in **/*.sh; do
+            echo "Checking $f"
+            if ! bash -n "$f"; then
+              fail=1
+            fi
+          done
+          exit "$fail"
+
+      - name: Install shellcheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+
+      - name: Run shellcheck
+        run: |
+          set -euo pipefail
+          shopt -s globstar nullglob
+          fail=0
+          for f in **/*.sh; do
+            echo "shellcheck $f"
+            shellcheck "$f" || fail=1
+          done
+          exit "$fail"

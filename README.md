@@ -67,6 +67,7 @@ Use the patterns and chapters together. For example, before reviewing a new pipe
 | Case studies | [`docs/case-studies/`](docs/case-studies/) | Anonymized production incidents with root cause and fix. |
 | Examples | [`examples/`](examples/README.md) | PySpark, Spark SQL, and config examples used by the chapters. |
 | Diagrams | [`diagrams/`](diagrams/README.md) | Sources for execution, storage, and platform diagrams. |
+| Templates | [`docs/templates/`](docs/templates/README.md) | Staff-level templates for design reviews, incident postmortems, production readiness, and cost reviews. |
 | Glossary | [`docs/glossary.md`](docs/glossary.md) | Production-oriented Spark vocabulary. |
 | Q&A | [`docs/advanced-spark-questions.md`](docs/advanced-spark-questions.md) | The original question list that defines the bar for this handbook. |
 
@@ -104,6 +105,12 @@ This is currently a single-author, opinionated handbook. If you want to suggest 
 - A concrete production scenario where the claim fails or could be sharper.
 
 Vague stylistic feedback is unlikely to be incorporated; concrete production experience is welcome.
+
+## Repository Metadata
+
+Suggested GitHub topics for discoverability:
+
+`apache-spark`, `spark-sql`, `aws-emr`, `data-engineering`, `data-platform`, `iceberg`, `yarn`, `s3`, `performance-tuning`, `distributed-systems`, `structured-streaming`, `lakehouse`.
 
 ## License
 
