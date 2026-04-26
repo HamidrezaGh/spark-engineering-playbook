@@ -11,7 +11,7 @@ The default production environment is AWS EMR with Spark on YARN and S3-backed d
 - [`patterns/`](patterns/README.md) — reusable Spark and lakehouse architectural patterns.
 - [`tuning/`](tuning/README.md) — focused tuning references for common levers.
 - [`configs/`](configs/README.md) — Spark configuration field manual.
-- [`checklists/`](checklists/README.md) — operating checklists for pre-deploy, triage, cost, and production readiness.
+- [`checklists/`](checklists/README.md) — operating checklists for pre-deploy, triage, cost, production readiness, and [docs presentation quality](checklists/repo-quality-checklist.md).
 - [`case-studies/`](case-studies/README.md) — anonymized post-incident reviews.
 - [`templates/`](templates/) — authoring templates for new chapters, patterns, and field guides.
 - [`glossary.md`](glossary.md) — shared production-oriented terminology.

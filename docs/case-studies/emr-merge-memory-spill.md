@@ -1,138 +1,116 @@
-# Case Study — Large Iceberg Merge On EMR: Memory Spill And Oversized Scope
+# Case Study: Fixing A Skewed Spark Merge On EMR
 
-This is an anonymized post-incident review of a recurring failure on a large daily merge job running on AWS EMR. Numbers are illustrative; the failure shape is real and common.
+Anonymized post-incident review of a recurring failure on a large daily merge job on AWS EMR against Iceberg on S3.
 
-## Problem
+> **Numbers in this write-up are illustrative** — rounded for readability and to avoid leaking customer scale. The failure *shape* (scope creep, shuffle pressure, Spot during long shuffle) is common in production.
 
-A daily pipeline merged the previous day's CDC events into a multi-terabyte Iceberg fact table on S3. The job had been stable for ~9 months. Over a few weeks it became progressively slower, and then started failing.
+## Situation
 
-- Source: ~250 GB / day of CDC events, partitioned by `event_date`.
-- Target: ~6 TB Iceberg table partitioned by `event_date`, clustered by `customer_id`.
-- Operation: `MERGE INTO target USING staging ON target.event_id = staging.event_id WHEN MATCHED THEN UPDATE WHEN NOT MATCHED THEN INSERT`.
+A daily pipeline merged the previous day’s CDC events into a multi-terabyte Iceberg fact table on S3. The job had been stable for roughly nine months, then degraded over several weeks: longer wall times, then intermittent failures.
 
-By the time it became an incident, the job ran for 8+ hours when it succeeded and was OOM-ing two runs out of three.
+- **Source:** CDC events for one logical day, stored with a partition column such as `event_date`.
+- **Target:** a large Iceberg fact table partitioned by `event_date`, with clustering on a high-cardinality business key.
+- **Operation:** `MERGE INTO target USING staging ON target.event_id = staging.event_id WHEN MATCHED THEN UPDATE WHEN NOT MATCHED THEN INSERT`.
+
+By the time it became an incident, successful runs could exceed eight hours; roughly two out of three runs failed.
 
 ## Symptoms
 
-- Wall-clock time went from ~50 minutes to 8+ hours over six weeks.
-- Multiple `ExecutorLostFailure` events per run, clustered around the merge stage.
-- Some runs failed with `FetchFailedException` cascades after Spot task node loss.
-- One run failed with executor OOM during a sort-merge join stage.
-- EMR cluster cost tripled because the job was scaled up reactively each time it failed.
+- Wall-clock time grew from roughly an hour to many hours over about six weeks.
+- Repeated `ExecutorLostFailure` around the merge stage; occasional `FetchFailedException` cascades after Spot task loss.
+- At least one run failed with executor OOM during a sort-merge join stage.
+- EMR cost rose sharply because the team scaled clusters reactively after each failure.
 
-The on-call response to that point had been "add more memory and re-run." That stopped working.
+The on-call pattern had been “add more memory and re-run,” which eventually stopped helping.
 
-## Evidence From Spark UI And Logs
+## Investigation
 
-Following the [Spark UI reading guide](../field-guides/spark-ui-reading-guide.md) workflow:
+Following the [Spark UI reading guide](../field-guides/spark-ui-reading-guide.md):
 
 ### Stages
 
-- The slowest stage was the shuffle stage feeding the `MERGE` join — a sort-merge join between the staging dataset and the entire target table for the affected partitions.
-- That stage was 92% of total runtime.
-- Task duration distribution: median ~45 seconds, max ~58 minutes. Long tail.
-- The slowest task: shuffle read ~14 GB; spill memory ~22 GB; spill disk ~9 GB.
-- 30 of ~2000 tasks accounted for ~70% of stage runtime.
+- The dominant stage was the shuffle stage feeding the `MERGE` join — a sort-merge join between staging and the affected target partitions.
+- That stage accounted for the vast majority of total runtime.
+- Task duration was heavily skewed: median task duration was modest, but the slowest tasks ran tens of minutes.
+- A small fraction of tasks accounted for most of the stage time.
+- Shuffle read and spill metrics on the worst tasks were far above peers.
 
-### SQL Tab
+### SQL tab
 
-- Two `Exchange hashpartitioning(event_id, 200)` nodes, one for staging and one for the target side. Both sides shuffled fully.
-- No broadcast — target was multi-TB so this was correct.
-- AQE was enabled but did not help much: skew join handling triggered only on a subset of partitions and the working set per task remained large.
-- The scan on the target side showed `PartitionFilters: [event_date >= ...]` but pulled in ~3 weeks of partitions, not just the day being merged. The merge condition included a small window of historical updates.
+- Two `Exchange hashpartitioning(event_id, …)` nodes — staging and target both shuffled end-to-end for the working set Spark chose.
+- No broadcast on the target side (expected at multi-terabyte scale).
+- AQE was enabled but could not fully absorb the problem: skew handling fired for some partitions, yet per-task working sets on hot buckets remained huge.
+- Target scan showed partition filters, but the **effective** partition window was wider than “one day” because the merge predicate allowed a rolling history window for late-arriving updates.
 
-### Executors
+### Executors and cluster shape
 
-- Executors were lost during the long-tail tasks. Three executors lost in one run, all on Spot task nodes.
-- One executor consistently took ~5x more shuffle read than peers — the host of the skewed task.
-- Driver was healthy; this was an executor-side problem.
+- Executors were lost during long-tail tasks; losses clustered on Spot-backed task nodes.
+- One executor repeatedly showed several times the shuffle read of its peers — the host running the hot reduce work.
+- The driver stayed healthy: this was executor-side pressure, not `collect()`.
 
-### YARN / EMR Logs
+### YARN / EMR logs
 
-- Container kill messages on the lost executors: physical memory limit exceeded.
-- `spark.executor.memoryOverhead` had been bumped from 2 GB to 6 GB over the previous weeks; the kills continued.
-- EMR step logs confirmed the job was running on a fleet that was 70% Spot for task nodes.
+- Container kills cited physical memory limits.
+- `spark.executor.memoryOverhead` had been raised multiple times in prior weeks; kills continued.
+- Step logs showed a large fraction of task capacity on Spot.
 
 ## Root Cause
 
-There were three problems compounding into one incident:
+Three compounding issues:
 
-1. **Merge scope had silently grown.** The original `MERGE` predicate matched a 1-day window. A change six months earlier extended this to 21 days to handle late-arriving CDC. The shuffle volume on the target side scaled with that window, not with the daily input. The job was no longer a "merge yesterday" job; it was a "join staging against three weeks of target" job.
+1. **Merge scope crept without a capacity review.** A predicate change widened the target partition window from roughly one day to multiple weeks to absorb late-arriving CDC. Shuffle volume on the target side scaled with that window, not with “one day of staging.” The job was no longer architecturally a small merge; it was a large repeated join against a sliding target slice.
 
-2. **Per-task working set exceeded executor memory budget.** The shuffle volume per reduce partition had crossed the memory budget. Tasks were spilling tens of GB to disk, and the long-tail tasks were spilling more than that. Bumping `memoryOverhead` did not help because the limit being exceeded was the per-task working set, not heap.
+2. **Per-task working set exceeded the safe memory envelope.** Shuffle bytes per hot partition drove sort and merge structures past what executor heap and overhead could hold without heavy spill. Raising overhead did not shrink the working set — it only changed how YARN classified the failure.
 
-3. **Spot task nodes amplified the failure.** Once the merge stage took ~6 hours, the probability of losing at least one Spot task node mid-stage approached 1. Each loss caused a `FetchFailedException` cascade and re-execution of upstream map output, which made the next attempt longer and more likely to lose another node.
+3. **Spot on long shuffle stages raised the probability of fetch failures.** Once the merge stage ran for many hours, losing a task node mid-stage became likely. Each loss triggered shuffle recompute and stretched the next attempt.
 
-The "obvious" fix (more memory) didn't work because the real problem was scope and shape, not capacity.
+## What Did Not Work
+
+- **Repeated vertical scaling and memoryOverhead bumps** without changing join scope: costs rose, runtime variance stayed high, failures continued.
+- **Treating the problem as “Iceberg is slow”** without opening the SQL plan: the plan showed the true partition read window and the exchanges.
+- **Applying several fixes at once** on some reruns: made attribution noisy and slowed down the real post-mortem.
 
 ## Fix
 
-The fix applied three changes in order, validating each in the Spark UI before adding the next.
+Changes were rolled out **one at a time**, each validated in the Spark UI before the next.
 
-### 1. Bound the merge scope explicitly
+### 1. Bound merge scope and split late updates
 
-The merge query was rewritten to make the time window explicit and small, with a separate "late updates" path for the older window:
+The daily merge was rewritten so the fast path touched **one** target partition (explicit alignment on the partition column in the `ON` clause where the engine can prune). A separate, lower-frequency job absorbed the wider late-arrival window.
 
-```sql
--- Daily fast path: yesterday only.
-MERGE INTO fact_events t
-USING (
-  SELECT * FROM staging_events
-  WHERE event_date = DATE '<run_date>'
-) s
-ON  t.event_id = s.event_id
-AND t.event_date = s.event_date     -- partition pruning hint to the merge
-WHEN MATCHED THEN UPDATE SET ...
-WHEN NOT MATCHED THEN INSERT ...;
-```
+Effects:
 
-The 21-day "late updates" merge moved to its own weekly job. After this change:
+- Target-side scan dropped from many partitions to one for the steady path.
+- Shuffle volume on the merge stage dropped by an order of magnitude on typical days.
+- Long-tail tasks collapsed once per-task shuffle read returned to a sane range.
 
-- Target-side scan dropped from 21 partitions to 1.
-- Shuffle volume on the merge stage dropped ~14× on a typical day.
-- Long-tail tasks went away because the per-task working set fit comfortably in memory.
+### 2. Right-size executors after scope was fixed
 
-### 2. Right-size the executors instead of overprovisioning
+After the working set shrank, the overgrown executor shape from firefighting was rolled back: memory overhead returned toward normal for the workload, instance types moved back toward the standard analytics fleet, and ad-hoc shuffle partition overrides were removed so AQE could size partitions from observed traffic.
 
-The cluster had been scaled vertically through repeated incidents. After fix #1, the working set per task was small enough that the original sizing was already adequate. The team reverted:
+### 3. Keep SLA-critical shuffle off Spot
 
-- `spark.executor.memoryOverhead` from 6 GB to 3 GB (PySpark workload, kept some headroom).
-- Executor instance type from a memory-heavy variant back to the standard analytics fleet.
-- Removed an ad-hoc `spark.sql.shuffle.partitions` override and let AQE choose at runtime.
-
-This dropped cluster cost back to roughly the pre-incident level.
-
-### 3. Move SLA-critical shuffle off Spot task nodes
-
-The merge stage was kept on on-demand core nodes. Spot was reintroduced only for the read-heavy staging preparation, which is cheap to retry. After this:
-
-- No more `FetchFailedException` cascades on the merge stage.
-- The job became deterministic in runtime within ±15%, instead of varying 2× run-to-run.
+Merge stages were pinned to on-demand core capacity; Spot remained for earlier, retry-friendly stages. Fetch-failure cascades on the merge stage stopped being a routine outcome.
 
 ## Result
 
-| Metric | Before | After |
+| Metric | Before (incident period) | After (steady state) |
 | --- | --- | --- |
-| Daily merge runtime | 5–8+ hours, sometimes failed | ~50 minutes, deterministic |
-| Failed runs / week | 2–3 | 0 |
-| Cluster cost / day | ~3× baseline | ~1.0× baseline |
-| Number of Spot reclamations affecting the job | Multiple per run | 0 (on the merge stage) |
-| Spark UI long-tail ratio (max / median task duration) | ~80× | ~3× |
+| Daily merge runtime | Many hours; frequent failures | Sub-hour class; stable week over week |
+| Failed runs | Multiple per week | None in the tracked window |
+| Cluster cost | Several times baseline | Back to baseline band |
+| Merge-stage Spot losses | Common | None on the merge stage |
+| Long-tail ratio (max / median task time) | Very high | Healthy band for the workload |
 
-A guardrail metric was added: the merge stage's shuffle read total and max-to-median task duration ratio are now logged to a central metrics table after every run. A regression in either fires an alert before the SLA is at risk.
+A guardrail was added: total shuffle read for the merge stage plus max-to-median task duration are logged after each run; regression in either pages on-call before the SLA burns.
 
 ## Staff-Level Lesson
 
-The local lesson is "scope your merges." The platform-level lessons are more important.
+The local fix was “scope the merge.” The durable contribution was **turning the incident into an operational pattern**:
 
-1. **A `MERGE` predicate is a contract, not an implementation detail.** Quietly widening a window from one day to 21 days is a 14× shuffle change. The platform should require predicate-scope review for incremental jobs over large tables, not leave it to whoever is writing the query.
+- **`MERGE` predicates that widen time windows are capacity changes** — they deserve the same review as doubling partition count or cluster size.
+- **Repeated memory-overhead escalation without UI evidence is a smell** — treat it as a trigger to inspect shuffle bytes, spill, and partition windows, not as a capacity knob to keep turning.
+- **Spot is a fine tool for elastic compute and a poor default for hours-long shuffle** — platform templates should encode that tradeoff so product teams do not rediscover it under pager load.
+- **One query fix helps one team; metrics and templates help every team** — staff-level work packages the lesson so the next merge job inherits the guardrail.
 
-2. **Adding memory is a diagnostic giveaway.** When a Spark job has had `executor.memoryOverhead` bumped multiple times and is still failing, the bottleneck is almost never heap. It is shape: per-task working set, skew, or scope. The platform should treat repeated memory escalations as a signal to open the Spark UI, not to provision more memory.
-
-3. **Spot capacity is fine for compute. It is dangerous for shuffle.** A long shuffle stage on Spot is a probabilistic failure. The platform should provide guardrails or templates that keep shuffle-heavy SLA-critical stages on stable capacity by default, and require explicit opt-in for Spot on those stages.
-
-4. **Every incident is a candidate platform improvement.** This incident produced one query rewrite, one cluster template change, and one new guardrail metric. Forty teams running similar jobs benefit from the metric and the template; only one team benefits from the query rewrite. Staff-level work is recognizing which lessons generalize and turning them into standards.
-
-5. **Validate one change at a time.** It is tempting to apply all three fixes simultaneously. Doing so makes the post-mortem useless and removes the evidence needed to defend the changes against future "let's revert this" pressure. Each change above was validated in isolation in the Spark UI before the next was applied.
-
-The runbook outcome wasn't "this team knows how to fix this." The outcome was "the platform now prevents this for everyone."
+The runbook outcome was not “this team is heroically good at Spark.” It was “the platform makes this failure class hard to repeat.”

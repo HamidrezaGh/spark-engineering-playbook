@@ -34,6 +34,10 @@ A practical, opinionated reference covering:
 
 If you are brand new to Spark, this repo will be too dense. Start with the official Spark documentation and a short intro course, then come back here.
 
+## Why This Is Different From Typical Spark Notes
+
+Most Spark material optimizes for breadth or interview coverage. This playbook optimizes for **production decisions**: what to look at in the Spark UI when a stage is red, how YARN and EMR change failure modes, how S3 and Iceberg interact with commits and file layout, and how staff-level platform work turns one incident into a guardrail for the next forty teams. It is denser on purpose — it assumes you already ship jobs and need the *why* behind the knobs.
+
 ## How To Read This Repo
 
 There are three reasonable entry points depending on your goal.
@@ -53,6 +57,19 @@ Use the patterns and chapters together. For example, before reviewing a new pipe
 1. Read [`docs/book/04-joins.md`](docs/book/04-joins.md) and [`docs/book/05-data-skew.md`](docs/book/05-data-skew.md).
 2. Skim [`docs/checklists/pre-deploy-review.md`](docs/checklists/pre-deploy-review.md).
 3. Match the workload to a pattern in [`docs/patterns/`](docs/patterns/README.md).
+
+## Recommended Reading Path (By Topic)
+
+| Topic | Primary reading | Diagrams / examples |
+| --- | --- | --- |
+| Execution model | [`docs/book/01-execution-model.md`](docs/book/01-execution-model.md) | [`diagrams/spark-job-stage-task.md`](diagrams/spark-job-stage-task.md), [`examples/sql/01-explain-shuffle.sql`](examples/sql/01-explain-shuffle.sql) |
+| Shuffle and performance | [`docs/book/02-shuffle-and-performance.md`](docs/book/02-shuffle-and-performance.md) | [`diagrams/shuffle-read-write.md`](diagrams/shuffle-read-write.md), [`docs/tuning/shuffle-partitions.md`](docs/tuning/shuffle-partitions.md) |
+| Joins | [`docs/book/04-joins.md`](docs/book/04-joins.md) | [`diagrams/broadcast-vs-sort-merge-join.md`](diagrams/broadcast-vs-sort-merge-join.md), [`examples/sql/02-broadcast-vs-sort-merge-join.sql`](examples/sql/02-broadcast-vs-sort-merge-join.sql) |
+| Skew | [`docs/book/05-data-skew.md`](docs/book/05-data-skew.md) | [`docs/field-guides/debugging-skew.md`](docs/field-guides/debugging-skew.md), [`examples/sql/03-skew-detection.sql`](examples/sql/03-skew-detection.sql) |
+| Memory | [`docs/book/07-memory-management.md`](docs/book/07-memory-management.md) | [`docs/field-guides/debugging-oom.md`](docs/field-guides/debugging-oom.md), [`docs/tuning/memory-overhead.md`](docs/tuning/memory-overhead.md) |
+| EMR debugging | [`docs/book/11-spark-on-yarn-and-emr.md`](docs/book/11-spark-on-yarn-and-emr.md), [`docs/book/12-production-debugging.md`](docs/book/12-production-debugging.md) | [`docs/field-guides/debugging-slow-jobs.md`](docs/field-guides/debugging-slow-jobs.md), [`docs/field-guides/spark-ui-reading-guide.md`](docs/field-guides/spark-ui-reading-guide.md) |
+| Iceberg write path and merges | [`docs/book/13-iceberg-and-spark.md`](docs/book/13-iceberg-and-spark.md), [`docs/book/17-spark-write-path-and-output-files.md`](docs/book/17-spark-write-path-and-output-files.md) | [`diagrams/iceberg-merge-on-s3.md`](diagrams/iceberg-merge-on-s3.md), [`docs/patterns/large-iceberg-merge.md`](docs/patterns/large-iceberg-merge.md) |
+| Case studies | [`docs/case-studies/README.md`](docs/case-studies/README.md) | [`docs/case-studies/emr-merge-memory-spill.md`](docs/case-studies/emr-merge-memory-spill.md) and companion case files |
 
 ## Repository Structure
 
@@ -95,6 +112,12 @@ Most chapters share a few opinions that are worth stating up front, because they
 - **Treat S3 as durable storage, not local disk.** Listing, throttling, commit semantics, and small files are first-class concerns.
 - **Treat configs as a contract.** A tuning value without a reason or a way to validate it is technical debt.
 - **Treat platform problems as platform problems.** If 40 teams all hit the same issue, the answer is a guardrail, not 40 fixes.
+
+## Repo Maturity
+
+All book chapters (1–25) exist as real files in [`docs/book/`](docs/book/README.md); depth varies by topic. Favor the execution stack (1–6), debugging and EMR chapters (11–12), and lakehouse write paths (13, 17–18) when you need the most battle-tested prose. Shorter chapters are tightening toward the same bar — if something is still a stub, the Markdown says **TODO** or **In progress** inline.
+
+Automation: [`.github/workflows/markdown-lint.yml`](.github/workflows/markdown-lint.yml) enforces Markdown consistency; [`.github/workflows/docs-check.yml`](.github/workflows/docs-check.yml) runs link checks and lightweight syntax gates. For a human pass before a big docs merge, use [`docs/checklists/repo-quality-checklist.md`](docs/checklists/repo-quality-checklist.md).
 
 ## Contributing
 

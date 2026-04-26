@@ -1,8 +1,8 @@
 # Case Studies
 
-Anonymized production incidents, written up the way a staff engineer would write a post-incident review. Every case study follows the same structure:
+Anonymized production incidents, written up the way a staff engineer would write a post-incident review. Case studies aim for a consistent arc:
 
-- **Problem** — what the job was trying to do and what went wrong.
+- **Situation** — what the job was trying to do and the business context.
 - **Symptoms** — what the operator first noticed.
 - **Evidence** — what the Spark UI, event logs, streaming progress, file counts, and YARN/EMR/CloudWatch logs actually showed.
 - **Root cause** — why it broke.
