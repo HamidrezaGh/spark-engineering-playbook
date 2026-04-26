@@ -1,0 +1,36 @@
+=== LABELED SAMPLE OUTPUT for examples/pyspark/file_count_audit.py --demo ===
+
+Command:
+  python3 examples/pyspark/file_count_audit.py --demo
+
+The script creates a temporary Hive-style layout (two `event_date=` partitions, 25 tiny files each),
+runs a real Hadoop FS listing through Spark, then deletes the temp tree. Paths in the header line
+will differ per machine.
+
+=== File audit for file:///.../demo_dataset (demo temp dataset) ===
+  file_count       : 50
+  total_size       : 653.32 KiB
+  min file size    : 11.72 KiB
+  median file size : 13.18 KiB
+  p95 file size    : 14.65 KiB
+  max file size    : 14.65 KiB
+  avg file size    : 13.07 KiB
+  small files (<32.00 MiB): 50 (100.0%)
+
+=== Top 20 partitions by file count ===
+  partition                                                         files          size         avg
+  event_date=2026-04-26                                                25    326.66 KiB   13.07 KiB
+  event_date=2026-04-25                                                25    326.66 KiB   13.07 KiB
+
+Recommended next action: high small-file ratio at ~12 KiB/file suggests coalesce/repartition before
+write, raise target file size, or compact the partition; expect heavy task counts on downstream scans
+until fixed.
+
+How to interpret
+----------------
+* **100% under the small-file threshold** — Every file is far below a healthy Parquet target
+  (often hundreds of MiB for analytics). Reads will spawn many tasks; metadata and listing costs grow.
+* **Per-partition file counts** — Use this to see whether the problem is global or isolated to a few
+  prefixes before choosing compaction scope.
+* **Production path** — Re-run with `--path s3://...` or `file://...` on your dataset (credentials as
+  required for cloud storage).

@@ -1,0 +1,32 @@
+=== LABELED ILLUSTRATIVE SAMPLE (not from a live cluster) ===
+=== Shape matches Spark 3.x EXPLAIN FORMATTED for a grouped aggregation. ===
+=== Run examples/sql/01-explain-shuffle.sql in your session for authoritative output. ===
+
+== Physical Plan ==
+*(2) HashAggregate(keys=[customer_id#12], functions=[count(1)], output=[customer_id#12, count#24L])
++- Exchange hashpartitioning(customer_id#12, 200), ENSURE_REQUIREMENTS, [plan_id=3]
+   +- *(1) HashAggregate(keys=[customer_id#12], functions=[partial_count(1)], output=[customer_id#12, count#21L])
+      +- *(1) ColumnarToRow
+         +- FileScan parquet spark_catalog.db.events[customer_id#12,event_date#13]
+               PartitionFilters: [isnotnull(event_date#13), (event_date#13 = 2026-04-25)]
+               PushedFilters: []
+               ReadSchema: struct<customer_id:string>
+
+Where to look
+-------------
+* **Exchange hashpartitioning(..., 200)** — This is the shuffle. In the Spark UI SQL graph it
+  appears as **Exchange**; it is almost always a **stage boundary** (child stage produces
+  shuffle write, parent stage consumes shuffle read).
+* **HashAggregate(... partial_count)** — Map-side (partial) aggregation; reduces bytes sent
+  across the shuffle when it applies.
+* **HashAggregate(... count)** without "partial" — Reduce-side final aggregation after the shuffle.
+* **PartitionFilters** — Shows partition pruning on the scan; empty or wrong predicates here
+  often explain full-table scans on partitioned lakes.
+* **ReadSchema** — Column pruning; extra columns here mean extra I/O and larger shuffle rows.
+
+Spark UI signals (same query on real data)
+------------------------------------------
+* **SQL** tab: one Exchange between scan-side operators and the final aggregate.
+* **Stages**: typically **two** stages for this pattern — stage 0 shuffle write, stage 1 shuffle read.
+* **Stage 0** summary metrics: most input bytes; non-trivial shuffle write if groups are large.
+* **Stage 1** summary metrics: shuffle read; watch for **skew** (max task >> median) on hot keys.

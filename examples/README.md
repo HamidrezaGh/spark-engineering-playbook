@@ -2,7 +2,7 @@
 
 Short, annotated examples that support the handbook. Each example is paired with the chapters it illustrates and explains, in comments, what to look for in the Spark UI and which production issue it helps diagnose.
 
-These are not benchmarks or end-to-end pipelines. They are the kind of small diagnostic snippets a staff engineer keeps in a scratchpad and pastes into a notebook during incident triage.
+These are not benchmarks or end-to-end pipelines. They are the kind of small diagnostic snippets you keep in a scratchpad and paste into a notebook during incident triage.
 
 ## Directories
 

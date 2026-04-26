@@ -3,10 +3,21 @@
 A production-grade Apache Spark handbook for engineers who want to make better Spark decisions
 in real systems, not just pass an interview.
 
-This repository is written from the point of view of a staff-level data platform engineer running
-Spark on AWS EMR with S3-backed storage.
-Every chapter focuses on what actually matters when a job is slow, expensive, fragile, or hard to
-operate at scale.
+This repository is written from the point of view of someone who runs Spark on AWS EMR with
+object-store-backed storage. The emphasis is on production scenarios, debugging workflows, case
+studies, design review templates, Spark UI evidence, EXPLAIN-driven examples, operational tradeoffs,
+guardrails, and runbooks — not on API walkthroughs. Every chapter focuses on what actually matters
+when a job is slow, expensive, fragile, or hard to operate at scale.
+
+## Why this exists
+
+Many Spark resources explain APIs, transformations, and simple tuning flags. Production Spark work
+is different: jobs fail because of shuffle pressure, skew, memory spill, small files, unsafe joins,
+bad partitioning, object-storage behavior, dependency drift, and missing observability.
+
+This playbook exists to capture practical Spark engineering judgment: how to read the Spark UI,
+reason from physical plans, diagnose production failures, choose the smallest safe fix, and turn
+incidents into reusable platform patterns.
 
 ## What This Is
 
@@ -20,7 +31,7 @@ A practical, opinionated reference covering:
 - Lakehouse patterns: Iceberg, incremental processing, idempotent backfills, table maintenance.
 - Structured Streaming reliability: triggers, checkpointing, watermarks, exactly-once.
 - Reliability and correctness: schema evolution, output commits, small-files control.
-- Staff-level platform thinking: golden paths, guardrails, observability, cost.
+- Platform patterns: golden paths, guardrails, observability, cost.
 
 ## What This Is Not
 
@@ -38,8 +49,8 @@ A practical, opinionated reference covering:
 - Senior data engineers who want to move from "my job works" to "I understand why it works, why it
   sometimes doesn't, and how to operate it safely."
 - Platform and infra engineers who own shared Spark / EMR infrastructure for many teams.
-- Tech leads and staff engineers preparing for design reviews, incident response, or cost reviews.
-- Engineers preparing for staff-level Spark interviews who want depth, not just trivia.
+- Tech leads preparing for design reviews, incident response, or cost reviews.
+- Engineers who want senior- or staff-interview depth on Spark execution and operations, without reducing the material to trivia lists.
 
 If you are brand new to Spark, this repo will be too dense. Start with the official Spark
 documentation and a short intro course, then come back here.
@@ -48,9 +59,8 @@ documentation and a short intro course, then come back here.
 
 Most Spark material optimizes for breadth or interview coverage.
 This playbook optimizes for **production decisions**: what to look at in the Spark UI when a stage
-is red, how YARN and EMR change failure modes, how S3 and Iceberg interact with commits and file
-layout, and how staff-level platform work turns one incident into a guardrail for the next forty
-teams.
+is red, how YARN and EMR change failure modes, how object storage and Iceberg interact with commits
+and file layout, and how one incident becomes a guardrail for the next forty teams.
 It is denser on purpose — it assumes you already ship jobs and need the *why* behind the knobs.
 
 ## How To Read This Repo
@@ -62,8 +72,8 @@ There are three reasonable entry points depending on your goal.
 Read the book chapters in order.
 
 Chapters 1–6 build the execution model, chapters 7–10 cover memory, formats, SQL, and caching,
-chapters 11–14 cover EMR/YARN, debugging, Iceberg, and streaming, and chapters 15–25 cover staff-level
-platform topics, reliability, and operating concerns.
+chapters 11–14 cover EMR/YARN, debugging, Iceberg, and streaming, and chapters 15–25 cover platform
+reliability, cost, isolation, and operating concerns.
 
 ### 2. Incident-driven path
 
@@ -104,15 +114,24 @@ Use the patterns and chapters together. For example, before reviewing a new pipe
 | Configs | [`docs/configs/`](docs/configs/README.md) | Spark configuration field manual: what each knob does and when to touch it. |
 | Checklists | [`docs/checklists/`](docs/checklists/README.md) | Operational checklists for pre-deploy, incident triage, cost, and production readiness. |
 | Case studies | [`docs/case-studies/`](docs/case-studies/) | Anonymized production incidents with root cause and fix. |
-| Examples | [`examples/`](examples/README.md) | PySpark, Spark SQL, and config examples used by the chapters. |
+| Examples | [`examples/`](examples/README.md) | PySpark, Spark SQL, and config examples used by the chapters; see [Runnable examples](#runnable-examples-with-sample-output) below. |
 | Diagrams | [`diagrams/`](diagrams/README.md) | Sources for execution, storage, and platform diagrams. |
-| Templates | [`docs/templates/`](docs/templates/README.md) | Staff-level templates for design reviews, incident postmortems, production readiness, and cost reviews. |
+| Templates | [`docs/templates/`](docs/templates/README.md) | Design review, incident postmortem, production readiness, and cost review templates. |
 | Glossary | [`docs/glossary.md`](docs/glossary.md) | Production-oriented Spark vocabulary. |
 | Q&A | [`docs/advanced-spark-questions.md`](docs/advanced-spark-questions.md) | The original question list that defines the bar for this handbook. |
+| Sample outputs | [`docs/assets/screenshots/`](docs/assets/screenshots/README.md) | Labeled text captures of EXPLAIN shape, skew detector, and file audit (not production screenshots). |
+
+## Runnable examples with sample output
+
+These go beyond documentation-only snippets: you can run them locally and compare your terminal to the labeled samples in [`docs/assets/screenshots/`](docs/assets/screenshots/README.md).
+
+1. **EXPLAIN and shuffle boundaries** — [`examples/sql/01-explain-shuffle.sql`](examples/sql/01-explain-shuffle.sql) with annotated sample plan shape in [`docs/assets/screenshots/explain-formatted-shuffle-output.txt`](docs/assets/screenshots/explain-formatted-shuffle-output.txt). Run with `spark-sql` after pointing `events` at your table, or use [`examples/local/run_examples.sh`](examples/local/run_examples.sh) for the bundled CSVs.
+2. **Skew detector** — [`examples/pyspark/skew_detector.py`](examples/pyspark/skew_detector.py): `python3 examples/pyspark/skew_detector.py --demo` (no input files), or `--input examples/local/data/events_sample.csv --format csv --header --key customer_id`. Sample tables in [`docs/assets/screenshots/skew-detector-output.txt`](docs/assets/screenshots/skew-detector-output.txt).
+3. **Small-file audit** — [`examples/pyspark/file_count_audit.py`](examples/pyspark/file_count_audit.py): `python3 examples/pyspark/file_count_audit.py --demo` creates a temporary multi-file layout and prints a real audit. Sample in [`docs/assets/screenshots/file-count-audit-output.txt`](docs/assets/screenshots/file-count-audit-output.txt).
 
 ## Suggested Learning Path
 
-For an engineer with one to three years of Spark experience aiming for staff-level depth:
+For an engineer with one to three years of Spark experience who wants depth beyond day-to-day tuning:
 
 1. **Foundations** — Chapters 1–3: execution model, shuffle, partitioning. Get the mental model right
    before tuning anything.
@@ -124,8 +143,8 @@ For an engineer with one to three years of Spark experience aiming for staff-lev
    design. This is where data platforms succeed or fail.
 5. **Operations on EMR** — Chapter 11 plus the configs and checklists. Understand how EMR, YARN, and
    S3 shape Spark behavior.
-6. **Platform thinking** — Chapters 15, 16, 20, 21, 22, 24, 25: staff-level engineering,
-   correctness, packaging, security, CI/CD, backfills, isolation.
+6. **Platform thinking** — Chapters 15, 16, 20, 21, 22, 24, 25: correctness, packaging, security,
+   CI/CD, backfills, isolation, and shared guardrails.
 7. **Streaming** — Chapter 14: structured streaming, watermarks, state, exactly-once.
 
 Once those are internalized, use the field guides and case studies to keep the muscle memory fresh.
