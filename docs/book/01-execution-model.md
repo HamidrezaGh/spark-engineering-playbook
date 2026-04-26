@@ -7,9 +7,32 @@ Spark turns a logical data computation into distributed work. A user writes tran
 
 The useful production model is:
 
-- Job: work triggered by one action.
-- Stage: a set of tasks that can run without waiting for a shuffle boundary.
-- Task: one unit of work over one partition of data.
+- **Job**: work triggered by one action.
+- **Stage**: a set of tasks that can run without waiting for a shuffle boundary.
+- **Task**: one unit of work over one partition of data.
+
+Note: shuffles are best thought of as **between stages**, but tasks on both sides participate. The upstream stage performs **shuffle write** (partitioning + writing shuffle files); the downstream stage performs **shuffle read** (fetching those files over the network/disk) and then continues processing.
+
+Example: `df.groupBy("k").count()` typically becomes:
+
+```text
+Stage 0 (shuffle write): scan/filter/map -> write shuffle buckets by k
+Stage 1 (shuffle read):  read shuffle buckets -> aggregate counts
+```
+
+## Where Data Is Actually Read/Written (EMR)
+
+In Spark docs and UIs you'll often see "read" and "write" as generic terms. In production it helps to separate **shuffle I/O** from **source/sink I/O**, because they hit different storage layers.
+
+- **Source read / sink write**: your input and output paths, typically:
+  - **S3** (common on EMR): `s3://...` (or `s3a://...`) via the Hadoop filesystem layer.
+  - **HDFS** (if enabled on the cluster): `hdfs://...`.
+  - **Local filesystem** on nodes: `file:/...` (mostly for scratch, not durable storage).
+- **Shuffle read / shuffle write**: Spark's intermediate data exchange between stages.
+  - **Where it lives**: executor-local disks (instance store / attached volumes) as shuffle files.
+  - **How it moves**: downstream tasks fetch shuffle blocks over the network from the executors that produced them.
+
+Practical implication: "shuffle write is high" does *not* mean you are writing to S3/HDFS; it usually means you are writing temporary shuffle files to executor disks and saturating disk + network.
 
 ## Key Takeaways
 
@@ -93,6 +116,14 @@ Use the Spark UI to locate the level of the problem:
 - Stages tab: task counts, shuffle read/write, spill, locality, and long tails.
 - SQL tab: physical operators, joins, exchanges, adaptive plan changes.
 - Executors tab: failed tasks, memory use, disk spill, GC time, and executor loss.
+
+## Hadoop + YARN (What They Do On EMR)
+
+On EMR, Spark usually runs on top of the Hadoop stack (even when your data lives in S3).
+
+- **Hadoop filesystem layer**: Spark uses Hadoop FS implementations for `s3://`, `hdfs://`, and `file:/`. Many "S3 read/write" behaviors are connector behaviors (retries/timeouts, listing, commit semantics).
+- **YARN** (for YARN-based clusters): starts driver/executors as containers and enforces resource limits. Many Spark failures show up as YARN container/application failures.
+- **HDFS** (optional): a cluster filesystem backed by node disks—often used for fast, in-cluster temporary data; durability/lifecycle depends on your EMR setup (many treat it as more ephemeral than S3).
 
 ## Best Practices
 
