@@ -1,8 +1,5 @@
 # Data Correctness And Idempotency
 
-Status: First Draft
-Level: Staff
-Covers: retries, partial writes, backfills, schema drift, quality gates, reconciliation
 
 ## Core Idea
 

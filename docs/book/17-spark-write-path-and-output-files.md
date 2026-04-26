@@ -1,8 +1,5 @@
 # Spark Write Path And Output Files
 
-Status: First Draft
-Level: Senior to Staff
-Covers: file writers, task outputs, commit protocols, object-store writes, output file sizing
 
 ## Core Idea
 

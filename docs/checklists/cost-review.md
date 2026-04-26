@@ -1,6 +1,5 @@
 # Cost Review Checklist
 
-Status: Draft
 
 ## Compute
 

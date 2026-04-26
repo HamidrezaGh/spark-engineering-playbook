@@ -1,6 +1,5 @@
 # Small Files Playbook
 
-Status: Draft
 
 ## Symptom
 

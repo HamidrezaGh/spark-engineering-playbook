@@ -1,6 +1,5 @@
 # Debugging Skew
 
-Status: Draft
 
 ## Symptom
 

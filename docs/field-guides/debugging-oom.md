@@ -1,6 +1,5 @@
 # Debugging OOM
 
-Status: Draft
 
 ## Symptom
 

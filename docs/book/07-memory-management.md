@@ -1,8 +1,5 @@
 # Memory Management
 
-Status: First Draft
-Level: Senior to Staff
-Covers: executor memory, execution memory, storage memory, overhead, PySpark memory, spill, GC
 
 ## Core Idea
 

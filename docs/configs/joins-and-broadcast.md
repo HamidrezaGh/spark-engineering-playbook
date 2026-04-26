@@ -1,6 +1,5 @@
 # Joins And Broadcast Configs
 
-Status: Draft
 
 ## Primary Configs
 

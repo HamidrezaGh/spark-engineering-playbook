@@ -1,6 +1,5 @@
 # Pre-Deploy Review Checklist
 
-Status: Draft
 
 ## Code
 

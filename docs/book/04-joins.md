@@ -1,8 +1,5 @@
 # Joins
 
-Status: First Draft
-Level: Senior to Staff
-Covers: broadcast hash join, sort-merge join, shuffled hash join, join hints, large joins
 
 ## Core Idea
 

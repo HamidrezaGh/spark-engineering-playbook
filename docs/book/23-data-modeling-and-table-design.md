@@ -1,8 +1,5 @@
 # Data Modeling And Table Design
 
-Status: First Draft
-Level: Senior to Staff
-Covers: partition columns, bronze/silver/gold, SCD, fact tables, clustering, table evolution
 
 ## Core Idea
 

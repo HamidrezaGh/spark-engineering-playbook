@@ -1,6 +1,5 @@
 # Broadcast Joins
 
-Status: Draft
 
 ## Knob
 

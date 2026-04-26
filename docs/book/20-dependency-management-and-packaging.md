@@ -1,8 +1,5 @@
 # Dependency Management And Packaging
 
-Status: First Draft
-Level: Senior to Staff
-Covers: application packaging, classpath, Python dependencies, connector versions, reproducible builds
 
 ## Core Idea
 

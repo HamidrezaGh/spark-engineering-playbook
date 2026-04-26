@@ -1,8 +1,5 @@
 # Staff-Level Spark Engineering
 
-Status: First Draft
-Level: Staff
-Covers: platform design, observability, guardrails, cost, reusable standards
 
 ## Core Idea
 

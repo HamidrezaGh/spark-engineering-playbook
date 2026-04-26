@@ -1,6 +1,5 @@
 # Spark Configs
 
-Status: Draft
 
 This section is a practical field manual for Spark configuration in production (with an EMR/YARN/S3 bias).
 

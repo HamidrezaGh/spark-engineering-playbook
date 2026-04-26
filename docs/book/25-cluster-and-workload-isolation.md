@@ -1,8 +1,5 @@
 # Cluster And Workload Isolation
 
-Status: First Draft
-Level: Staff
-Covers: EMR workload separation, YARN queues, managed scaling, core nodes, task nodes, Spot, guardrails, cost attribution
 
 ## Core Idea
 

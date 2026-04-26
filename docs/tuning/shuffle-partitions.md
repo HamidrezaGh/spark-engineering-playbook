@@ -1,6 +1,5 @@
 # Shuffle Partitions
 
-Status: Draft
 
 ## Knob
 

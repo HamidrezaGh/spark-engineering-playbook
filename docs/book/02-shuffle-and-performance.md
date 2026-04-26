@@ -1,8 +1,5 @@
 # Shuffle And Performance
 
-Status: First Draft
-Level: Senior to Staff
-Covers: shuffle mechanics, shuffle files, spill, fetch failures, shuffle partition sizing
 
 ## Core Idea
 

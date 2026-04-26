@@ -1,6 +1,5 @@
 # Adaptive Query Execution (AQE) Configs
 
-Status: Draft
 
 ## Primary Configs
 

@@ -1,8 +1,5 @@
 # Data Skew
 
-Status: First Draft
-Level: Senior to Staff
-Covers: skew detection, salting, skewed joins, AQE skew handling, celebrity keys
 
 ## Core Idea
 

@@ -1,6 +1,5 @@
 # Kafka To Iceberg Streaming
 
-Status: Draft
 
 ## Problem
 

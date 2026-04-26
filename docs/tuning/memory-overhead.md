@@ -1,6 +1,5 @@
 # Memory Overhead
 
-Status: Draft
 
 ## Knob
 

@@ -2,9 +2,6 @@
 
 Use this template for files under `docs/field-guides/`.
 
----
-Status: Draft
----
 
 ## Symptom
 

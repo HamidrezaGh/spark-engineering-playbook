@@ -1,8 +1,5 @@
 # S3 With Spark On EMR
 
-Status: First Draft
-Level: Senior to Staff
-Covers: S3, S3A, EMRFS, list operations, rename, committers, throttling, metadata operations
 
 ## Core Idea
 

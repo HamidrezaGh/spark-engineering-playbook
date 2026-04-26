@@ -1,8 +1,5 @@
 # Testing And CI/CD
 
-Status: First Draft
-Level: Senior to Staff
-Covers: local tests, integration tests, representative datasets, deterministic tests, streaming tests, deployment
 
 ## Core Idea
 

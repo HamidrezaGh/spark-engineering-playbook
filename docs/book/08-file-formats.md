@@ -1,8 +1,5 @@
 # File Formats
 
-Status: First Draft
-Level: Senior to Staff
-Covers: Parquet, CSV, column pruning, predicate pushdown, compression, small files, schema evolution
 
 ## Core Idea
 

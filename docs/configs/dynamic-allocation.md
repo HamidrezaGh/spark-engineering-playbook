@@ -1,6 +1,5 @@
 # Dynamic Allocation And Autoscaling Configs
 
-Status: Draft
 
 ## Core Idea
 

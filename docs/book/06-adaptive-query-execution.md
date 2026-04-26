@@ -1,8 +1,5 @@
 # Adaptive Query Execution
 
-Status: First Draft
-Level: Senior to Staff
-Covers: runtime plan changes, partition coalescing, skew joins, join strategy switching
 
 ## Core Idea
 

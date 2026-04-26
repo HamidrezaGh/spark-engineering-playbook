@@ -2,9 +2,6 @@
 
 Use this template for files under `docs/patterns/`.
 
----
-Status: Draft
----
 
 ## Problem
 

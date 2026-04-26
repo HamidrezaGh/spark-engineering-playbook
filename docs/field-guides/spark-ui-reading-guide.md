@@ -1,6 +1,5 @@
 # Spark UI Reading Guide
 
-Status: Draft
 
 ## The 90-Second Workflow
 

@@ -1,6 +1,5 @@
 # Spark Config Principles
 
-Status: Draft
 
 ## Core Idea
 

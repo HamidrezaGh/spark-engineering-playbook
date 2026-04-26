@@ -1,6 +1,5 @@
 # Large Iceberg Merge
 
-Status: Draft
 
 ## Problem
 

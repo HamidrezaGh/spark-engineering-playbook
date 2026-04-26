@@ -1,6 +1,5 @@
 # S3 / Object Storage IO Configs
 
-Status: Draft
 
 ## Core Idea
 

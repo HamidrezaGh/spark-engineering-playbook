@@ -1,6 +1,5 @@
 # Idempotent Backfill
 
-Status: Draft
 
 ## Problem
 

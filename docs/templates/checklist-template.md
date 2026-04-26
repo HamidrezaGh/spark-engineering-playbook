@@ -2,9 +2,6 @@
 
 Use this template for files under `docs/checklists/`.
 
----
-Status: Draft
----
 
 ## Purpose
 

@@ -1,6 +1,5 @@
 # Incremental Pipeline
 
-Status: Draft
 
 ## Problem
 

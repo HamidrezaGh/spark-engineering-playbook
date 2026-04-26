@@ -1,8 +1,5 @@
 # Caching And Persistence
 
-Status: First Draft
-Level: Senior to Staff
-Covers: cache, persist, storage levels, memory pressure, recomputation, cache verification
 
 ## Core Idea
 

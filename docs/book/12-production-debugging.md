@@ -1,8 +1,5 @@
 # Production Debugging
 
-Status: First Draft
-Level: Staff
-Covers: triage, regressions, OOM, skew, spill, small files, CPU and IO bottlenecks
 
 ## Core Idea
 

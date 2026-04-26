@@ -1,6 +1,5 @@
 # Executor Sizing
 
-Status: Draft
 
 ## Knob
 

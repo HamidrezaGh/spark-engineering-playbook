@@ -1,8 +1,5 @@
 # Security And Governance
 
-Status: First Draft
-Level: Staff
-Covers: IAM, EMR instance profiles, EMR security configuration, secrets, permissions, PII, auditing, governance
 
 ## Core Idea
 

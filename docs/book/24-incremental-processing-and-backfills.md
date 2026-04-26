@@ -1,8 +1,5 @@
 # Incremental Processing And Backfills
 
-Status: First Draft
-Level: Staff
-Covers: high-watermarks, late data, replay, backfills, deletes, updates, reconciliation
 
 ## Core Idea
 

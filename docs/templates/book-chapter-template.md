@@ -2,11 +2,6 @@
 
 Use this template for files under `docs/book/`.
 
----
-Status: Draft
-Level: (Senior | Staff)
-Covers: comma-separated topics
----
 
 ## Core Idea
 

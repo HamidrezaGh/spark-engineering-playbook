@@ -1,8 +1,5 @@
 # Iceberg And Spark
 
-Status: First Draft
-Level: Senior to Staff
-Covers: Iceberg writes, hidden partitioning, metadata, manifests, snapshots, time travel, merge
 
 ## Core Idea
 

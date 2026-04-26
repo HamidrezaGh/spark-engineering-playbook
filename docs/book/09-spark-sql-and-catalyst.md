@@ -1,8 +1,5 @@
 # Spark SQL And Catalyst
 
-Status: First Draft
-Level: Senior to Staff
-Covers: logical plans, physical plans, Catalyst, Tungsten, code generation, formatted explain
 
 ## Core Idea
 

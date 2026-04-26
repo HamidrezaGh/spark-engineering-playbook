@@ -1,8 +1,5 @@
 # Spark On AWS EMR And YARN
 
-Status: First Draft
-Level: Senior to Staff
-Covers: EMR, YARN, client mode, cluster mode, ApplicationMaster, containers, executor sizing, S3, logs, CloudWatch
 
 ## Core Idea
 

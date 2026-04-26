@@ -1,8 +1,5 @@
 # Execution Model
 
-Status: First Draft
-Level: Senior to Staff
-Covers: jobs, stages, tasks, drivers, executors, narrow transformations, wide transformations
 
 ## Core Idea
 

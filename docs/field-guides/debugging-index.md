@@ -1,6 +1,5 @@
 # Debugging Index
 
-Status: Draft
 
 Use this page when you have an incident symptom and need a fast path to the right Spark UI evidence and playbook.
 

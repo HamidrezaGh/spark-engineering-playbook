@@ -1,6 +1,5 @@
 # Memory And GC Configs
 
-Status: Draft
 
 ## Primary Configs
 

@@ -1,6 +1,5 @@
 # S3 On EMR
 
-Status: Draft
 
 ## Knob
 

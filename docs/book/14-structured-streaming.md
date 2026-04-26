@@ -1,8 +1,5 @@
 # Structured Streaming
 
-Status: First Draft
-Level: Senior to Staff
-Covers: micro-batches, checkpoints, watermarks, stateful processing, fault tolerance, Kafka, Iceberg
 
 ## Core Idea
 

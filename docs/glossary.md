@@ -1,6 +1,5 @@
 # Glossary
 
-Status: Draft
 
 ## Terms
 

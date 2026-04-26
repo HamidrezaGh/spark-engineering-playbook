@@ -1,6 +1,5 @@
 # Shuffle Configs
 
-Status: Draft
 
 ## Primary Configs
 

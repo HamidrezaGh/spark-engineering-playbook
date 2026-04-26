@@ -1,6 +1,5 @@
 # Debugging Slow Jobs
 
-Status: Draft
 
 ## Symptom
 

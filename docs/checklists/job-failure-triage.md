@@ -1,6 +1,5 @@
 # Job Failure Triage Checklist
 
-Status: Draft
 
 ## Scope The Failure
 

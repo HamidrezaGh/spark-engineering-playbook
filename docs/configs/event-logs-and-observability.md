@@ -1,6 +1,5 @@
 # Event Logs And Observability Configs
 
-Status: Draft
 
 ## Core Idea
 

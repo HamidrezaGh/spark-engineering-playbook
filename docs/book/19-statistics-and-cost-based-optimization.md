@@ -1,8 +1,5 @@
 # Statistics And Cost-Based Optimization
 
-Status: First Draft
-Level: Senior to Staff
-Covers: table statistics, column statistics, CBO, join order, stale stats, optimizer hints
 
 ## Core Idea
 

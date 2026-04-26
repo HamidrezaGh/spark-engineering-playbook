@@ -1,8 +1,5 @@
 # Partitioning
 
-Status: First Draft
-Level: Senior to Staff
-Covers: Spark partitions, table partitions, repartition, coalesce, skew, small files
 
 ## Core Idea
 

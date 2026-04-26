@@ -1,6 +1,5 @@
 # Speculation And Stragglers
 
-Status: Draft
 
 ## Core Idea
 

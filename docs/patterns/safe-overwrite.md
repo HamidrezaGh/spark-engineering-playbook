@@ -1,6 +1,5 @@
 # Safe Overwrite
 
-Status: Draft
 
 ## Problem
 

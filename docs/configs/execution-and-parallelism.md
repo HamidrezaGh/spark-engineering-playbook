@@ -1,6 +1,5 @@
 # Execution And Parallelism Configs
 
-Status: Draft
 
 ## Core Idea
 

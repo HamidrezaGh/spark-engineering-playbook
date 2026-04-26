@@ -1,6 +1,5 @@
 # Production Readiness Checklist
 
-Status: Draft
 
 ## Data Correctness
 
