@@ -14,7 +14,9 @@ A Structured Streaming query reads from a source (Kafka, files, Kinesis) one mic
 
 The checkpoint location is the durable single source of truth for "what has been processed and where are we." Lose the checkpoint and the streaming query has to start over from a configured starting offset.
 
-## Mermaid Diagram
+### Driver, Executors, and S3 Checkpoint per Micro-Batch
+
+Each batch loads state from the checkpoint, processes input, writes state and WAL entries back, then commits offsets—so checkpoint I/O and state size are on the critical path for latency and recovery time.
 
 ```mermaid
 flowchart LR
@@ -75,6 +77,8 @@ flowchart LR
     class Offsets,Commits,State,Sources ckpt
     class Sink sink
 ```
+
+Growing `state/` or `walCommit` duration without input growth usually means missing watermarking, missing TTL on custom state, or checkpoint directory hygiene—not “just add driver memory.”
 
 ## How To Use This Diagram In The Relevant Chapter
 

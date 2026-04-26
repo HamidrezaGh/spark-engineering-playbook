@@ -11,7 +11,9 @@ Two production rules to remember:
 - "Shuffle Write" in the Spark UI is **executor-local disk**, not S3 or HDFS. It is the temporary working set that the next stage will fetch.
 - "Shuffle Read" is **remote** by default — the reducer pulls bytes from N executors. Network and the shuffle service determine throughput here.
 
-## Mermaid Diagram
+### Shuffle Boundary: Map-Side Write and Reduce-Side Read
+
+Map tasks partition output into buckets on executor-local disk; reduce tasks fetch the buckets they own across the network—this is what Spark UI “Shuffle Write” and “Shuffle Read” measure.
 
 ```mermaid
 flowchart LR
@@ -64,6 +66,8 @@ flowchart LR
     class F0,F1,F2 disk
     class R0,R1,R2,R3 reduce
 ```
+
+Losing one map-side executor invalidates its shuffle files; every reducer that depended on those files may fail with `FetchFailedException` until upstream work is recomputed.
 
 ## How To Use This Diagram In The Relevant Chapter
 
