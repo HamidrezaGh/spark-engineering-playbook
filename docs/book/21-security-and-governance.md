@@ -8,6 +8,13 @@ Covers: IAM, EMR instance profiles, EMR security configuration, secrets, permiss
 
 Spark security on EMR is the combination of compute identity, S3 and Glue permissions, secret handling, KMS encryption, network controls, table governance, and auditability. A production EMR platform should make secure behavior the default.
 
+## Key Takeaways
+
+- **Every Spark job has an identity**, and that identity must be least-privilege.
+- **S3, Glue, KMS, and logs are all security surfaces**.
+- **Secrets can leak through configs, logs, closures, and notebooks**.
+- **Dev, staging, and production permissions should be separated by default**.
+
 ## Mental Model
 
 Every Spark job has an identity. That identity reads sources, writes targets, accesses catalogs, decrypts data, and emits logs. Security failures happen when identity, permissions, or data handling are broader than the job requires.

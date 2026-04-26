@@ -8,6 +8,13 @@ Covers: logical plans, physical plans, Catalyst, Tungsten, code generation, form
 
 Catalyst is Spark SQL's optimizer. It turns DataFrame and SQL operations into analyzed, optimized, and executable plans. Understanding these plans is the shortest path to understanding why Spark chose a join, inserted a shuffle, pushed a filter, or scanned more data than expected.
 
+## Key Takeaways
+
+- **Catalyst can optimize DataFrame and SQL plans** because the logic is visible to Spark.
+- **`Exchange` means data movement**, usually a shuffle.
+- **UDFs can hide logic from the optimizer**.
+- **`explain("formatted")` is a production debugging tool**, not only a learning tool.
+
 ## Mental Model
 
 The plan flow is:

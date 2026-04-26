@@ -8,6 +8,13 @@ Covers: partition columns, bronze/silver/gold, SCD, fact tables, clustering, tab
 
 Table design determines how expensive future Spark jobs will be. Good modeling balances query performance, write cost, table maintenance, correctness, and downstream usability.
 
+## Key Takeaways
+
+- **Table design is a long-term cost decision**.
+- **Partitioning helps only when it matches query and write patterns**.
+- **Bronze, silver, and gold tables should have different contracts**.
+- **High-cardinality partitioning usually creates metadata and small-file problems**.
+
 ## Mental Model
 
 Bronze tables preserve raw or lightly normalized data. Silver tables apply cleaning, deduplication, conformance, and business keys. Gold tables serve curated analytics, reporting, ML features, or product-facing data.

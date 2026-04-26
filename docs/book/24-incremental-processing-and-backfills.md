@@ -8,6 +8,13 @@ Covers: high-watermarks, late data, replay, backfills, deletes, updates, reconci
 
 Incremental processing updates only the data that changed. Backfills recompute historical ranges. Both must be designed for correctness, isolation, replayability, and operational control.
 
+## Key Takeaways
+
+- **Incremental processing reduces cost but increases correctness risk**.
+- **Advance watermarks only after successful durable output**.
+- **Backfills must be isolated, rerunnable, and reconciled**.
+- **Deletes and updates require explicit source semantics and target behavior**.
+
 ## Mental Model
 
 A high-watermark records progress, such as max event time, ingestion time, source version, or offset. It helps a job identify new input. Late-arriving records are records that belong to an older business time but arrive after the normal processing window.

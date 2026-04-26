@@ -8,6 +8,13 @@ Covers: Parquet, CSV, column pruning, predicate pushdown, compression, small fil
 
 File format is a performance and correctness decision. Columnar formats such as Parquet are usually better for analytics than row-oriented text formats such as CSV because they support column pruning, predicate pushdown, compression, typed schemas, and metadata-driven reads.
 
+## Key Takeaways
+
+- **Parquet is usually better than CSV for analytics** because Spark can skip columns and sometimes row groups.
+- **Small files are a performance and cost problem on S3**.
+- **Compression is a CPU/storage tradeoff**, not a universal default.
+- **Schema evolution needs compatibility discipline**, especially in shared tables.
+
 ## Mental Model
 
 CSV is plain text. Spark must parse rows, infer or apply schema, and read full records even if a query only needs a few columns.

@@ -10,6 +10,13 @@ A shuffle redistributes data between executors so rows with the same key or orde
 
 Shuffle is expensive because it adds network IO, disk IO, serialization, sorting, memory pressure, and failure recovery complexity.
 
+## Key Takeaways
+
+- **Shuffle is often the most expensive Spark operation** because it combines network, disk, CPU, and memory pressure.
+- **`Exchange` in a plan usually means a shuffle boundary**.
+- **Shuffle partition count controls reduce-side task size and output shape**.
+- **Fetch failures often mean lost shuffle data**, executor loss, disk issues, or network instability.
+
 ## Mental Model
 
 Think of shuffle as a distributed exchange:

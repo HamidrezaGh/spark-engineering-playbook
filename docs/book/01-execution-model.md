@@ -14,6 +14,13 @@ The useful production model is:
 - Stage: a set of tasks that can run without waiting for a shuffle boundary.
 - Task: one unit of work over one partition of data.
 
+## Key Takeaways
+
+- **Actions create jobs**; transformations only build the plan.
+- **Shuffle boundaries create new stages** because data must be redistributed.
+- **Tasks are partition-level work**, so partition sizing controls parallelism and pressure.
+- **Driver failure usually fails the application**; executor failure is usually retried.
+
 ## Mental Model
 
 Transformations such as `select`, `filter`, and `withColumn` are lazy. They describe a plan but do not execute it. Actions such as `count`, `collect`, `write`, and `show` force Spark to materialize the plan.

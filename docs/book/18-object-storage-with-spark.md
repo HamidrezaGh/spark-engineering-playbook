@@ -8,6 +8,13 @@ Covers: S3, S3A, EMRFS, list operations, rename, committers, throttling, metadat
 
 S3 is not HDFS. It is durable, scalable object storage with different semantics and performance characteristics than a distributed filesystem. Spark on EMR must account for S3 list cost, request rates, object metadata, commit behavior, small files, S3 throttling, and non-atomic rename-like workflows.
 
+## Key Takeaways
+
+- **S3 is not a POSIX filesystem**, so rename/list/write patterns matter.
+- **Small files create S3 request cost and Spark planning overhead**.
+- **Low executor CPU can mean S3 is the bottleneck**.
+- **Adding executors can make S3 pressure worse** if request rate or listing is the limit.
+
 ## Mental Model
 
 HDFS is built for distributed filesystem operations. S3 exposes object APIs. Operations such as listing many prefixes, writing many small objects, and renaming paths can be expensive or implemented as copy/delete workflows.

@@ -8,6 +8,13 @@ Covers: table statistics, column statistics, CBO, join order, stale stats, optim
 
 Spark's optimizer makes better decisions when it has useful statistics. Cost-based optimization uses table size, row counts, column stats, and estimates to choose join order, join strategy, and plan shape.
 
+## Key Takeaways
+
+- **Missing stats can cause bad join strategies**.
+- **Stale stats are worse than no mental model** because the plan looks intentional but is wrong.
+- **Table-format metadata helps scan pruning**, while catalog stats help optimizer planning.
+- **Hints should be measured and documented**, not used as permanent guesswork.
+
 ## Mental Model
 
 Without stats, Spark relies on defaults and heuristics. With accurate stats, Spark can estimate whether a table is broadcastable, which join order is cheaper, and how selective filters may be.

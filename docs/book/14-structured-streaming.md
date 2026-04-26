@@ -8,6 +8,13 @@ Covers: micro-batches, checkpoints, watermarks, stateful processing, fault toler
 
 Structured Streaming treats streaming data as an unbounded table. Spark runs the query continuously, usually as a sequence of micro-batches, and uses checkpoints to track progress and recover from failures.
 
+## Key Takeaways
+
+- **Checkpointing is the recovery backbone** for streaming progress and state.
+- **Watermarks bound state for late data**, but aggressive watermarks can drop valid records.
+- **Exactly-once is an end-to-end design property**, not just a Spark setting.
+- **Frequent micro-batches can create small files on S3** without compaction or table maintenance.
+
 ## Mental Model
 
 A micro-batch processes a bounded slice of new data. Checkpoints store offsets, progress, and state metadata. Stateful operations such as aggregations, deduplication, joins, and session windows maintain state across micro-batches.

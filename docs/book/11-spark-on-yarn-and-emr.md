@@ -10,6 +10,14 @@ On AWS EMR, Spark commonly runs on YARN. YARN manages containers for the driver,
 
 The production question is not only "does the Spark code work?" It is "does the Spark application fit this EMR release, instance fleet, YARN queue, S3 layout, IAM role, logging setup, and cost model?"
 
+## Key Takeaways
+
+- **EMR release version is part of your runtime contract**.
+- **Cluster mode is the safer default for scheduled production jobs**.
+- **S3 is durable storage; executor local disks are working space** for shuffle, spill, and cache.
+- **Task nodes and Spot capacity are useful but interruptible**, so plan for executor loss.
+- **Persist Spark event logs and YARN logs to S3** before transient clusters terminate.
+
 ## Mental Model
 
 In client mode, the driver runs where `spark-submit` is launched, such as an edge node, notebook host, or gateway. In cluster mode, the driver runs inside the cluster in an application container.

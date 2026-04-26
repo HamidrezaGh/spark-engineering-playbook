@@ -8,6 +8,13 @@ Covers: retries, partial writes, backfills, schema drift, quality gates, reconci
 
 A Spark job is idempotent when rerunning it with the same inputs produces the same correct final state without duplicates, missing records, or corrupt partial output. Production pipelines must assume retries, partial failures, late data, and backfills will happen.
 
+## Key Takeaways
+
+- **Idempotency means safe reruns**, not just successful first runs.
+- **Append is risky for retryable jobs** unless the input and sink semantics prevent duplicates.
+- **Quality gates should run before publishing gold data**.
+- **Watermarks and run metadata must advance only after durable success**.
+
 ## Mental Model
 
 Correctness is a contract across input, transformation, and write path. Spark can retry tasks, but business correctness depends on deterministic logic and safe sink behavior.

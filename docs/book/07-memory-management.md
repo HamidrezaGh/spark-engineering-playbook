@@ -8,6 +8,13 @@ Covers: executor memory, execution memory, storage memory, overhead, PySpark mem
 
 Spark memory is not just one heap. A production Spark job uses memory for execution, cached data, JVM overhead, Python worker processes, off-heap buffers, shuffle, serialization, and user code. Memory tuning must account for the actual workload shape.
 
+## Key Takeaways
+
+- **Executor heap is only part of memory**; overhead matters heavily on EMR.
+- **PySpark often needs more memory overhead** because Python workers run outside JVM heap.
+- **Spill is a symptom to measure**, not automatically a failure.
+- **Too many concurrent tasks per executor can create memory pressure**.
+
 ## Mental Model
 
 Executor memory is the JVM heap available to executor processes. Spark uses a unified memory model where execution memory and storage memory can share space. Execution memory supports joins, aggregations, sorts, and shuffles. Storage memory supports cached or persisted data.

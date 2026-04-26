@@ -8,6 +8,13 @@ Covers: EMR workload separation, YARN queues, managed scaling, core nodes, task 
 
 Workload isolation prevents one Spark job, team, or workload type from degrading the platform for everyone else. A shared Spark platform needs scheduling policy, resource quotas, guardrails, and cost attribution.
 
+## Key Takeaways
+
+- **Shared EMR clusters need workload isolation**, not only more capacity.
+- **YARN queues and dynamic allocation bounds prevent runaway jobs**.
+- **Spot task nodes reduce cost but increase executor-loss risk**.
+- **Cost attribution changes behavior only when ownership is visible**.
+
 ## Mental Model
 
 Interactive queries, batch ETL, streaming jobs, ad hoc exploration, and backfills have different reliability and latency needs. They should not all compete blindly for the same unrestricted resources.

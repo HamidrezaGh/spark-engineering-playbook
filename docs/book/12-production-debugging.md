@@ -8,6 +8,13 @@ Covers: triage, regressions, OOM, skew, spill, small files, CPU and IO bottlenec
 
 Production Spark debugging is evidence collection under time pressure. Start from what changed, locate the slow or failed stage, inspect data shape and physical plan, then choose the smallest safe remediation.
 
+## Key Takeaways
+
+- **Start from the slowest or failed stage**, not from random config changes.
+- **Compare today to a known-good run**: data size, skew, files, plan, runtime, and cluster.
+- **Low CPU often points to S3, shuffle wait, queue wait, or planning**, not lack of executors.
+- **Every fix should add a metric or guardrail** so the same issue is easier next time.
+
 ## Mental Model
 
 Debug Spark incidents across four layers:

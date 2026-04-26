@@ -8,6 +8,13 @@ Covers: file writers, task outputs, commit protocols, object-store writes, outpu
 
 Spark writes are distributed. Each task writes output for its partition, so final file count is tied to final partition count, table partitioning, retries, and writer behavior.
 
+## Key Takeaways
+
+- **Final partition count strongly influences output file count**.
+- **Commit behavior matters more on S3 than on HDFS**.
+- **Task retries and speculation can create orphan or duplicate attempt files** if commit handling is wrong.
+- **Table formats reduce raw path write risks** by committing metadata snapshots.
+
 ## Mental Model
 
 A write is not one file operation. Spark schedules tasks, each task writes data files, and a commit protocol coordinates which files become visible. Table formats add a metadata commit layer.

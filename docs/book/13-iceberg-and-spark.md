@@ -8,6 +8,13 @@ Covers: Iceberg writes, hidden partitioning, metadata, manifests, snapshots, tim
 
 Apache Iceberg is a table format that adds transactional table metadata on top of data files. Spark writes data files and commits metadata changes so readers see consistent snapshots.
 
+## Key Takeaways
+
+- **Iceberg table state is metadata-driven**, not just a directory of files.
+- **Snapshots enable isolation, rollback, and time travel**.
+- **Manifests and manifest lists drive planning and pruning**.
+- **Large `MERGE INTO` operations are expensive when many target files are touched**.
+
 ## Mental Model
 
 Iceberg tables are made of snapshots. A snapshot points to manifest lists, which point to manifests, which track data files and delete files. This metadata layer lets Iceberg support snapshot isolation, time travel, schema evolution, partition evolution, and hidden partitioning.

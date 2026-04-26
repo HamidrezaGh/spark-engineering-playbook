@@ -8,6 +8,13 @@ Covers: platform design, observability, guardrails, cost, reusable standards
 
 Staff-level Spark engineering is about creating systems where many teams can run Spark reliably, safely, and cost-effectively. The work is less about tuning one job and more about designing standards, guardrails, observability, and reusable patterns.
 
+## Key Takeaways
+
+- **Staff-level Spark work creates repeatable operating standards**.
+- **Templates and guardrails prevent repeated incidents across teams**.
+- **Observability must include Spark metrics, event logs, data quality, S3/file metrics, and cost**.
+- **Cost reduction should remove waste without weakening reliability**.
+
 ## Mental Model
 
 A Spark platform needs:

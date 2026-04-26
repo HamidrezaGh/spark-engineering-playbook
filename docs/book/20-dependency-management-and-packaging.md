@@ -8,6 +8,13 @@ Covers: application packaging, classpath, Python dependencies, connector version
 
 Spark applications on EMR run across driver and executor processes on cluster nodes. Dependencies must be available in the right place, with versions compatible with the EMR release, Spark version, Scala binary version, Java version, Python version, and any connectors.
 
+## Key Takeaways
+
+- **Driver dependencies and executor dependencies are different failure surfaces**.
+- **EMR release compatibility controls Spark, Scala, Python, Java, and connector versions**.
+- **Notebook state is not a production artifact**.
+- **Reproducible packaging prevents local-success/cluster-failure surprises**.
+
 ## Mental Model
 
 The driver classpath affects code that runs in the driver: planning, catalog access, job orchestration, and some client-side logic. The executor classpath affects task execution. PySpark also has Python environments on driver and executors.

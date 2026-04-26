@@ -8,6 +8,13 @@ Covers: cache, persist, storage levels, memory pressure, recomputation, cache ve
 
 Caching stores a DataFrame, Dataset, or RDD after it is computed so later actions can reuse it without recomputing the full lineage. It helps only when reuse is real and the cached data is worth the memory or disk it consumes.
 
+## Key Takeaways
+
+- **Cache only reused expensive intermediates**.
+- **Caching is lazy**; an action must materialize it.
+- **Caching can make jobs slower** by stealing memory from execution.
+- **Always unpersist when reuse is finished**.
+
 ## Mental Model
 
 `cache()` is shorthand for persisting with a default storage level. `persist()` lets you choose a storage level, such as memory only, memory and disk, serialized, replicated, or disk only depending on API and Spark version.

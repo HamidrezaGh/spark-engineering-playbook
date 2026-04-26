@@ -8,6 +8,13 @@ Covers: local tests, integration tests, representative datasets, deterministic t
 
 Spark testing should prove transformation correctness, data contract behavior, deployment packaging, and production safety. The goal is not to unit test Spark itself; it is to test the business logic and operational assumptions around Spark jobs.
 
+## Key Takeaways
+
+- **Test business logic and data contracts**, not Spark internals.
+- **Representative small data beats perfect toy data**.
+- **Local Spark tests do not prove EMR/S3/Glue behavior**.
+- **The same artifact should move from dev to staging to production**.
+
 ## Mental Model
 
 Use different test layers:

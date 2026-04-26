@@ -8,6 +8,13 @@ Covers: runtime plan changes, partition coalescing, skew joins, join strategy sw
 
 Adaptive Query Execution, or AQE, lets Spark adjust a query plan after it observes runtime statistics. Instead of relying only on estimates from the initial plan, Spark can coalesce shuffle partitions, split skewed partitions, and change join strategies while the query is running.
 
+## Key Takeaways
+
+- **AQE changes the plan at runtime** after Spark sees real shuffle statistics.
+- **Coalescing reduces tiny shuffle tasks**.
+- **Skew handling can split large shuffle partitions** in supported plans.
+- **Always verify the final adaptive plan**, not only the initial plan.
+
 ## Mental Model
 
 The initial physical plan is Spark's best plan before execution. The final adaptive plan is what Spark actually used after collecting shuffle statistics. AQE is most useful when static estimates are wrong or incomplete.

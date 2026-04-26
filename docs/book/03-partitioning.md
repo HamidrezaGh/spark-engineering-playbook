@@ -10,6 +10,13 @@ Partitioning controls how data is split for parallel work. Spark partitioning is
 
 Confusing these two meanings is a common source of bad tuning.
 
+## Key Takeaways
+
+- **Spark partitions control task parallelism**.
+- **Table partitions control storage layout and pruning**.
+- **Too many partitions create overhead and small files**.
+- **Too few partitions create large tasks, spill, and poor cluster utilization**.
+
 ## Mental Model
 
 A Spark partition is a slice of a DataFrame or RDD processed by one task. More partitions usually means more tasks and more parallelism, but also more scheduling overhead and potentially more output files.

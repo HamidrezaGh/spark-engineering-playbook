@@ -10,6 +10,13 @@ Data skew happens when work is unevenly distributed across partitions. In Spark,
 
 Skew is a distribution problem, not simply a "cluster too small" problem.
 
+## Key Takeaways
+
+- **Skew is visible as long-tail tasks**, not just large total data size.
+- **A single hot key can keep one task running while the cluster waits**.
+- **AQE helps with some skewed joins**, but it is not a universal fix.
+- **Salting can split hot keys**, but it adds correctness and maintenance complexity.
+
 ## Mental Model
 
 During a key-based shuffle, Spark assigns rows to target partitions based on a partitioning expression, commonly a hash of the key. If one key appears millions of times, all rows for that key may land in the same partition. That one partition becomes a long-running task.

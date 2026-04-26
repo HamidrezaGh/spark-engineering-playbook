@@ -10,6 +10,13 @@ Join strategy determines how Spark brings matching rows together. For production
 
 The main strategies are broadcast hash join, sort-merge join, shuffled hash join, broadcast nested loop join, and cartesian-style joins for special cases.
 
+## Key Takeaways
+
+- **Broadcast joins avoid shuffling the large side** when the small side safely fits in executor memory.
+- **Sort-merge joins are common for large equi-joins** because they scale beyond memory.
+- **Join key skew can dominate runtime** even when average input size looks normal.
+- **Always filter and project before large joins**.
+
 ## Mental Model
 
 Spark must satisfy the join condition. If one side is small enough, Spark can broadcast it to every executor and avoid shuffling the large side. If both sides are large, Spark usually shuffles both sides by join key so matching keys land in the same partitions.
