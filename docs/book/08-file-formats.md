@@ -1,6 +1,16 @@
 # File Formats
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- Why Parquet/ORC are usually better than CSV/JSON for analytics workloads.
+- What column pruning and predicate pushdown are (and how they show up in runtime behavior).
+- Why small files hurt (planning, listing, scheduling, cost) and what “compaction” fixes.
+- How to think about compression tradeoffs (CPU vs storage vs latency).
+- What schema evolution risks to watch for in shared production tables.
+
 ## Core Idea
 
 File format is a performance and correctness decision. Columnar formats such as Parquet are usually better for analytics than row-oriented text formats such as CSV because they support column pruning, predicate pushdown, compression, typed schemas, and metadata-driven reads.

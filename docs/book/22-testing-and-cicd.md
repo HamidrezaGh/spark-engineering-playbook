@@ -1,6 +1,16 @@
 # Testing And CI/CD
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- What to test in Spark code (business logic + data contracts + operational assumptions).
+- Why local Spark tests don’t prove EMR/S3/Glue behavior (and what integration tests cover).
+- How to structure a practical test pyramid for Spark pipelines.
+- What makes a deployment “real” (same artifact promoted dev → staging → prod).
+- What regressions you should lock in with tests (skew, duplicates, late data, schema evolution).
+
 ## Core Idea
 
 Spark testing should prove transformation correctness, data contract behavior, deployment packaging, and production safety. The goal is not to unit test Spark itself; it is to test the business logic and operational assumptions around Spark jobs.

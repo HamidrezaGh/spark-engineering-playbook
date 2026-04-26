@@ -1,6 +1,16 @@
 # Structured Streaming
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- What a micro-batch is, and what checkpoints store (offsets, progress, state).
+- What “exactly-once” means in practice (end-to-end: source + processing + sink).
+- How watermarks affect late data and state size (and what can go wrong).
+- Why streaming commonly creates small files and how to mitigate it.
+- What to check first when a streaming job falls behind or restarts incorrectly (lag, state growth, checkpoint integrity).
+
 ## Core Idea
 
 Structured Streaming treats streaming data as an unbounded table. Spark runs the query continuously, usually as a sequence of micro-batches, and uses checkpoints to track progress and recover from failures.

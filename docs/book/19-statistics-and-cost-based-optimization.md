@@ -1,6 +1,16 @@
 # Statistics And Cost-Based Optimization
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- What decisions Spark can make better with stats (broadcast, join order/strategy, selectivity).
+- Why stale stats are dangerous (plans look “intentional” but are wrong).
+- What stats to care about (table size, row counts, column NDV, null counts) and where they come from.
+- When to use hints (and why they need measurement + documentation).
+- How to debug “Spark picked a weird join” by checking stats and the physical plan.
+
 ## Core Idea
 
 Spark's optimizer makes better decisions when it has useful statistics. Cost-based optimization uses table size, row counts, column stats, and estimates to choose join order, join strategy, and plan shape.

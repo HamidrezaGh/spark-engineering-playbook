@@ -1,6 +1,16 @@
 # Joins
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- What join strategy Spark chose (broadcast vs sort-merge vs shuffled hash) and why.
+- When a broadcast join is safe vs a memory-risk anti-pattern.
+- What “two big tables join” implies operationally (shuffle size, skew risk, spill risk).
+- How to read the plan (`explain("formatted")` / SQL tab) to see `Exchange` + join operators.
+- What the first practical fixes are (filter/project early, stats, key cleanup, skew handling).
+
 ## Core Idea
 
 Join strategy determines how Spark brings matching rows together. For production workloads, the strategy can be the difference between a fast local hash lookup and a multi-terabyte shuffle.

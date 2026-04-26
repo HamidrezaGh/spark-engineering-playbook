@@ -1,6 +1,16 @@
 # Data Correctness And Idempotency
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- What “idempotent” means for a Spark pipeline (safe reruns, no duplicates/partial output).
+- Which write modes are safest for retryable pipelines (and what can go wrong with append/overwrite).
+- Where correctness usually breaks in production (late data, retries, partial commits, backfills).
+- What quality gates and run metadata you need to publish “gold” data safely.
+- How to design reruns/backfills so they are operationally safe and observable.
+
 ## Core Idea
 
 A Spark job is idempotent when rerunning it with the same inputs produces the same correct final state without duplicates, missing records, or corrupt partial output. Production pipelines must assume retries, partial failures, late data, and backfills will happen.

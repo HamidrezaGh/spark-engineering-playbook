@@ -1,6 +1,16 @@
 # Security And Governance
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- What “job identity” means on EMR and how least-privilege should look in practice.
+- Where Spark security failures commonly happen (S3/Glue/KMS permissions, secrets, logs).
+- How secrets leak in Spark systems (configs, logs, notebooks, closures) and how to prevent it.
+- What production governance should standardize (auditability, separation of envs, defaults).
+- What to check first when a job fails with permissions errors (which identity, which policy, which prefix/key).
+
 ## Core Idea
 
 Spark security on EMR is the combination of compute identity, S3 and Glue permissions, secret handling, KMS encryption, network controls, table governance, and auditability. A production EMR platform should make secure behavior the default.

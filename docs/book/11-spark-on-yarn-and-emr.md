@@ -1,6 +1,16 @@
 # Spark On AWS EMR And YARN
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- What deploy mode you are running (client vs cluster) and what that implies for driver stability.
+- Where to look first when EMR/YARN kills containers (and why it’s not always a Java heap OOM).
+- How EMR concepts map to Spark production behavior (release version, nodes, steps, queues, logs).
+- Why “S3 is storage but local disk is working space” matters for shuffle/spill/write failures.
+- What the minimal production logging posture is (event logs + YARN logs persisted to S3).
+
 ## Core Idea
 
 On AWS EMR, Spark commonly runs on YARN. YARN manages containers for the driver, ApplicationMaster, and executors, while EMR provides the cluster lifecycle, release version, EC2 instance layout, bootstrap actions, application configuration, step orchestration, and integrations with S3, IAM, CloudWatch, and CloudWatch Logs.

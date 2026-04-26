@@ -1,6 +1,16 @@
 # Dependency Management And Packaging
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- Why “works on my notebook” fails on executors (driver vs executor dependencies).
+- What version compatibility matters on EMR (Spark, Scala, Java, Python, connector jars).
+- How to package and distribute Python/jar dependencies reproducibly.
+- How to debug classpath/import failures quickly (where to look, what logs to read).
+- What the production artifact should be (notebook is not the deployable unit).
+
 ## Core Idea
 
 Spark applications on EMR run across driver and executor processes on cluster nodes. Dependencies must be available in the right place, with versions compatible with the EMR release, Spark version, Scala binary version, Java version, Python version, and any connectors.

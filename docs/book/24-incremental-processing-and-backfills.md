@@ -1,6 +1,16 @@
 # Incremental Processing And Backfills
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- What “incremental” means for your pipeline (watermark/state) and what correctness risks it introduces.
+- How to design backfills so they are isolated, rerunnable, and reconcilable.
+- How to advance watermarks safely (only after durable success) and what late data does to you.
+- What write strategies are safe for incremental updates (merge vs scoped overwrite vs append) and why.
+- What operational controls you need (rate limiting, queue isolation, audits, reconciliation).
+
 ## Core Idea
 
 Incremental processing updates only the data that changed. Backfills recompute historical ranges. Both must be designed for correctness, isolation, replayability, and operational control.

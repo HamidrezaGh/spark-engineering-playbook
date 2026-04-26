@@ -1,6 +1,16 @@
 # S3 With Spark On EMR
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- Why S3 behaves differently than HDFS for Spark (list/rename/commit semantics).
+- Why “slow with low CPU” often points to S3 listing/request bottlenecks.
+- How small files amplify both cost and performance problems on S3.
+- Why adding executors can make S3 performance worse (request-rate pressure).
+- What the first practical mitigations are (file compaction, layout, committers, request hygiene).
+
 ## Core Idea
 
 S3 is not HDFS. It is durable, scalable object storage with different semantics and performance characteristics than a distributed filesystem. Spark on EMR must account for S3 list cost, request rates, object metadata, commit behavior, small files, S3 throttling, and non-atomic rename-like workflows.

@@ -1,9 +1,19 @@
 # Shuffle And Performance
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- What a shuffle is (map-side write vs reduce-side read) and why it is expensive.
+- Which operators typically introduce shuffles and stage boundaries.
+- How to debug a slow shuffle stage from the Spark UI (shuffle bytes, spill, skew, long tails).
+- How to reason about `spark.sql.shuffle.partitions` and how AQE changes the story.
+- What a `FetchFailedException` usually means in production.
+
 ## Core Idea
 
-A shuffle redistributes data between executors so rows with the same key or ordering requirement arrive at the right downstream tasks. It is required for many joins, aggregations, `distinct`, window operations, repartitioning, and global sorts.
+A shuffle redistributes data between executors so rows with the same key or ordering requirement arrive at the right downstream tasks. It is required for many joins, aggregations, distinct, window operations, repartitioning, and global sorts.
 
 Shuffle is expensive because it adds network IO, disk IO, serialization, sorting, memory pressure, and failure recovery complexity.
 

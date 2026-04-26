@@ -1,6 +1,16 @@
 # Data Modeling And Table Design
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- Why table design is a long-term performance/cost lever for Spark workloads.
+- How to choose partitions/clustering/bucketing based on query and write patterns.
+- What “bronze/silver/gold” contracts mean operationally (correctness, SLA, maintenance).
+- What anti-patterns create small-file and metadata disasters (high-cardinality partitioning).
+- What to check first when a table becomes slow to read (pruning, file counts, stats, layout).
+
 ## Core Idea
 
 Table design determines how expensive future Spark jobs will be. Good modeling balances query performance, write cost, table maintenance, correctness, and downstream usability.

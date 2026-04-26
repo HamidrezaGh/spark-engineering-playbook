@@ -1,6 +1,16 @@
 # Adaptive Query Execution
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- What AQE changes at runtime, and what evidence it uses to decide.
+- How to verify AQE from the Spark UI (initial vs final adaptive plan).
+- When AQE coalescing helps (and when it can reduce parallelism too far).
+- When AQE skew handling helps (and why it doesn’t fix every skew pattern).
+- Why you still need to reason about shuffle, joins, and output file sizing with AQE enabled.
+
 ## Core Idea
 
 Adaptive Query Execution, or AQE, lets Spark adjust a query plan after it observes runtime statistics. Instead of relying only on estimates from the initial plan, Spark can coalesce shuffle partitions, split skewed partitions, and change join strategies while the query is running.

@@ -1,6 +1,16 @@
 # Data Skew
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- How skew shows up in Spark (max vs median task time, long-tail stages).
+- How to confirm skew quickly from the Spark UI and from simple profiling queries.
+- When AQE skew handling helps, and when it won’t.
+- What options exist for hot keys (broadcast, salting, isolating keys) and their tradeoffs.
+- Why “add executors” is usually not the first or best skew fix.
+
 ## Core Idea
 
 Data skew happens when work is unevenly distributed across partitions. In Spark, skew usually means a small number of tasks process much more data than the rest, often because a few keys dominate the dataset.

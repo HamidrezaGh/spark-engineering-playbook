@@ -1,6 +1,16 @@
 # Partitioning
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- What “partition” means in Spark execution vs table storage layout.
+- When to use `repartition()` vs `coalesce()` and what each costs.
+- How partition count impacts task sizing, shuffle pressure, and output file count.
+- How to spot partitioning issues in the Spark UI (tiny tasks, huge tasks, small files).
+- How to avoid common table-partitioning mistakes (high cardinality, missing pruning).
+
 ## Core Idea
 
 Partitioning controls how data is split for parallel work. Spark partitioning is about runtime task parallelism. Table partitioning in Hive, Glue, Iceberg, Delta, or Hudi is about how data is physically or logically organized for pruning, writes, and maintenance.

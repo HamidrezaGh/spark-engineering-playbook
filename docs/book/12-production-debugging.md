@@ -1,6 +1,16 @@
 # Production Debugging
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- Where to start when a production job is slow or failing (and what evidence to gather first).
+- How to locate the slowest/failed stage and read the plan + task metrics to form a hypothesis.
+- How to classify “slow with low CPU” vs “slow with high spill” vs “one long tail task”.
+- What the smallest safe remediation usually looks like (change one thing, re-measure).
+- What guardrail/metric to add so the issue is easier next time.
+
 ## Core Idea
 
 Production Spark debugging is evidence collection under time pressure. Start from what changed, locate the slow or failed stage, inspect data shape and physical plan, then choose the smallest safe remediation.

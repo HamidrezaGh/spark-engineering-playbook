@@ -1,6 +1,16 @@
 # Memory Management
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- What “memory” means in Spark in practice (heap vs overhead vs Python workers vs off-heap).
+- How to distinguish driver OOM vs executor OOM vs YARN container kill.
+- What spill indicates and when it is a problem vs a normal pressure-release mechanism.
+- Which levers usually help first (reduce per-task working set, adjust cores/partitions, then memory).
+- How to find memory pressure evidence in Spark UI + logs (GC time, spill, container kill reasons).
+
 ## Core Idea
 
 Spark memory is not just one heap. A production Spark job uses memory for execution, cached data, JVM overhead, Python worker processes, off-heap buffers, shuffle, serialization, and user code. Memory tuning must account for the actual workload shape.

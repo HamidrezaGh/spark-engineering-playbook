@@ -1,6 +1,16 @@
 # Staff-Level Spark Engineering
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- What problems are “job tuning” vs “platform/standardization” problems.
+- What guardrails and golden paths prevent repeated incidents across teams.
+- What observability a Spark platform must standardize (metrics, logs, data quality, cost).
+- How to reduce cost without trading away reliability (remove waste, not safety).
+- What the upgrade/dependency strategy should look like for many Spark users.
+
 ## Core Idea
 
 Staff-level Spark engineering is about creating systems where many teams can run Spark reliably, safely, and cost-effectively. The work is less about tuning one job and more about designing standards, guardrails, observability, and reusable patterns.

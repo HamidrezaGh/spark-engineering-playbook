@@ -1,6 +1,16 @@
 # Cluster And Workload Isolation
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- Why “shared cluster” incidents are usually isolation/policy problems, not just capacity problems.
+- How to use queues/quotas/caps to prevent runaway jobs from starving others.
+- How dynamic allocation and executor sizing interact with isolation (min/max bounds matter).
+- What to do differently for backfills vs streaming vs prod-critical batch workloads.
+- What signals prove isolation is working (queue wait time, noisy-neighbor incidents, cost attribution).
+
 ## Core Idea
 
 Workload isolation prevents one Spark job, team, or workload type from degrading the platform for everyone else. A shared Spark platform needs scheduling policy, resource quotas, guardrails, and cost attribution.

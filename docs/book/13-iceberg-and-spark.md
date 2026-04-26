@@ -1,6 +1,16 @@
 # Iceberg And Spark
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- What Iceberg adds vs “a directory of Parquet files” (snapshots, metadata, atomic commits).
+- How snapshot/manifest metadata drives planning and pruning.
+- Why write patterns like `MERGE INTO` can be expensive (files touched, rewrites, metadata churn).
+- What to check first when Iceberg performance regresses (planning time, file counts, partitioning, metadata).
+- What maintenance tasks keep tables healthy (compaction, rewrite manifests, snapshot expiration).
+
 ## Core Idea
 
 Apache Iceberg is a table format that adds transactional table metadata on top of data files. Spark writes data files and commits metadata changes so readers see consistent snapshots.

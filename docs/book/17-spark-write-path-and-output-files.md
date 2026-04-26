@@ -1,6 +1,16 @@
 # Spark Write Path And Output Files
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- Why Spark write file count is tied to final partition count and retries.
+- What “commit protocol” means and why it’s a bigger deal on S3 than HDFS.
+- Why you can get small-file explosions and how to prevent them.
+- How speculative execution/retries can create orphan/duplicate attempt files (and how to avoid it).
+- What to check first when write performance or correctness regresses (final stage tasks, file counts, commit errors).
+
 ## Core Idea
 
 Spark writes are distributed. Each task writes output for its partition, so final file count is tied to final partition count, table partitioning, retries, and writer behavior.

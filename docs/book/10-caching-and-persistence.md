@@ -1,6 +1,16 @@
 # Caching And Persistence
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- When caching helps (real reuse) vs when it only steals memory and makes jobs slower.
+- What “cache is lazy” means and how to intentionally materialize it.
+- How storage levels differ (memory-only vs memory+disk vs serialized) and what risks each introduces.
+- How to verify caching actually happened (Storage tab / in-memory relation in the plan).
+- When to `unpersist()` and why long-lived caches can cause production incidents.
+
 ## Core Idea
 
 Caching stores a DataFrame, Dataset, or RDD after it is computed so later actions can reuse it without recomputing the full lineage. It helps only when reuse is real and the cached data is worth the memory or disk it consumes.

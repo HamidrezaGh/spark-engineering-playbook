@@ -1,6 +1,16 @@
 # Spark SQL And Catalyst
 
 
+## What You Should Be Able To Answer
+
+After this chapter, you should be able to answer (quickly, from memory or by skimming this page):
+
+- What Catalyst is optimizing, and what it cannot optimize (especially around UDFs).
+- How to read `explain("formatted")` and the SQL tab to find the expensive operators.
+- How to spot shuffles (`Exchange`), join strategies, sorts, and scan pushdown/pruning in the plan.
+- Why a query scanned “too much” data (missing pruning/pushdown, wide projections, bad layout).
+- What “verify the final plan” means when AQE is enabled.
+
 ## Core Idea
 
 Catalyst is Spark SQL's optimizer. It turns DataFrame and SQL operations into analyzed, optimized, and executable plans. Understanding these plans is the shortest path to understanding why Spark chose a join, inserted a shuffle, pushed a filter, or scanned more data than expected.
