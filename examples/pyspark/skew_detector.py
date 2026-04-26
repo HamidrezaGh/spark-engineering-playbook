@@ -149,15 +149,40 @@ def print_report(report: SkewReport, key_col: str) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--table", required=True, help="Table name (e.g. db.events).")
+    parser.add_argument("--table", help="Table name (e.g. db.events).")
+    parser.add_argument(
+        "--input",
+        help="Path to read instead of a table. Use with --format.",
+    )
+    parser.add_argument(
+        "--format",
+        default="parquet",
+        help="Reader format when --input is set: parquet, csv, json, orc.",
+    )
+    parser.add_argument(
+        "--header",
+        action="store_true",
+        help="For CSV: treat the first line as a header.",
+    )
     parser.add_argument("--key", required=True, help="Key column to analyze.")
     parser.add_argument("--filter", help="Optional WHERE clause (without WHERE).")
-    parser.add_argument("--top", type=int, default=20)
+    parser.add_argument("--top", "--top-n", dest="top", type=int, default=20)
     args = parser.parse_args()
+
+    if not args.table and not args.input:
+        parser.error("either --table or --input is required")
 
     spark = SparkSession.builder.appName("skew_detector").getOrCreate()
 
-    df = spark.table(args.table)
+    if args.input:
+        reader = spark.read.format(args.format)
+        if args.format == "csv":
+            reader = reader.option("header", "true" if args.header else "false")
+            reader = reader.option("inferSchema", "true")
+        df = reader.load(args.input)
+    else:
+        df = spark.table(args.table)
+
     if args.filter:
         df = df.filter(args.filter)
 

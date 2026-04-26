@@ -10,6 +10,7 @@ These are not benchmarks or end-to-end pipelines. They are the kind of small dia
 | --- | --- |
 | [`sql/`](sql/README.md) | Spark SQL examples: reading physical plans, join strategy, skew detection, window vs `GROUP BY`. |
 | [`pyspark/`](pyspark/README.md) | PySpark diagnostic scripts: partition inspector, skew detector, file count auditor. |
+| [`local/`](local/README.md) | A small runnable harness with sample CSVs and a driver script for running the SQL and PySpark examples on a laptop. |
 | [`configs/`](configs/README.md) | Spark configuration examples annotated with the workload shape they target. |
 
 ## Reading Order
