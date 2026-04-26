@@ -40,6 +40,7 @@ jobs:
         with:
           args: >-
             --no-progress
+            --exclude-mail
             --exclude-loopback
             --exclude-private
             --exclude '^https?://localhost'
