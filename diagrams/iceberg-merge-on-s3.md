@@ -11,7 +11,7 @@ Two production rules to remember:
 - A `MERGE` predicate that does not pin a partition column reads the entire table. The partition column in the `MERGE` ON clause is what enables Iceberg to prune target partitions.
 - Copy-on-write `MERGE` rewrites every file that contained any matched row, even if only one row changed. File granularity dominates write cost.
 
-## Mermaid Diagram
+## Iceberg MERGE Execution on S3
 
 ```mermaid
 flowchart TB

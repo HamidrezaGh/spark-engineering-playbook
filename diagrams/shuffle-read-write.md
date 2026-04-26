@@ -11,7 +11,7 @@ Two production rules to remember:
 - "Shuffle Write" in the Spark UI is **executor-local disk**, not S3 or HDFS. It is the temporary working set that the next stage will fetch.
 - "Shuffle Read" is **remote** by default — the reducer pulls bytes from N executors. Network and the shuffle service determine throughput here.
 
-## Mermaid Diagram
+## Shuffle Write and Shuffle Read Flow
 
 ```mermaid
 flowchart LR

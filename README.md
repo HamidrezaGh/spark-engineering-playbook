@@ -44,7 +44,9 @@ There are three reasonable entry points depending on your goal.
 
 ### 1. Sequential learning path
 
-Read the book chapters in order. Chapters 1–6 build the execution model, chapters 7–10 cover memory, formats, SQL, and caching, chapters 11–14 cover EMR/YARN, debugging, Iceberg, and streaming, and chapters 15–25 cover staff-level platform topics, reliability, and operating concerns.
+Read the book chapters in order.
+
+Chapters 1–6 build the execution model, chapters 7–10 cover memory, formats, SQL, and caching, chapters 11–14 cover EMR/YARN, debugging, Iceberg, and streaming, and chapters 15–25 cover staff-level platform topics, reliability, and operating concerns.
 
 ### 2. Incident-driven path
 
@@ -117,7 +119,7 @@ Most chapters share a few opinions that are worth stating up front, because they
 
 All book chapters (1–25) exist as real files in [`docs/book/`](docs/book/README.md); depth varies by topic. Favor the execution stack (1–6), debugging and EMR chapters (11–12), and lakehouse write paths (13, 17–18) when you need the most battle-tested prose. Shorter chapters are tightening toward the same bar — if something is still a stub, the Markdown says **TODO** or **In progress** inline.
 
-Automation: [`.github/workflows/markdown-lint.yml`](.github/workflows/markdown-lint.yml) enforces Markdown consistency; [`.github/workflows/docs-check.yml`](.github/workflows/docs-check.yml) runs link checks and lightweight syntax gates. For a human pass before a big docs merge, use [`docs/checklists/repo-quality-checklist.md`](docs/checklists/repo-quality-checklist.md).
+Automation: [`.github/workflows/docs-check.yml`](.github/workflows/docs-check.yml) runs Markdown lint (markdownlint), link checks, and lightweight Python and shell validation. For a human pass before a big docs merge, use [`docs/checklists/repo-quality-checklist.md`](docs/checklists/repo-quality-checklist.md).
 
 ## Contributing
 

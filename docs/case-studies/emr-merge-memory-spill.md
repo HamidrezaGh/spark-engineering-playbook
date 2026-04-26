@@ -6,7 +6,9 @@ Anonymized post-incident review of a recurring failure on a large daily merge jo
 
 ## Situation
 
-A daily pipeline merged the previous day’s CDC events into a multi-terabyte Iceberg fact table on S3. The job had been stable for roughly nine months, then degraded over several weeks: longer wall times, then intermittent failures.
+A daily pipeline merged the previous day’s CDC events into a multi-terabyte Iceberg fact table on S3.
+
+The job had been stable for roughly nine months, then degraded over several weeks: longer wall times, then intermittent failures.
 
 - **Source:** CDC events for one logical day, stored with a partition column such as `event_date`.
 - **Target:** a large Iceberg fact table partitioned by `event_date`, with clustering on a high-cardinality business key.
@@ -104,13 +106,13 @@ Merge stages were pinned to on-demand core capacity; Spot remained for earlier, 
 
 A guardrail was added: total shuffle read for the merge stage plus max-to-median task duration are logged after each run; regression in either pages on-call before the SLA burns.
 
-## Staff-Level Lesson
+## Staff-Level Lessons
 
-The local fix was “scope the merge.” The durable contribution was **turning the incident into an operational pattern**:
+The local fix was “scope the merge.” The durable contribution was **turning the incident into an operational pattern**.
 
-- **`MERGE` predicates that widen time windows are capacity changes** — they deserve the same review as doubling partition count or cluster size.
-- **Repeated memory-overhead escalation without UI evidence is a smell** — treat it as a trigger to inspect shuffle bytes, spill, and partition windows, not as a capacity knob to keep turning.
-- **Spot is a fine tool for elastic compute and a poor default for hours-long shuffle** — platform templates should encode that tradeoff so product teams do not rediscover it under pager load.
-- **One query fix helps one team; metrics and templates help every team** — staff-level work packages the lesson so the next merge job inherits the guardrail.
+1. **`MERGE` predicates that widen time windows are capacity changes** — they deserve the same review as doubling partition count or cluster size.
+2. **Repeated memory-overhead escalation without UI evidence is a smell** — treat it as a trigger to inspect shuffle bytes, spill, and partition windows, not as a capacity knob to keep turning.
+3. **Spot is a fine tool for elastic compute and a poor default for hours-long shuffle** — platform templates should encode that tradeoff so product teams do not rediscover it under pager load.
+4. **One query fix helps one team; metrics and templates help every team** — staff-level work packages the lesson so the next merge job inherits the guardrail.
 
 The runbook outcome was not “this team is heroically good at Spark.” It was “the platform makes this failure class hard to repeat.”

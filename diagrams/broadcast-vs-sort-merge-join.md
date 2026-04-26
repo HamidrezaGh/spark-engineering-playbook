@@ -10,7 +10,7 @@ A **sort-merge join** shuffles both sides by the join key, sorts each side withi
 
 Spark picks broadcast when the build side fits under `spark.sql.autoBroadcastJoinThreshold` (default 10 MB). It picks sort-merge for everything else, with rare exceptions for shuffled hash join.
 
-## Mermaid Diagram
+## Broadcast vs Sort-Merge Join Flow
 
 ```mermaid
 flowchart TB
