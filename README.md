@@ -20,6 +20,7 @@ The first public roadmap is the [Advanced Spark Questions](docs/advanced-spark-q
 - [docs/field-guides](docs/field-guides/README.md): incident-oriented debugging guides.
 - [docs/patterns](docs/patterns/README.md): reusable production Spark architecture patterns.
 - [docs/tuning](docs/tuning/README.md): focused tuning guides for common performance levers.
+- [docs/configs](docs/configs/README.md): a practical Spark configuration field manual.
 - [docs/checklists](docs/checklists/README.md): operational review checklists.
 - [examples](examples/README.md): PySpark, SQL, and configuration examples used by the handbook.
 - [diagrams](diagrams/README.md): source files for execution, storage, and platform diagrams.
