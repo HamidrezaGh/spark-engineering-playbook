@@ -4,6 +4,7 @@ Field guides are incident-oriented references. They should help an engineer diag
 
 ## Guides
 
+- [Debugging Index](debugging-index.md)
 - [Debugging Slow Jobs](debugging-slow-jobs.md)
 - [Debugging OOM](debugging-oom.md)
 - [Debugging Skew](debugging-skew.md)

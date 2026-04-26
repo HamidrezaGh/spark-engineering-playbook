@@ -15,6 +15,7 @@ The goal is not to list every config. The goal is to cover the configs that most
 ## Index
 
 - [Principles](principles.md)
+- [Top Spark Configs (Cheat Sheet)](top-configs.md)
 - [Execution And Parallelism](execution-and-parallelism.md)
 - [Shuffle](shuffle.md)
 - [Joins And Broadcast](joins-and-broadcast.md)
