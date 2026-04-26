@@ -1,6 +1,8 @@
 # Examples
 
-Short, annotated examples that support the handbook. Each example is paired with the chapters it illustrates and explains, in comments, what to look for in the Spark UI and which production issue it helps diagnose.
+Short, annotated examples that support the handbook. Each example is paired with the chapters it
+illustrates and explains, in comments, what to look for in the Spark UI and which production issue
+it helps diagnose.
 
 These are not benchmarks or end-to-end pipelines. They are the kind of small diagnostic snippets you keep in a scratchpad and paste into a notebook during incident triage.
 

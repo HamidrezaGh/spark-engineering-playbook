@@ -1,10 +1,13 @@
+# CI: Markdown style (markdownlint), link checks, Python compileall, bash -n, shellcheck.
 name: docs-check
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -35,8 +38,8 @@ jobs:
       - name: Run lychee link checker
         uses: lycheeverse/lychee-action@v2
         with:
-          # Folded string: one space-separated arg list for the lychee binary.
-          # Note: do not use --exclude-mail; it was removed in lychee 0.23 (mail is off by default).
+          # Folded to one argv string: newlines become spaces. Do not use --exclude-mail (removed
+          # in lychee 0.23; mail is off by default).
           args: >-
             --no-progress
             --exclude-loopback

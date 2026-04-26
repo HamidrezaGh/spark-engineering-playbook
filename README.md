@@ -50,7 +50,7 @@ A practical, opinionated reference covering:
   sometimes doesn't, and how to operate it safely."
 - Platform and infra engineers who own shared Spark / EMR infrastructure for many teams.
 - Tech leads preparing for design reviews, incident response, or cost reviews.
-- Engineers who want senior- or staff-interview depth on Spark execution and operations, without reducing the material to trivia lists.
+- Engineers who want serious depth on Spark execution and operations—how plans behave under load, how failures show up in production—not reduced to interview trivia.
 
 If you are brand new to Spark, this repo will be too dense. Start with the official Spark
 documentation and a short intro course, then come back here.
@@ -121,13 +121,39 @@ Use the patterns and chapters together. For example, before reviewing a new pipe
 | Q&A | [`docs/advanced-spark-questions.md`](docs/advanced-spark-questions.md) | The original question list that defines the bar for this handbook. |
 | Sample outputs | [`docs/assets/screenshots/`](docs/assets/screenshots/README.md) | Labeled text captures of EXPLAIN shape, skew detector, and file audit (not production screenshots). |
 
+## Try it locally
+
+From the repo root:
+
+```bash
+cd examples/local
+./run_examples.sh
+```
+
+This runs the bundled SQL and PySpark examples against the sample CSVs. You need Spark 3.4+ with
+`spark-sql` for SQL mode; PySpark in Python is enough for `./run_examples.sh pyspark` only. See
+[`examples/local/README.md`](examples/local/README.md) for prerequisites, modes (`sql`, `pyspark`, `all`), and troubleshooting.
+
 ## Runnable examples with sample output
 
 These go beyond documentation-only snippets: you can run them locally and compare your terminal to the labeled samples in [`docs/assets/screenshots/`](docs/assets/screenshots/README.md).
 
-1. **EXPLAIN and shuffle boundaries** — [`examples/sql/01-explain-shuffle.sql`](examples/sql/01-explain-shuffle.sql) with annotated sample plan shape in [`docs/assets/screenshots/explain-formatted-shuffle-output.txt`](docs/assets/screenshots/explain-formatted-shuffle-output.txt). Run with `spark-sql` after pointing `events` at your table, or use [`examples/local/run_examples.sh`](examples/local/run_examples.sh) for the bundled CSVs.
-2. **Skew detector** — [`examples/pyspark/skew_detector.py`](examples/pyspark/skew_detector.py): `python3 examples/pyspark/skew_detector.py --demo` (no input files), or `--input examples/local/data/events_sample.csv --format csv --header --key customer_id`. Sample tables in [`docs/assets/screenshots/skew-detector-output.txt`](docs/assets/screenshots/skew-detector-output.txt).
-3. **Small-file audit** — [`examples/pyspark/file_count_audit.py`](examples/pyspark/file_count_audit.py): `python3 examples/pyspark/file_count_audit.py --demo` creates a temporary multi-file layout and prints a real audit. Sample in [`docs/assets/screenshots/file-count-audit-output.txt`](docs/assets/screenshots/file-count-audit-output.txt).
+1. **EXPLAIN and shuffle boundaries** — Script:
+   [`examples/sql/01-explain-shuffle.sql`](examples/sql/01-explain-shuffle.sql). Annotated plan shape in
+   [`docs/assets/screenshots/explain-formatted-shuffle-output.txt`](docs/assets/screenshots/explain-formatted-shuffle-output.txt).
+   Run with `spark-sql` after you point `events` at your table, or use
+   [`examples/local/run_examples.sh`](examples/local/run_examples.sh) for the bundled CSVs.
+
+2. **Skew detector** — [`examples/pyspark/skew_detector.py`](examples/pyspark/skew_detector.py). Example:
+   `python3 examples/pyspark/skew_detector.py --demo` (no input files), or
+   `--input examples/local/data/events_sample.csv --format csv --header --key customer_id`.
+   Sample output in
+   [`docs/assets/screenshots/skew-detector-output.txt`](docs/assets/screenshots/skew-detector-output.txt).
+
+3. **Small-file audit** — [`examples/pyspark/file_count_audit.py`](examples/pyspark/file_count_audit.py). Example:
+   `python3 examples/pyspark/file_count_audit.py --demo` (builds a temp multi-file layout and prints a real audit).
+   Sample output in
+   [`docs/assets/screenshots/file-count-audit-output.txt`](docs/assets/screenshots/file-count-audit-output.txt).
 
 ## Suggested Learning Path
 

@@ -94,7 +94,13 @@ There were three compounding problems:
 
 1. **No watermark on the windowed aggregation.** The original developer had used `groupBy(window(...), "user_id")` for the 5-minute aggregation but had not specified `withWatermark("event_time", "...")` on the source. Without a watermark, Spark cannot decide when a window is "done" and never expires its state. Every 5-minute window for every user since the job started was still in the state store.
 
-2. **Watermark on the enrichment join was technically present but ineffective.** The enrichment used a `flatMapGroupsWithState` keyed by `user_id`. The watermark was set on the events stream but the enrichment state never used it for expiration; the developer had assumed Spark would expire on the watermark automatically for `mapGroupsWithState`, which is not how it works. State expiration in `flatMapGroupsWithState` requires explicit `state.setTimeoutTimestamp(...)` and a TTL strategy. The original code had neither.
+2. **Watermark on the enrichment join was technically present but ineffective.**
+   The enrichment used a `flatMapGroupsWithState` keyed by `user_id`.
+   The watermark was set on the events stream but the enrichment state never used it
+   for expiration; the developer had assumed Spark would expire on the watermark
+   automatically for `mapGroupsWithState`, which is not how it works.
+   State expiration in `flatMapGroupsWithState` requires explicit
+   `state.setTimeoutTimestamp(...)` and a TTL strategy. The original code had neither.
 
 3. **High-cardinality state key.** `user_id` had ~120 million distinct values across the lifetime of the job. Even with correct watermarking, state size scales with the number of active keys. The original design did not account for keys that are never seen again — long-tail users who appeared once and never returned. With no expiration, those keys lived in state forever.
 
