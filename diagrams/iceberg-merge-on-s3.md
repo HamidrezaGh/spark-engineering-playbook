@@ -11,9 +11,7 @@ Two production rules to remember:
 - A `MERGE` predicate that does not pin a partition column reads the entire table. The partition column in the `MERGE` ON clause is what enables Iceberg to prune target partitions.
 - Copy-on-write `MERGE` rewrites every file that contained any matched row, even if only one row changed. File granularity dominates write cost.
 
-### Iceberg MERGE on S3: Scan, Join, File Rewrite, Atomic Commit
-
-Staging rows meet pruned target partitions through a sort-merge join; matched files are rewritten on S3; the catalog advances to a new snapshot in one atomic step.
+## Mermaid Diagram
 
 ```mermaid
 flowchart TB
@@ -60,8 +58,6 @@ flowchart TB
     class PartitionsRead,NewFiles,NewManifest storage
     class AtomicCommit,Consumers commit
 ```
-
-The expensive segments are usually `JoinExchange` (shuffle volume) and `NewFiles` (bytes written); `AtomicCommit` is metadata-only once data files land.
 
 ## How To Use This Diagram In The Relevant Chapter
 

@@ -10,9 +10,7 @@ A **sort-merge join** shuffles both sides by the join key, sorts each side withi
 
 Spark picks broadcast when the build side fits under `spark.sql.autoBroadcastJoinThreshold` (default 10 MB). It picks sort-merge for everything else, with rare exceptions for shuffled hash join.
 
-### Broadcast Hash Join vs Sort-Merge Join Paths
-
-Broadcast replicates a small build relation to all executors so the probe side scans without a shuffle; sort-merge exchanges and sorts both sides by the join key before merging streams.
+## Mermaid Diagram
 
 ```mermaid
 flowchart TB
@@ -62,8 +60,6 @@ flowchart TB
     class SSortLeft,SSortRight sort
     class Bjoin,SJoin join
 ```
-
-The first question in a slow-join triage is which path the planner took: one `BroadcastExchange` and no probe-side shuffle, or two `Exchange` nodes and a `SortMergeJoin`.
 
 ## How To Use This Diagram In The Relevant Chapter
 

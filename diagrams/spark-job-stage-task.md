@@ -13,9 +13,7 @@ The hierarchy is:
 - Stage: a contiguous block of pipelined narrow transformations. Stages are separated by `Exchange` (shuffle) operators.
 - Task: one partition's worth of work in one stage, executed on one executor core.
 
-### Spark Job, Stage, and Task Relationship
-
-Actions create jobs; shuffle boundaries split jobs into stages; each stage runs one task per partition (scan) or per shuffle partition (after `Exchange`).
+## Mermaid Diagram
 
 ```mermaid
 flowchart TB
@@ -48,8 +46,6 @@ flowchart TB
     class S1A,S1B,S2A,S2B,S2C stage
     class T1A1,T1A2,T1A3,T1B1,T1B2,T1B3 task
 ```
-
-Each `Exchange` in the physical plan is the edge where shuffle write ends and the next stage’s shuffle read begins—where most latency and failure modes concentrate.
 
 ## How To Use This Diagram In The Relevant Chapter
 

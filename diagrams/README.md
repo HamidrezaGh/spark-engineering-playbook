@@ -7,7 +7,7 @@ Use this directory for diagrams that explain Spark execution, shuffle flow, join
 - One concept per diagram. Composite "everything in one picture" diagrams are not useful for incidents or design reviews.
 - Mermaid for structural diagrams (job/stage/task hierarchy, dataflow, decision trees) — readable in the GitHub Markdown renderer with no extra tooling.
 - ASCII text diagrams in chapter source for inline explanations where Mermaid would be heavier than the concept warrants.
-- Each Mermaid diagram in this directory ships as a `.md` file with: a short explanation, an engineering-focused level-3 Markdown heading (never a generic “diagram” label), a fenced mermaid code block, a one-line caption when it clarifies production signal, how to use it in the relevant chapter, and a "production interpretation" section that anchors the diagram to real failure modes.
+- Each Mermaid diagram in this directory ships as a `.md` file with: a short explanation, the diagram, how to use it in the relevant chapter, and a "production interpretation" section that anchors the diagram to real failure modes.
 
 ## Index
 
