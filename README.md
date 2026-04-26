@@ -6,6 +6,18 @@ This repo is intended to read like a staff-level engineering reference: each top
 
 The handbook should stay practical and production-oriented: each topic should include mental models, tradeoffs, performance notes, best practices, examples, and realistic use cases.
 
+The chapters use text diagrams, Mermaid diagrams, and decision tables so the material works both as a book and as a fast review reference.
+
 ## Handbook Roadmap
 
 The first public roadmap is the [Advanced Spark Questions](docs/advanced-spark-questions.md) list. These questions define the bar for the handbook: production behavior, debugging, tuning, lakehouse design, streaming, and staff-level platform thinking.
+
+## Repository Structure
+
+- [docs/book](docs/book/README.md): the main chapter-by-chapter handbook.
+- [docs/field-guides](docs/field-guides/README.md): incident-oriented debugging guides.
+- [docs/patterns](docs/patterns/README.md): reusable production Spark architecture patterns.
+- [docs/tuning](docs/tuning/README.md): focused tuning guides for common performance levers.
+- [docs/checklists](docs/checklists/README.md): operational review checklists.
+- [examples](examples/README.md): PySpark, SQL, and configuration examples used by the handbook.
+- [diagrams](diagrams/README.md): source files for execution, storage, and platform diagrams.
