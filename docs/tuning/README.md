@@ -8,4 +8,4 @@ Tuning guides focus on one performance lever at a time. They should explain the 
 - [Shuffle Partitions](shuffle-partitions.md)
 - [Broadcast Joins](broadcast-joins.md)
 - [Memory Overhead](memory-overhead.md)
-- [Object Storage](object-storage.md)
+- [S3 On EMR](object-storage.md)

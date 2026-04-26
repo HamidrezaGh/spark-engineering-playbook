@@ -14,14 +14,16 @@ A micro-batch processes a bounded slice of new data. Checkpoints store offsets, 
 
 Watermarking tells Spark how long to wait for late data before old state can be dropped.
 
-```mermaid
-flowchart LR
-    Kafka[Kafka/source offsets] --> Batch[Micro-batch]
-    Batch --> State[State store]
-    State --> Output[Sink write]
-    Batch --> Checkpoint[Checkpoint: offsets + progress]
-    State --> Checkpoint
-    Checkpoint --> Restart[Restart recovery]
+```text
+Kafka/source offsets
+  -> micro-batch
+      |-- update state store
+      |-- write to sink
+      |-- write checkpoint: offsets + progress + state metadata
+
+restart
+  -> load checkpoint
+  -> resume from stored offsets and state
 ```
 
 | Concept | What It Protects | Failure If Missing |

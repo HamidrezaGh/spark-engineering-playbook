@@ -20,16 +20,16 @@ Transformations such as `select`, `filter`, and `withColumn` are lazy. They desc
 
 Spark builds a DAG. Narrow dependencies can be pipelined because each output partition depends on a small number of input partitions. Wide dependencies require data from many upstream partitions to be redistributed, usually by key. That redistribution creates a shuffle and normally creates a new stage.
 
-```mermaid
-flowchart LR
-    Code[User Code] --> Plan[Logical Plan]
-    Plan --> Opt[Optimized Plan]
-    Opt --> Physical[Physical Plan]
-    Physical --> Job[Job]
-    Job --> Stage1[Stage 1: narrow work]
-    Stage1 --> Shuffle[Shuffle Boundary]
-    Shuffle --> Stage2[Stage 2: reduce-side work]
-    Stage2 --> Tasks[Tasks per partition]
+```text
+User code
+  -> logical plan
+  -> optimized plan
+  -> physical plan
+  -> job
+      -> stage 1: narrow work
+      -> shuffle boundary
+      -> stage 2: reduce-side work
+          -> tasks per partition
 ```
 
 | Concept | Created By | Production Signal |

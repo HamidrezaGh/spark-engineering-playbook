@@ -2,11 +2,13 @@
 
 A public Spark handbook for engineers who want production-grade judgment, not only API familiarity.
 
-This repo is intended to read like a staff-level engineering reference: each topic should explain how Spark works, why design choices matter, how to diagnose tradeoffs, and how to apply the guidance in real systems.
+This repo is intended to read like a staff-level engineering reference with an AWS EMR production bias: each topic should explain how Spark works, why design choices matter, how to diagnose tradeoffs, and how to apply the guidance in real EMR/S3 systems.
 
 The handbook should stay practical and production-oriented: each topic should include mental models, tradeoffs, performance notes, best practices, examples, and realistic use cases.
 
-The chapters use text diagrams, Mermaid diagrams, and decision tables so the material works both as a book and as a fast review reference.
+The chapters use simple text diagrams and decision tables so the material works both as a book and as a fast review reference.
+
+Primary operating context: Apache Spark on AWS EMR, using YARN, S3, IAM, CloudWatch, EMR steps, and AWS-native operational patterns unless a chapter explicitly says otherwise.
 
 ## Handbook Roadmap
 

@@ -29,7 +29,7 @@ Executor container memory
 | Symptom | Likely Area | First Evidence |
 | --- | --- | --- |
 | Java heap OOM | Executor heap | Executor logs, task failure |
-| Container killed | Memory overhead or total limit | YARN/Kubernetes container reason |
+| Container killed | Memory overhead or total limit | YARN container reason on EMR |
 | High GC | Heap pressure/object churn | Executor GC time |
 | Heavy spill | Execution memory pressure | Stage spill metrics |
 
@@ -124,4 +124,4 @@ This can be reasonable for a PySpark workload with moderate executor heap needs 
 
 ## Real Use Case
 
-A PySpark feature engineering job fails on EMR with container memory kills but no Java heap OOM. The executor heap is not the bottleneck; Python workers and Arrow conversion use memory overhead. The fix is to increase memory overhead, reduce executor cores to lower concurrent Python workers, and reduce wide rows before expensive transformations.
+A PySpark feature engineering job fails on EMR with YARN container memory kills but no Java heap OOM. The executor heap is not the bottleneck; Python workers and Arrow conversion use memory overhead. The fix is to increase `spark.executor.memoryOverhead`, reduce executor cores to lower concurrent Python workers, and reduce wide rows before expensive transformations.

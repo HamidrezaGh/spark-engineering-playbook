@@ -16,17 +16,21 @@ Spark must satisfy the join condition. If one side is small enough, Spark can br
 
 Join performance depends on input size, join key distribution, column pruning, filters, statistics, memory, and table layout.
 
-```mermaid
-flowchart TD
-    A[Join Inputs] --> B{Is one side safely small?}
-    B -- yes --> C[Broadcast Hash Join]
-    B -- no --> D{Are both sides large equi-joins?}
-    D -- yes --> E[Sort-Merge Join]
-    D -- sometimes --> F[Shuffled Hash Join]
-    D -- no / non-equi --> G[Other strategies, often expensive]
-    C --> H[Verify memory and broadcast size]
-    E --> I[Verify shuffle size and skew]
-    F --> J[Verify per-partition build-side memory]
+```text
+Join inputs
+  |
+  |-- Is one side safely small?
+  |      -> yes: broadcast hash join
+  |              check broadcast size and executor memory
+  |
+  |-- Are both sides large equi-joins?
+  |      -> yes: sort-merge join
+  |              check shuffle size and skew
+  |      -> sometimes: shuffled hash join
+  |              check per-partition build-side memory
+  |
+  |-- Non-equi or unusual condition
+         -> other strategies, often expensive
 ```
 
 | Strategy | Best Fit | Main Risk |

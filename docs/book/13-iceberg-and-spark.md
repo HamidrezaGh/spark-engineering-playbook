@@ -12,16 +12,17 @@ Apache Iceberg is a table format that adds transactional table metadata on top o
 
 Iceberg tables are made of snapshots. A snapshot points to manifest lists, which point to manifests, which track data files and delete files. This metadata layer lets Iceberg support snapshot isolation, time travel, schema evolution, partition evolution, and hidden partitioning.
 
-```mermaid
-flowchart TD
-    Table[Iceberg table] --> Snapshot[Current snapshot]
-    Snapshot --> ManifestList[Manifest list]
-    ManifestList --> M1[Manifest]
-    ManifestList --> M2[Manifest]
-    M1 --> D1[Data files]
-    M1 --> Del1[Delete files]
-    M2 --> D2[Data files]
-    M2 --> Del2[Delete files]
+```text
+Iceberg table
+  -> current snapshot
+      -> manifest list
+          |-- manifest A
+          |     |-- data files
+          |     |-- delete files
+          |
+          |-- manifest B
+                |-- data files
+                |-- delete files
 ```
 
 | Metadata Layer | What It Tracks | Why It Matters |

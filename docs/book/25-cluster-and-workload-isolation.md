@@ -2,7 +2,7 @@
 
 Status: First Draft
 Level: Staff
-Covers: workload separation, fair scheduling, YARN queues, Kubernetes quotas, guardrails, cost attribution
+Covers: EMR workload separation, YARN queues, managed scaling, core nodes, task nodes, Spot, guardrails, cost attribution
 
 ## Core Idea
 
@@ -12,16 +12,20 @@ Workload isolation prevents one Spark job, team, or workload type from degrading
 
 Interactive queries, batch ETL, streaming jobs, ad hoc exploration, and backfills have different reliability and latency needs. They should not all compete blindly for the same unrestricted resources.
 
-```mermaid
-flowchart TD
-    Shared[Shared Spark platform] --> Critical[prod-critical queue]
-    Shared --> Batch[prod-batch queue]
-    Shared --> Streaming[streaming reserved capacity]
-    Shared --> Backfill[backfill capped queue]
-    Shared --> Adhoc[adhoc low-priority queue]
-    Critical --> SLA[Strict SLA]
-    Backfill --> Cap[Executor/runtime caps]
-    Adhoc --> Limits[Low priority and limits]
+```text
+Shared Spark platform
+  |-- prod-critical queue
+  |     -> strict SLA
+  |
+  |-- prod-batch queue
+  |
+  |-- streaming reserved capacity
+  |
+  |-- backfill capped queue
+  |     -> executor and runtime caps
+  |
+  |-- adhoc low-priority queue
+        -> low priority and limits
 ```
 
 | Workload | Needs | Isolation Control |
@@ -42,6 +46,10 @@ The platform should define:
 - Backfill isolation.
 - Cost attribution by team or application.
 - Alerts for abusive or runaway jobs.
+- EMR managed scaling bounds.
+- Rules for core nodes vs task nodes.
+- Rules for Spot task node usage.
+- S3 file-count and request-pressure guardrails.
 
 ## Why It Matters In Production
 
@@ -58,9 +66,19 @@ Without isolation, one large backfill can starve streaming jobs, one bad join ca
 
 ## Configuration And Controls
 
-On YARN, queues and capacity/fair scheduling control resource allocation. On Kubernetes, namespaces, quotas, node pools, taints, tolerations, and priority classes can isolate workloads.
+On EMR with YARN, queues and capacity/fair scheduling control resource allocation. EMR managed scaling controls cluster elasticity within configured bounds. Core nodes and task nodes should be treated differently: core nodes are more stable and may hold HDFS roles if used; task nodes are better for elastic compute and Spot capacity.
 
 Spark-level guardrails include max executors, dynamic allocation bounds, memory limits, runtime limits, and job admission checks.
+
+EMR isolation controls:
+
+| Control | Use It For | Risk If Missing |
+| --- | --- | --- |
+| YARN queues | Team/workload fairness | One job starves the cluster |
+| Dynamic allocation bounds | Elasticity with limits | Runaway executor allocation |
+| Managed scaling limits | Cluster cost and capacity control | Surprise cost or under-capacity |
+| Task node Spot policy | Cheap elastic compute | Executor loss and fetch failures |
+| Core node minimums | Stable cluster baseline | Critical jobs lose capacity |
 
 ## Operating Signals
 
@@ -74,6 +92,9 @@ Monitor:
 - Shuffle disk usage.
 - Cost by team/application.
 - Jobs exceeding guardrail thresholds.
+- EMR managed scaling events.
+- Spot interruption-related executor loss.
+- S3 request errors and throttling during high-concurrency jobs.
 
 ## Best Practices
 
@@ -83,6 +104,9 @@ Monitor:
 - Use cost attribution to change behavior.
 - Provide approved executor profiles.
 - Review large backfills before execution.
+- Use Spot primarily for interruption-tolerant task capacity, not as the only capacity for critical SLAs.
+- Cap backfill queues and schedule them outside peak production windows.
+- Keep production event logs and YARN logs available after transient clusters terminate.
 
 ## Anti-Patterns
 
@@ -91,6 +115,8 @@ Monitor:
 - Running massive backfills during business-critical windows.
 - Optimizing cluster utilization while missing streaming SLAs.
 - Measuring cost only at cluster level with no owner.
+- Letting ad hoc notebooks use the same queue and limits as production jobs.
+- Scaling task nodes aggressively without considering S3 request pressure.
 
 ## Example
 
@@ -106,7 +132,7 @@ A platform can define separate queues:
 - How do you separate interactive, batch, streaming, and backfill workloads?
 - What is fair scheduling in Spark?
 - How do queues work in YARN?
-- How do namespaces, node pools, and quotas work for Spark on Kubernetes?
+- How do EMR managed scaling, YARN queues, core nodes, and task nodes affect workload isolation?
 - How do you prevent one team's Spark job from starving others?
 - How do you set guardrails for executor count, memory, cores, runtime, and shuffle size?
 - How do you design per-team cost attribution?

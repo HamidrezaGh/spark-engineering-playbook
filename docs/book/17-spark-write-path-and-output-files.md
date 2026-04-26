@@ -12,13 +12,13 @@ Spark writes are distributed. Each task writes output for its partition, so fina
 
 A write is not one file operation. Spark schedules tasks, each task writes data files, and a commit protocol coordinates which files become visible. Table formats add a metadata commit layer.
 
-```mermaid
-flowchart LR
-    Partitions[Final DataFrame partitions] --> Tasks[Write tasks]
-    Tasks --> Temp[Task attempt files]
-    Temp --> TaskCommit[Task commit]
-    TaskCommit --> JobCommit[Job commit]
-    JobCommit --> Visible[Visible output files or table snapshot]
+```text
+Final DataFrame partitions
+  -> write tasks
+  -> task attempt files
+  -> task commit
+  -> job commit
+  -> visible output files or table snapshot
 ```
 
 | Lever | Affects | Risk |
@@ -52,7 +52,7 @@ Small output files often come from too many final partitions, high-cardinality t
 - 50,000 small files from high task count or over-partitioned writes.
 - Partial raw-path overwrite after job failure.
 - Duplicate attempt files from failed or speculative tasks.
-- Slow commits on object storage.
+- Slow commits on S3.
 - Downstream query slowdown from many tiny files.
 
 ## Tuning And Configuration
@@ -88,7 +88,7 @@ Check:
 
 - `coalesce(1)` for production single-file output.
 - Partitioning output by high-cardinality user or event IDs.
-- Ignoring failed write attempts in object storage.
+- Ignoring failed write attempts in S3.
 - Using append-only writes for rerunnable pipelines.
 
 ## Example

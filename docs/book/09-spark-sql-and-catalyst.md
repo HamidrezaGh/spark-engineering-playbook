@@ -18,13 +18,13 @@ The plan flow is:
 4. Physical plan: Spark chooses executable operators.
 5. Executed plan: runtime plan, potentially adaptive.
 
-```mermaid
-flowchart LR
-    SQL[SQL / DataFrame API] --> Unresolved[Unresolved logical plan]
-    Unresolved --> Analyzed[Analyzed logical plan]
-    Analyzed --> Optimized[Optimized logical plan]
-    Optimized --> Physical[Physical plan]
-    Physical --> Executed[Executed / adaptive plan]
+```text
+SQL / DataFrame API
+  -> unresolved logical plan
+  -> analyzed logical plan
+  -> optimized logical plan
+  -> physical plan
+  -> executed / adaptive plan
 ```
 
 | Plan Layer | Question It Answers |

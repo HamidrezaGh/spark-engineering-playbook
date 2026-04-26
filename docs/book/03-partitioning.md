@@ -22,14 +22,14 @@ A table partition is a table layout concept, often based on columns or transform
 | Shuffle partition | Runtime after wide transformations | Reduce-side task count | Leaving default `200` for every workload |
 | Table partition | Storage/table metadata | Pruning and file organization | Partitioning by high-cardinality keys |
 
-```mermaid
-flowchart LR
-    Files[Input files] --> InputPartitions[Input partitions]
-    InputPartitions --> Tasks[Scan tasks]
-    Tasks --> Exchange[Exchange / shuffle]
-    Exchange --> ShufflePartitions[Shuffle partitions]
-    ShufflePartitions --> WriteTasks[Write tasks]
-    WriteTasks --> TablePartitions[Table partitions / files]
+```text
+Input files
+  -> input partitions
+  -> scan tasks
+  -> exchange / shuffle
+  -> shuffle partitions
+  -> write tasks
+  -> table partitions / output files
 ```
 
 ## What Spark Does Internally

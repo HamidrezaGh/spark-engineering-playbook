@@ -14,15 +14,14 @@ A high-watermark records progress, such as max event time, ingestion time, sourc
 
 Replayable pipelines can rerun a range and produce the same final state.
 
-```mermaid
-flowchart LR
-    Source[Source changes] --> Select[Select range by watermark]
-    Select --> Transform[Transform and validate]
-    Transform --> Merge[Merge / scoped overwrite]
-    Merge --> Commit{Commit succeeded?}
-    Commit -- yes --> Advance[Advance watermark]
-    Commit -- no --> Retry[Retry same range]
-    Retry --> Transform
+```text
+Source changes
+  -> select range by watermark
+  -> transform and validate
+  -> merge / scoped overwrite
+  -> commit succeeded?
+      |-- yes: advance watermark
+      |-- no: retry same range
 ```
 
 | Scenario | Safer Pattern | Risk To Control |

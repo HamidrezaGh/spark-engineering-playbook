@@ -12,16 +12,17 @@ Spark's optimizer makes better decisions when it has useful statistics. Cost-bas
 
 Without stats, Spark relies on defaults and heuristics. With accurate stats, Spark can estimate whether a table is broadcastable, which join order is cheaper, and how selective filters may be.
 
-```mermaid
-flowchart LR
-    Stats[Table and column stats] --> Optimizer[Catalyst / CBO]
-    Metadata[Table-format metadata] --> Planner[Scan planning]
-    Optimizer --> JoinOrder[Join order]
-    Optimizer --> JoinStrategy[Join strategy]
-    Planner --> FilePruning[File pruning]
-    JoinOrder --> Plan[Physical plan]
-    JoinStrategy --> Plan
-    FilePruning --> Plan
+```text
+Table and column stats
+  -> Catalyst / CBO
+      |-- join order
+      |-- join strategy
+      -> physical plan
+
+Table-format metadata
+  -> scan planning
+      |-- file pruning
+      -> physical plan
 ```
 
 | Missing Signal | Bad Plan Risk | Fix |

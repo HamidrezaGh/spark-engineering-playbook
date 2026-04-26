@@ -140,7 +140,7 @@ If one `customer_id` has millions of records, all rows for that key may go to on
 - Is caching useful before one action?
 - How do you verify cache usage from the Spark UI?
 
-## 11. Spark On YARN And EMR
+## 11. Spark On AWS EMR And YARN
 
 - What is the difference between Spark client mode and cluster mode?
 - Where does the driver run in client mode?
@@ -152,6 +152,10 @@ If one `customer_id` has millions of records, all rows for that key may go to on
 - How do executor instances affect parallelism?
 - How do you size executors on EMR?
 - How do you debug failed Spark jobs from YARN logs?
+- What is the difference between EMR steps, `spark-submit`, and notebook-submitted jobs?
+- How do EMR release versions affect Spark, Hadoop, Python, Java, and connector compatibility?
+- How do core, task, and primary nodes affect Spark behavior on EMR?
+- When would you use Spot task nodes, and what failure modes should you expect?
 
 ## 12. Production Debugging
 
@@ -231,18 +235,18 @@ If one `customer_id` has millions of records, all rows for that key may go to on
 - What is the difference between writing a DataFrame and writing to a table format like Iceberg or Delta?
 - How do you debug a job that writes far more files than expected?
 
-## 18. Object Storage With Spark
+## 18. S3 With Spark On EMR
 
-- Why is S3, GCS, or ADLS not the same as a filesystem?
+- Why is S3 not the same as HDFS?
 - Why are rename operations expensive or unsafe on object stores?
 - How do list operations affect Spark planning and runtime?
 - How do small files affect object-store cost and latency?
 - What are common symptoms of S3 throttling?
-- How do you tune Spark for object-storage-heavy workloads?
-- How do committers reduce object-store write problems?
+- How do you tune Spark for S3-heavy workloads on EMR?
+- How do EMRFS and S3A committers reduce S3 write problems?
 - How do table formats like Iceberg, Delta, and Hudi reduce object-store risks?
 - How do you design a pipeline to avoid excessive object-store metadata operations?
-- What metrics would you monitor for object-store bottlenecks?
+- What CloudWatch and Spark metrics would you monitor for S3 bottlenecks?
 
 ## 19. Statistics And Cost-Based Optimization
 
@@ -263,7 +267,7 @@ If one `customer_id` has millions of records, all rows for that key may go to on
 - What causes dependency conflicts in Spark jobs?
 - What is the difference between driver classpath and executor classpath?
 - How do Python dependencies get distributed to executors?
-- Why can a job work locally but fail on EMR, YARN, Kubernetes, or Databricks?
+- Why can a job work locally but fail on EMR/YARN?
 - How do Java, Scala, Python, and Spark version compatibility issues show up?
 - How do you manage third-party connectors such as Iceberg, Delta, Kafka, or JDBC drivers?
 - How do you make Spark builds reproducible?
@@ -273,13 +277,13 @@ If one `customer_id` has millions of records, all rows for that key may go to on
 ## 21. Security And Governance
 
 - How do Spark jobs access data securely?
-- How do IAM roles, instance profiles, Kerberos, or service principals affect Spark jobs?
+- How do IAM roles, instance profiles, and EMR security configuration affect Spark jobs?
 - How do you prevent secrets from leaking into Spark logs?
 - How do you enforce table-level, row-level, and column-level access control?
 - How do you handle PII or sensitive data in Spark pipelines?
 - How do you audit who read or wrote a dataset?
 - How do encryption at rest and encryption in transit affect Spark architecture?
-- How do you design secure access for shared EMR, YARN, Kubernetes, or Databricks environments?
+- How do you design secure access for shared EMR/YARN environments?
 - How do you separate developer, staging, and production permissions?
 - How do you design governance for bronze, silver, and gold datasets?
 
@@ -327,7 +331,7 @@ If one `customer_id` has millions of records, all rows for that key may go to on
 - How do you separate interactive, batch, streaming, and backfill workloads?
 - What is fair scheduling in Spark?
 - How do queues work in YARN?
-- How do namespaces, node pools, and quotas work for Spark on Kubernetes?
+- How do EMR managed scaling, YARN queues, core nodes, and task nodes affect workload isolation?
 - How do you prevent one team's Spark job from starving others?
 - How do you set guardrails for executor count, memory, cores, runtime, and shuffle size?
 - How do you design per-team cost attribution?

@@ -14,15 +14,18 @@ Caching stores a DataFrame, Dataset, or RDD after it is computed so later action
 
 Caching is lazy. Spark does not populate the cache until an action materializes it.
 
-```mermaid
-flowchart TD
-    A[Expensive DataFrame] --> B{Reused by multiple actions?}
-    B -- no --> C[Do not cache]
-    B -- yes --> D{Fits safely in memory?}
-    D -- yes --> E[cache / memory storage]
-    D -- no --> F[persist with memory-and-disk or reconsider]
-    E --> G[unpersist when done]
-    F --> G
+```text
+Expensive DataFrame
+  |
+  |-- Reused by multiple actions?
+  |      -> no: do not cache
+  |
+  |-- yes: does it fit safely in memory?
+         -> yes: cache / memory storage
+         -> no: persist with memory-and-disk or reconsider
+
+After reuse:
+  -> unpersist when done
 ```
 
 | Cache Decision | Good Signal | Bad Signal |

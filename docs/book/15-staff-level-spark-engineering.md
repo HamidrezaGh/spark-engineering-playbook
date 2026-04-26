@@ -21,15 +21,16 @@ A Spark platform needs:
 - Incident diagnosis.
 - Upgrade and dependency strategy.
 
-```mermaid
-flowchart TD
-    Teams[Data teams] --> Templates[Job templates]
-    Templates --> Platform[Shared Spark platform]
-    Platform --> Guardrails[Config and resource guardrails]
-    Platform --> Observability[Metrics, logs, event logs]
-    Platform --> Quality[Data quality gates]
-    Platform --> Cost[Cost attribution]
-    Platform --> Runtime[EMR/YARN/Kubernetes/Databricks]
+```text
+Data teams
+  -> job templates
+  -> shared Spark platform
+      |-- config and resource guardrails
+      |-- metrics, logs, event logs
+      |-- data quality gates
+      |-- cost attribution
+      |-- EMR / YARN runtime
+      |-- S3, Glue, IAM, CloudWatch integration
 ```
 
 | Platform Capability | Prevents | Example |
@@ -69,6 +70,9 @@ Platform tuning should define safe defaults and controlled escape hatches:
 - Output file size targets.
 - Cluster queue policies.
 - Streaming trigger and checkpoint standards.
+- EMR release compatibility policy.
+- S3 log and Spark event-log retention policy.
+- Instance fleet and Spot usage rules.
 
 ## Operating Signals
 
@@ -93,6 +97,8 @@ Every production Spark job should emit:
 - Standardize event log retention.
 - Provide reusable data quality and metrics libraries.
 - Create cost review dashboards.
+- Provide approved EMR cluster templates for batch, streaming, backfill, and ad hoc workloads.
+- Make S3 small-file and request-cost controls part of platform policy.
 
 ## Anti-Patterns
 
@@ -101,6 +107,8 @@ Every production Spark job should emit:
 - Allowing unbounded cluster usage without guardrails.
 - Migrating to incremental processing without correctness tests.
 - Optimizing cost by reducing reliability.
+- Allowing every team to choose arbitrary EMR releases and connector versions.
+- Running production jobs on clusters with no durable event-log or YARN-log archive.
 
 ## Example
 
@@ -121,4 +129,4 @@ A platform might provide a standard `SparkJob` wrapper that records metrics, val
 
 ## Real Use Case
 
-A company has 40 teams running Spark on shared EMR clusters. Incidents repeatedly come from unbounded backfills and small-file writes. A staff engineer introduces queue policies, job templates, output file checks, event-log analysis, and a standard incremental pipeline pattern. Costs fall because waste is removed, not because reliability checks are skipped.
+A company has 40 teams running Spark on shared EMR clusters with S3-backed tables. Incidents repeatedly come from unbounded backfills, small-file writes, mismatched connector versions, and missing event logs after transient clusters terminate. A staff engineer introduces EMR cluster templates, queue policies, job templates, output file checks, S3-backed event-log retention, and a standard incremental pipeline pattern. Costs fall because waste is removed, not because reliability checks are skipped.

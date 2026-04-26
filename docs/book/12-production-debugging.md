@@ -14,22 +14,20 @@ Debug Spark incidents across four layers:
 
 - Code: plan, joins, filters, UDFs, writes.
 - Data: volume, skew, schema, file count, late or duplicate records.
-- Runtime: executors, memory, cores, spill, GC, queues.
-- Platform: storage, network, cluster capacity, permissions, dependencies.
+- Runtime: executors, memory, cores, spill, GC, YARN queues.
+- Platform: S3, network, EMR capacity, IAM permissions, dependencies, EMR release.
 
-```mermaid
-flowchart TD
-    Symptom[Symptom] --> Changed{What changed?}
-    Changed --> Stage[Find slow or failed stage]
-    Stage --> Plan[Read physical plan]
-    Stage --> Metrics[Inspect task metrics]
-    Plan --> Cause[Hypothesis]
-    Metrics --> Cause
-    Cause --> Data[Validate data shape]
-    Cause --> Runtime[Validate runtime logs]
-    Data --> Fix[Targeted fix]
-    Runtime --> Fix
-    Fix --> Guardrail[Add metric or guardrail]
+```text
+Symptom
+  -> ask what changed
+  -> find slow or failed stage
+      |-- read physical plan
+      |-- inspect task metrics
+  -> form hypothesis
+      |-- validate data shape
+      |-- validate runtime logs
+  -> apply targeted fix
+  -> add metric or guardrail
 ```
 
 | Symptom | First Place To Look | Common Cause |
@@ -71,7 +69,7 @@ Good triage prevents random tuning. Staff-level debugging creates a repeatable p
 3. Compare input size, output size, shuffle, spill, and task distribution.
 4. Read the SQL physical plan.
 5. Check data profile: row counts, top keys, nulls, file counts, schema.
-6. Inspect executor and YARN/Kubernetes/container logs.
+6. Inspect executor logs, YARN aggregated logs, EMR step logs, and CloudWatch/S3 log archives.
 7. Apply a targeted fix.
 8. Add a metric or guardrail to prevent recurrence.
 
@@ -92,6 +90,8 @@ Use:
 - Save explain plans for critical jobs.
 - Maintain a failure triage checklist.
 - Treat data distribution changes as production changes.
+- Preserve Spark event logs to S3 so EMR jobs can be debugged after cluster termination.
+- Correlate Spark stage regressions with S3 request errors, EMR instance health, and YARN queue pressure.
 
 ## Anti-Patterns
 

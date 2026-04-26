@@ -2,31 +2,34 @@
 
 Status: First Draft
 Level: Staff
-Covers: IAM, Kerberos, service principals, secrets, permissions, PII, auditing, governance
+Covers: IAM, EMR instance profiles, EMR security configuration, secrets, permissions, PII, auditing, governance
 
 ## Core Idea
 
-Spark security is the combination of compute identity, data permissions, secret handling, network controls, table governance, and auditability. A production Spark platform should make secure behavior the default.
+Spark security on EMR is the combination of compute identity, S3 and Glue permissions, secret handling, KMS encryption, network controls, table governance, and auditability. A production EMR platform should make secure behavior the default.
 
 ## Mental Model
 
 Every Spark job has an identity. That identity reads sources, writes targets, accesses catalogs, decrypts data, and emits logs. Security failures happen when identity, permissions, or data handling are broader than the job requires.
 
-```mermaid
-flowchart TD
-    Job[Spark job identity] --> Catalog[Catalog permissions]
-    Job --> Storage[Object storage permissions]
-    Job --> Secrets[Secret manager]
-    Job --> Logs[Logs and metrics]
-    Catalog --> Tables[Tables and views]
-    Storage --> Files[Data files]
-    Secrets --> External[External systems]
-    Logs --> Audit[Audit trail]
+```text
+Spark job identity
+  |-- catalog permissions
+  |     -> tables and views
+  |
+  |-- S3 permissions
+  |     -> data files
+  |
+  |-- secret manager
+  |     -> external systems
+  |
+  |-- logs and metrics
+        -> audit trail
 ```
 
 | Surface | Control | Failure Mode |
 | --- | --- | --- |
-| Storage | IAM/service principal | Overbroad read/write/delete |
+| Storage | IAM role / instance profile | Overbroad S3 read/write/delete |
 | Catalog | Table/row/column permissions | Bypassed governance |
 | Logs | Redaction and logging policy | Secret or PII leak |
 | Environment | Separate roles | Dev accesses prod data |
@@ -42,7 +45,7 @@ Spark jobs often process sensitive data at large scale. One bad job can expose P
 ## Common Failure Modes
 
 - Secrets passed as plain Spark config and printed in logs.
-- Overbroad IAM roles or service principals.
+- Overbroad IAM roles or EMR EC2 instance profiles.
 - Executors lack permissions that the driver has.
 - PII written to debug output or staging tables.
 - No audit trail for table reads/writes.
@@ -58,6 +61,9 @@ Use:
 - Encryption at rest and in transit.
 - Network restrictions for sensitive systems.
 - Separate dev, staging, and production permissions.
+- EMR security configurations for encryption and authentication where required.
+- KMS key policies aligned with S3 data and log buckets.
+- VPC endpoints and network controls for private S3, Glue, and CloudWatch access.
 
 ## Operating Signals
 
@@ -74,7 +80,7 @@ Track:
 
 - Treat logs as data exposure surfaces.
 - Mask or avoid logging sensitive values.
-- Use separate roles for read, write, admin, and maintenance jobs.
+- Use separate IAM roles or cluster templates for read, write, admin, and maintenance jobs where your EMR setup supports it.
 - Enforce permissions in catalogs and storage.
 - Audit access to gold and sensitive datasets.
 
@@ -85,21 +91,22 @@ Track:
 - Writing PII to temporary public paths.
 - Granting direct object-store access that bypasses table governance.
 - Assuming driver-only credential checks are enough.
+- Letting dev clusters use production S3 prefixes by default.
 
 ## Example
 
-A production job that writes `gold.customer_profile` should use a job-specific role with read access to approved silver tables, write access only to its target table, no broad delete permission outside its table, and no ability to read unrelated PII datasets.
+A production EMR job that writes `gold.customer_profile` should run on a cluster or role configuration with read access to approved silver S3 prefixes and Glue catalog objects, write access only to its target table, KMS permissions for required buckets, no broad delete permission outside its table, and no ability to read unrelated PII datasets.
 
 ## Interview-Style Questions Covered
 
 - How do Spark jobs access data securely?
-- How do IAM roles, instance profiles, Kerberos, or service principals affect Spark jobs?
+- How do IAM roles, instance profiles, and EMR security configuration affect Spark jobs?
 - How do you prevent secrets from leaking into Spark logs?
 - How do you enforce table-level, row-level, and column-level access control?
 - How do you handle PII or sensitive data in Spark pipelines?
 - How do you audit who read or wrote a dataset?
 - How do encryption at rest and encryption in transit affect Spark architecture?
-- How do you design secure access for shared EMR, YARN, Kubernetes, or Databricks environments?
+- How do you design secure access for shared EMR/YARN environments?
 - How do you separate developer, staging, and production permissions?
 - How do you design governance for bronze, silver, and gold datasets?
 

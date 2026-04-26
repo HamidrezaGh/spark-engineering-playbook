@@ -1,28 +1,28 @@
-# Object Storage With Spark
+# S3 With Spark On EMR
 
 Status: First Draft
 Level: Senior to Staff
-Covers: S3, GCS, ADLS, list operations, rename, committers, throttling, metadata operations
+Covers: S3, S3A, EMRFS, list operations, rename, committers, throttling, metadata operations
 
 ## Core Idea
 
-Object storage is not a filesystem. It is highly scalable storage with different semantics and performance characteristics. Spark jobs must account for list cost, request rates, commit behavior, object metadata, and non-atomic rename patterns.
+S3 is not HDFS. It is durable, scalable object storage with different semantics and performance characteristics than a distributed filesystem. Spark on EMR must account for S3 list cost, request rates, object metadata, commit behavior, small files, S3 throttling, and non-atomic rename-like workflows.
 
 ## Mental Model
 
-HDFS is built for distributed filesystem operations. Object stores such as S3, GCS, and ADLS expose object APIs. Operations such as listing many prefixes, writing many small objects, and renaming paths can be expensive or implemented as copy/delete workflows.
+HDFS is built for distributed filesystem operations. S3 exposes object APIs. Operations such as listing many prefixes, writing many small objects, and renaming paths can be expensive or implemented as copy/delete workflows.
 
 ```text
 Filesystem intuition:
 rename(pathA, pathB) -> cheap metadata operation
 
-Object-store reality:
+S3 reality:
 rename-like behavior -> copy object(s) + delete old object(s)
 listing many prefixes -> many remote metadata requests
 many tiny files -> many remote reads and request charges
 ```
 
-| Operation | HDFS Intuition | Object Storage Reality |
+| Operation | HDFS Intuition | S3 Reality |
 | --- | --- | --- |
 | Rename | Cheap and atomic | Often copy/delete and expensive |
 | List directory | Metadata lookup | Remote API calls over many objects |
@@ -31,13 +31,25 @@ many tiny files -> many remote reads and request charges
 
 ## What Spark Does Internally
 
-Spark scans object storage by listing paths and planning file reads. Many small files mean many object metadata operations and many tiny tasks. During writes, commit protocols must make task outputs visible safely even though object-store rename may not be atomic or cheap.
+Spark on EMR reads S3 through Hadoop filesystem integrations such as S3A and EMRFS depending on EMR version and configuration. Spark scans S3 by listing paths and planning file reads. Many small files mean many S3 metadata operations and many tiny tasks. During writes, commit protocols must make task outputs visible safely even though S3 rename-like behavior may not be atomic or cheap.
 
 Table formats reduce risk by committing metadata snapshots rather than relying only on directory state.
 
+On EMR, the practical read/write path often looks like:
+
+```text
+Spark task
+  -> Hadoop S3 client: S3A or EMRFS
+  -> S3 API calls
+      |-- ListObjects / metadata requests
+      |-- GetObject reads
+      |-- PutObject writes
+      |-- copy/delete for rename-like workflows
+```
+
 ## Why It Matters In Production
 
-Object storage bottlenecks often look like Spark slowness:
+S3 bottlenecks often look like Spark slowness:
 
 - Low CPU utilization.
 - Slow scan planning.
@@ -53,38 +65,48 @@ Object storage bottlenecks often look like Spark slowness:
 - Rename-heavy commit protocol slows writes.
 - Orphan files after failed jobs.
 - Cost spikes from metadata-heavy workloads.
+- KMS throttling or access errors for encrypted buckets.
+- IAM policy issues that only appear on executors.
+- High S3 request volume from small-file reads or writes.
 
 ## Tuning And Configuration
 
-Tune object-storage workloads by:
+Tune S3-heavy EMR workloads by:
 
 - Reducing small files.
 - Avoiding unnecessary listings.
 - Using table metadata for pruning.
-- Choosing appropriate committers.
+- Choosing appropriate S3 committers or table-format commit paths.
 - Controlling write parallelism.
 - Compacting data files.
 - Designing partition layouts that do not create too many prefixes or files.
+- Watching S3 request rate, retry, and throttling signals.
+- Avoiding the false fix of adding more executors when the bottleneck is S3 metadata/listing.
+- Using S3-backed Spark event logs so slow S3 behavior can be diagnosed after cluster termination.
 
 ## Operating Signals
 
 Monitor:
 
-- Object-store request count and throttling.
+- S3 request count and throttling.
 - File count scanned.
 - Listing time.
 - Read/write throughput.
 - Commit time.
 - Average file size.
 - Retry counts from storage clients.
+- CloudWatch S3 metrics where available.
+- KMS throttling or access-denied errors for encrypted data.
 
 ## Best Practices
 
 - Use transactional table formats for important datasets.
 - Keep files reasonably sized.
 - Use partition pruning and metadata pruning.
-- Avoid treating object storage as POSIX storage.
+- Avoid treating S3 as POSIX storage.
 - Separate storage bottlenecks from Spark compute bottlenecks during debugging.
+- Prefer EMR/Spark configurations and table formats that avoid rename-heavy commit behavior.
+- Keep S3 bucket layout, Glue catalog metadata, and table-format metadata aligned.
 
 ## Anti-Patterns
 
@@ -92,6 +114,8 @@ Monitor:
 - Depending on directory listing as the source of truth for table state.
 - Using high-cardinality path partitioning.
 - Assuming rename is atomic and cheap everywhere.
+- Debugging S3-heavy jobs only from executor CPU metrics.
+- Granting broad S3 permissions instead of explicit prefixes and KMS keys.
 
 ## Example
 
@@ -99,21 +123,21 @@ Monitor:
 spark.read.parquet("s3://lake/events/").where("event_date = '2026-04-25'")
 ```
 
-This is efficient only if the table layout and metadata let Spark avoid listing and scanning irrelevant files.
+This is efficient only if the table layout and metadata let Spark avoid listing and scanning irrelevant S3 objects.
 
 ## Interview-Style Questions Covered
 
-- Why is S3, GCS, or ADLS not the same as a filesystem?
+- Why is S3 not the same as HDFS?
 - Why are rename operations expensive or unsafe on object stores?
 - How do list operations affect Spark planning and runtime?
-- How do small files affect object-store cost and latency?
+- How do small files affect S3 cost and latency?
 - What are common symptoms of S3 throttling?
-- How do you tune Spark for object-storage-heavy workloads?
-- How do committers reduce object-store write problems?
+- How do you tune Spark for S3-heavy workloads on EMR?
+- How do EMRFS and S3A committers reduce S3 write problems?
 - How do table formats like Iceberg, Delta, and Hudi reduce object-store risks?
 - How do you design a pipeline to avoid excessive object-store metadata operations?
-- What metrics would you monitor for object-store bottlenecks?
+- What CloudWatch and Spark metrics would you monitor for S3 bottlenecks?
 
 ## Real Use Case
 
-A daily dashboard query has low CPU usage but takes 30 minutes to start. The issue is not executor sizing; Spark is listing hundreds of thousands of small files on object storage. Compaction, table metadata pruning, and better partition layout reduce planning time and storage request cost.
+A daily dashboard query on EMR has low executor CPU usage but takes 30 minutes to start. The issue is not executor sizing; Spark is listing hundreds of thousands of small files on S3. Compaction, Iceberg/Glue metadata pruning, and better partition layout reduce planning time, S3 request cost, and false pressure to scale the cluster.

@@ -12,17 +12,15 @@ Adaptive Query Execution, or AQE, lets Spark adjust a query plan after it observ
 
 The initial physical plan is Spark's best plan before execution. The final adaptive plan is what Spark actually used after collecting shuffle statistics. AQE is most useful when static estimates are wrong or incomplete.
 
-```mermaid
-flowchart LR
-    Initial[Initial physical plan] --> Stage[Run query stage]
-    Stage --> Stats[Collect runtime stats]
-    Stats --> Decide{Can plan improve?}
-    Decide -- coalesce --> Coalesce[Coalesce shuffle partitions]
-    Decide -- skew --> Skew[Split skewed partitions]
-    Decide -- join --> Join[Switch join strategy]
-    Coalesce --> Final[Final adaptive plan]
-    Skew --> Final
-    Join --> Final
+```text
+Initial physical plan
+  -> run query stage
+  -> collect runtime stats
+  -> decide whether plan can improve
+       |-- coalesce small shuffle partitions
+       |-- split skewed partitions
+       |-- switch join strategy
+  -> final adaptive plan
 ```
 
 | AQE Feature | Problem It Targets | What To Verify |

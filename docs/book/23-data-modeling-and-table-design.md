@@ -14,13 +14,13 @@ Bronze tables preserve raw or lightly normalized data. Silver tables apply clean
 
 Partitioning is useful when it matches common filters and keeps partition sizes healthy. It is harmful when it creates tiny partitions, high metadata overhead, or poor pruning.
 
-```mermaid
-flowchart LR
-    Bronze[Bronze: raw/landing] --> Silver[Silver: cleaned/conformed]
-    Silver --> Gold[Gold: curated serving tables]
-    Gold --> BI[BI/reporting]
-    Gold --> ML[ML features]
-    Gold --> Product[Product data]
+```text
+Bronze: raw / landing
+  -> Silver: cleaned / conformed
+      -> Gold: curated serving tables
+          |-- BI / reporting
+          |-- ML features
+          |-- product data
 ```
 
 | Design Choice | Optimizes For | Watch Out |

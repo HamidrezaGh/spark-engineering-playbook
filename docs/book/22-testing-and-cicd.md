@@ -14,7 +14,7 @@ Use different test layers:
 
 - Unit tests for pure transformation logic on small DataFrames.
 - Contract tests for schemas, required columns, uniqueness, and null rules.
-- Integration tests for catalogs, table formats, object storage, and connectors.
+- Integration tests for Glue/catalogs, table formats, S3, and connectors.
 - Regression tests for known edge cases such as skew, late data, duplicates, and schema evolution.
 - Deployment tests for packaging and runtime compatibility.
 
@@ -37,7 +37,7 @@ Spark testing pyramid
 
 ## What Spark Does Internally
 
-Local Spark tests run with local executors and small data. They catch many logic bugs but do not fully represent distributed shuffle, object storage, cluster permissions, executor packaging, or production data volume.
+Local Spark tests run with local executors and small data. They catch many logic bugs but do not fully represent distributed shuffle, S3 behavior, EMR permissions, executor packaging, or production data volume.
 
 Streaming tests need deterministic input, controlled triggers, checkpoint isolation, and assertions over output/state.
 

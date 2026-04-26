@@ -6,7 +6,7 @@ Covers: application packaging, classpath, Python dependencies, connector version
 
 ## Core Idea
 
-Spark applications run across driver and executor processes, often on different machines. Dependencies must be available in the right place, with compatible versions, for both planning and task execution.
+Spark applications on EMR run across driver and executor processes on cluster nodes. Dependencies must be available in the right place, with versions compatible with the EMR release, Spark version, Scala binary version, Java version, Python version, and any connectors.
 
 ## Mental Model
 
@@ -43,7 +43,7 @@ Dependency issues often appear only in production because dev and cluster enviro
 - `NoSuchMethodError` from binary-incompatible jar versions.
 - Python `ModuleNotFoundError` on executors.
 - Driver can access a dependency but executors cannot.
-- Local test passes but EMR/YARN/Kubernetes job fails.
+- Local test passes but EMR/YARN job fails.
 - Secrets or environment config accidentally packaged into artifacts.
 
 ## Configuration And Deployment
@@ -51,11 +51,13 @@ Dependency issues often appear only in production because dev and cluster enviro
 Use reproducible packaging:
 
 - Lock Python dependencies.
-- Pin connector versions to Spark/Scala versions.
+- Pin connector versions to the EMR release's Spark and Scala versions.
 - Build application artifacts in CI.
 - Avoid manual cluster mutations.
 - Separate code config from environment secrets.
 - Test packaging in an environment close to production.
+- Treat bootstrap actions and custom AMIs as versioned infrastructure, not manual fixes.
+- Record the EMR release and installed applications for every production job.
 
 ## Operating Signals
 
@@ -70,7 +72,7 @@ Check:
 
 ## Best Practices
 
-- Keep a compatibility matrix for Spark, Scala, Java, Python, and connectors.
+- Keep a compatibility matrix for EMR release, Spark, Scala, Java, Python, Hadoop AWS libraries, and connectors.
 - Use build artifacts rather than notebook state for production jobs.
 - Validate dependencies in integration tests.
 - Keep deployment configuration reviewable.
@@ -78,7 +80,7 @@ Check:
 
 ## Anti-Patterns
 
-- Installing packages manually on one cluster and calling it production.
+- Installing packages manually on one EMR cluster and calling it production.
 - Depending on notebook-local packages.
 - Mixing connector versions across jobs.
 - Adding broad shaded jars without checking conflicts.
@@ -101,7 +103,7 @@ The Spark and Scala suffix must match the runtime. The exact Iceberg version sho
 - What causes dependency conflicts in Spark jobs?
 - What is the difference between driver classpath and executor classpath?
 - How do Python dependencies get distributed to executors?
-- Why can a job work locally but fail on EMR, YARN, Kubernetes, or Databricks?
+- Why can a job work locally but fail on EMR/YARN?
 - How do Java, Scala, Python, and Spark version compatibility issues show up?
 - How do you manage third-party connectors such as Iceberg, Delta, Kafka, or JDBC drivers?
 - How do you make Spark builds reproducible?
@@ -110,4 +112,4 @@ The Spark and Scala suffix must match the runtime. The exact Iceberg version sho
 
 ## Real Use Case
 
-A job works in a notebook but fails on EMR executors with `ModuleNotFoundError`. The package was installed only on the notebook host. The production fix is to build a versioned Python artifact, distribute it with `--py-files` or an environment archive, and test the submitted artifact in CI against a Spark runtime image.
+A job works in a notebook but fails on EMR executors with `ModuleNotFoundError`. The package was installed only on the notebook host. The production fix is to build a versioned Python artifact, distribute it with `--py-files` or an environment archive, and test the submitted artifact in CI against the target EMR release.

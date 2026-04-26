@@ -13,24 +13,26 @@ Each chapter is designed for two reading modes:
 
 ## Concept Dependency Map
 
-```mermaid
-flowchart TD
-    A[Execution Model] --> B[Shuffle And Performance]
-    A --> C[Partitioning]
-    B --> D[Joins]
-    C --> D
-    B --> E[Data Skew]
-    D --> E
-    B --> F[Adaptive Query Execution]
-    C --> G[File Formats And Table Layout]
-    G --> H[Iceberg And Spark]
-    D --> I[Production Debugging]
-    E --> I
-    F --> I
-    H --> J[Incremental Processing And Backfills]
-    J --> K[Data Correctness And Idempotency]
-    K --> L[Staff-Level Spark Engineering]
-    I --> L
+```text
+Execution Model
+  |-- Shuffle And Performance
+  |     |-- Joins
+  |     |-- Data Skew
+  |     |-- Adaptive Query Execution
+  |
+  |-- Partitioning
+        |-- Joins
+        |-- File Formats And Table Layout
+              |-- Iceberg And Spark
+
+Joins + Data Skew + AQE
+  -> Production Debugging
+  -> Staff-Level Spark Engineering
+
+Iceberg And Spark
+  -> Incremental Processing And Backfills
+  -> Data Correctness And Idempotency
+  -> Staff-Level Spark Engineering
 ```
 
 ## Visual Review Lanes
@@ -40,7 +42,7 @@ flowchart TD
 | Execution | 1-6 | How does Spark break work apart and move data? |
 | Runtime | 7, 10-12 | Why does the job fail or run slowly? |
 | Storage | 8, 13, 17-19, 23 | How does data layout change scan, write, and planning cost? |
-| Operations | 14-16, 20-22, 24-25 | How do we run Spark safely across teams and time? |
+| Operations | 11, 14-16, 20-22, 24-25 | How do we run Spark safely on EMR across teams and time? |
 
 ## Chapters
 
@@ -54,14 +56,14 @@ flowchart TD
 8. [File Formats](08-file-formats.md)
 9. [Spark SQL And Catalyst](09-spark-sql-and-catalyst.md)
 10. [Caching And Persistence](10-caching-and-persistence.md)
-11. [Spark On YARN And EMR](11-spark-on-yarn-and-emr.md)
+11. [Spark On AWS EMR And YARN](11-spark-on-yarn-and-emr.md)
 12. [Production Debugging](12-production-debugging.md)
 13. [Iceberg And Spark](13-iceberg-and-spark.md)
 14. [Structured Streaming](14-structured-streaming.md)
 15. [Staff-Level Spark Engineering](15-staff-level-spark-engineering.md)
 16. [Data Correctness And Idempotency](16-data-correctness-and-idempotency.md)
 17. [Spark Write Path And Output Files](17-spark-write-path-and-output-files.md)
-18. [Object Storage With Spark](18-object-storage-with-spark.md)
+18. [S3 With Spark On EMR](18-object-storage-with-spark.md)
 19. [Statistics And Cost-Based Optimization](19-statistics-and-cost-based-optimization.md)
 20. [Dependency Management And Packaging](20-dependency-management-and-packaging.md)
 21. [Security And Governance](21-security-and-governance.md)

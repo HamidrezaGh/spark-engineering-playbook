@@ -19,14 +19,14 @@ Append, overwrite, dynamic partition overwrite, and merge have different risk pr
 - Dynamic partition overwrite replaces only touched partitions but still needs correct partition scope.
 - Merge updates/inserts matching keys but can be expensive and depends on key quality.
 
-```mermaid
-flowchart LR
-    Input[Input range or source snapshot] --> Stage[Validated staging data]
-    Stage --> Gate{Quality gate}
-    Gate -- pass --> Commit[Atomic publish or merge]
-    Gate -- fail --> Stop[Stop before gold]
-    Commit --> Metadata[Run metadata and watermark]
-    Metadata --> Reconcile[Reconciliation checks]
+```text
+Input range or source snapshot
+  -> validated staging data
+  -> quality gate
+      |-- fail: stop before gold
+      |-- pass: atomic publish or merge
+              -> run metadata and watermark
+              -> reconciliation checks
 ```
 
 | Write Pattern | Retry Risk | Safer When |
