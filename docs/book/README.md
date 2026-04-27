@@ -2,7 +2,9 @@
 
 This is the main handbook.
 
-Each chapter is written for engineers who are already comfortable with basic Spark and want production-level depth: how Spark behaves internally, what fails in real systems, how to diagnose it from the Spark UI, and how to choose tradeoffs at staff-level.
+Each chapter is written for engineers who are already comfortable with basic Spark and want
+**production depth**: how Spark behaves internally, what fails in real systems, how to diagnose
+it from the **Spark UI** and **EXPLAIN**, and how to pick **tradeoffs** with evidence.
 
 The chapters can be read in order, but most are also useful as standalone references during incidents or design reviews.
 
@@ -24,7 +26,7 @@ Two reading modes:
 
 | Mode | Use When | What To Scan |
 | --- | --- | --- |
-| Fast review | Refreshing before an interview, design review, or incident | Core idea, mental model, diagrams, production smells, best practices |
+| Fast review | Design review, incident, or “what did we decide last time?” | Core idea, mental model, diagrams, production smells, best practices |
 | Deep review | Learning the topic or writing production code | Internals, tuning, failure modes, Spark UI signals, example, real use case |
 
 ## Reading Lanes
@@ -52,12 +54,12 @@ Execution Model
 
 Joins + Data Skew + AQE
   -> Production Debugging
-  -> Staff-Level Spark Engineering
+  -> Platform Patterns And Guardrails
 
 Iceberg And Spark
   -> Incremental Processing And Backfills
   -> Data Correctness And Idempotency
-  -> Staff-Level Spark Engineering
+  -> Platform Patterns And Guardrails
 ```
 
 ## Chapters
@@ -120,7 +122,8 @@ Iceberg And Spark
 ### 12. [Production Debugging](12-production-debugging.md)
 
 - **You'll learn:** a structured triage workflow — Stages → SQL → Executors → logs — for slow jobs, OOMs, and failures.
-- **Why it matters in production:** at staff level, you are expected to debug other people's Spark jobs without their context. A repeatable workflow is the difference between minutes and hours.
+- **Why it matters in production:** on shared platforms, you will debug jobs you did not write. A
+  repeatable **workflow** (UI → plan → logs) is the difference between minutes and hours.
 
 ### 13. [Iceberg And Spark](13-iceberg-and-spark.md)
 
@@ -132,10 +135,10 @@ Iceberg And Spark
 - **You'll learn:** micro-batch model, triggers, watermarks, state stores, checkpointing, exactly-once with idempotent sinks.
 - **Why it matters in production:** streaming jobs fail differently than batch jobs. Most incidents are checkpoint, watermark, or state size problems.
 
-### 15. [Staff-Level Spark Engineering](15-staff-level-spark-engineering.md)
+### 15. [Platform patterns and guardrails](15-platform-patterns.md)
 
-- **You'll learn:** what separates senior Spark users from staff-level platform engineers — golden paths, guardrails, observability, cost, upgrade strategy, and turning incidents into platform improvements.
-- **Why it matters in production:** at scale, the bottleneck is rarely one job. It's the absence of standards, observability, and guardrails for the next forty jobs.
+- **You'll learn:** how to turn one-off job fixes into **defaults** — golden paths, guardrails, observability, cost, upgrade strategy, and learning from incidents.
+- **Why it matters in production:** at scale, the recurring problem is not “one slow job” but missing **standards** and **evidence** for the next many jobs and teams.
 
 ### 16. [Data Correctness And Idempotency](16-data-correctness-and-idempotency.md)
 

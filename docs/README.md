@@ -1,18 +1,34 @@
-# Documentation
+# Documentation layout
 
-This directory contains the public Spark Engineering Playbook.
+The default **production** mental model in this repo is **Spark on YARN** (often **AWS EMR**)
+with **S3**-backed data lakes and sometimes **Iceberg** or other table formats. Generic Spark
+behavior is portable; failure modes and tuning often depend on the **cluster manager**, **storage**,
+and **format**.
 
-The default production environment is AWS EMR with Spark on YARN and S3-backed data lakes. Generic Spark concepts still apply elsewhere, but examples and operational guidance prefer EMR, S3, IAM, and CloudWatch.
+## How to navigate
 
-## Layout
+- **By concept (sequential):** [`book/README.md`](book/README.md)
+- **By symptom (trees):** [`troubleshooting/README.md`](troubleshooting/README.md) and
+  [`field-guides/README.md`](field-guides/README.md)
+- **By question:** [`concept-map.md`](concept-map.md)
+- **By UI and plan:** [`observability/README.md`](observability/README.md)
+- **Checklists (short):** [`checklists/README.md`](checklists/README.md)
+- **Self-check depth:** [`practical-spark-questions.md`](practical-spark-questions.md) (older name:
+  [`advanced-spark-questions.md`](advanced-spark-questions.md) stub)
 
-- [`book/`](book/README.md) — the main chapter-by-chapter handbook.
-- [`field-guides/`](field-guides/README.md) — incident-oriented debugging guides (slow jobs, OOM, skew, small files, Spark UI).
-- [`patterns/`](patterns/README.md) — reusable Spark and lakehouse architectural patterns.
-- [`tuning/`](tuning/README.md) — focused tuning references for common levers.
-- [`configs/`](configs/README.md) — Spark configuration field manual.
-- [`checklists/`](checklists/README.md) — operating checklists for pre-deploy, triage, cost, production readiness, and [docs presentation quality](checklists/repo-quality-checklist.md).
-- [`case-studies/`](case-studies/README.md) — anonymized post-incident reviews.
-- [`templates/`](templates/) — authoring templates for new chapters, patterns, and field guides.
-- [`glossary.md`](glossary.md) — shared production-oriented terminology.
-- [`advanced-spark-questions.md`](advanced-spark-questions.md) — the roadmap of questions the handbook should answer.
+## Directory index
+
+- [`book/`](book/) — main handbook
+- [`troubleshooting/`](troubleshooting/) — production decision trees
+- [`observability/`](observability/) — Spark UI and physical plan guides
+- [`field-guides/`](field-guides/) — short incident entry points
+- [`patterns/`](patterns/) — reusable architecture patterns
+- [`tuning/`](tuning/) — focused tuning notes
+- [`configs/`](configs/) — configuration field guide
+- [`checklists/`](checklists/) — operational and review checklists
+- [`case-studies/`](case-studies/) — anonymized incidents
+- [`templates/`](templates/) — review and authoring templates
+- [`glossary.md`](glossary.md) — terms with UI/EXPLAIN meaning
+- [`concept-map.md`](concept-map.md) — questions → chapters
+
+**Contributing:** [`../CONTRIBUTING.md`](../CONTRIBUTING.md)

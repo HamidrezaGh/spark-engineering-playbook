@@ -56,6 +56,15 @@ One minimal example or short scenario.
 
 A realistic production story with symptom → evidence → fix → guardrail.
 
-## Interview-Style Questions Covered (Optional)
+## Optional callouts (short)
 
-- (3-10 questions)
+Use **at most a few** per chapter, only when they disambiguate real mistakes:
+
+- **Production lesson** — a rule of thumb you would apply on-call.
+- **Common mistake** — a failure mode the chapter prevents.
+- **Tradeoff** — what you give up for a gain, and how to see it in the UI or `EXPLAIN`.
+
+## Self-check questions (optional)
+
+Link to the relevant **section** in [`../practical-spark-questions.md`](../practical-spark-questions.md)
+instead of duplicating a long list here.

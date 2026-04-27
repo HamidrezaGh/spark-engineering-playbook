@@ -55,13 +55,25 @@ run_sql_examples() {
 -- Create temp views over the local CSVs. These views replace the
 -- 'events' and 'customers' tables referenced in the SQL examples.
 
-CREATE OR REPLACE TEMPORARY VIEW events
+CREATE OR REPLACE TEMPORARY VIEW events_raw
 USING csv
 OPTIONS (
     path '${DATA_DIR}/events_sample.csv',
     header 'true',
     inferSchema 'true'
 );
+
+-- teaching views: synthetic campaign_id so join-strategy examples match the book
+CREATE OR REPLACE TEMPORARY VIEW events AS
+SELECT
+    event_id,
+    event_date,
+    event_time,
+    customer_id,
+    event_type,
+    amount,
+    concat('cmp_', lpad(cast((abs(hash(customer_id)) % 8) AS string), 1, '0')) AS campaign_id
+FROM events_raw;
 
 CREATE OR REPLACE TEMPORARY VIEW customers
 USING csv
@@ -88,11 +100,21 @@ SELECT DISTINCT
     country_id AS country_name
 FROM customers
 WHERE country_id IS NOT NULL;
+
+CREATE OR REPLACE TEMPORARY VIEW campaigns AS
+SELECT DISTINCT
+    campaign_id,
+    concat('Campaign ', campaign_id) AS campaign_name,
+    CASE WHEN abs(hash(campaign_id)) % 2 = 0 THEN 'US' ELSE 'UK' END AS country
+FROM events
+WHERE campaign_id IS NOT NULL;
 EOF
 
     local sql_files=(
         "${SQL_DIR}/01-explain-shuffle.sql"
         "${SQL_DIR}/02-broadcast-vs-sort-merge-join.sql"
+        "${SQL_DIR}/join-strategies/broadcast_join.sql"
+        "${SQL_DIR}/join-strategies/sort_merge_join.sql"
         "${SQL_DIR}/03-skew-detection.sql"
         "${SQL_DIR}/04-window-vs-groupby.sql"
         "${SQL_DIR}/05-partition-pruning.sql"
@@ -138,6 +160,28 @@ run_pyspark_examples() {
             --header \
             --key customer_id \
             --top-n 10 || true
+    fi
+
+    if [[ -f "${PYSPARK_DIR}/skew-demo/skew_demo.py" ]]; then
+        print_header "skew-demo/skew_demo.py"
+        SPARK_LOCAL="${SPARK_LOCAL:-local[2]}"
+        export SPARK_LOCAL
+        python3 "${PYSPARK_DIR}/skew-demo/skew_demo.py" || true
+    fi
+
+    if [[ -f "${PYSPARK_DIR}/skew-demo/salted_join_fix.py" ]]; then
+        print_header "skew-demo/salted_join_fix.py"
+        python3 "${PYSPARK_DIR}/skew-demo/salted_join_fix.py" || true
+    fi
+
+    if [[ -f "${PYSPARK_DIR}/partitioning-demo/repartition_vs_coalesce.py" ]]; then
+        print_header "partitioning-demo/repartition_vs_coalesce.py"
+        python3 "${PYSPARK_DIR}/partitioning-demo/repartition_vs_coalesce.py" || true
+    fi
+
+    if [[ -f "${PYSPARK_DIR}/partitioning-demo/output_file_count_demo.py" ]]; then
+        print_header "partitioning-demo/output_file_count_demo.py"
+        python3 "${PYSPARK_DIR}/partitioning-demo/output_file_count_demo.py" || true
     fi
 }
 

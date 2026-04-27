@@ -11,6 +11,8 @@ The point of these examples is not "look how to use the API." The point is to gi
 | [`inspect_partitions.py`](inspect_partitions.py) | Show per-partition row counts and skew indicators for any DataFrame. | Chapter 1 (Execution Model), Chapter 3 (Partitioning). |
 | [`skew_detector.py`](skew_detector.py) | Compute distribution stats and top keys for a candidate join/group-by key. | Chapter 5 (Data Skew), Chapter 6 (AQE). |
 | [`file_count_audit.py`](file_count_audit.py) | Walk an output prefix and report file counts, sizes, and small-file ratios per partition. | Chapter 17 (Write Path), Chapter 18 (S3), `docs/field-guides/small-files-playbook.md`. |
+| [`skew-demo/`](skew-demo/README.md) | **Skew** + **salting** demos (toy data + `skew_detector` import). | Chapter 5 (Data Skew), [`../../docs/troubleshooting/skew-and-stragglers.md`](../../docs/troubleshooting/skew-and-stragglers.md). |
+| [`partitioning-demo/`](partitioning-demo/README.md) | `repartition` vs `coalesce` and **output** file count. | Chapter 3 (Partitioning), [`../../docs/troubleshooting/small-files.md`](../../docs/troubleshooting/small-files.md). |
 
 ## How To Use These
 

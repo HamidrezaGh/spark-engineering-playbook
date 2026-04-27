@@ -1,6 +1,10 @@
 # Field Guides
 
-Field guides are incident-oriented references. They should help an engineer diagnose a production Spark problem quickly, using Spark UI signals, logs, metrics, query plans, and table metadata.
+Field guides are incident-oriented references. They should help an engineer diagnose a production
+Spark problem quickly, using Spark UI signals, logs, metrics, query plans, and table metadata. For
+the **full** Spark Web UI and plan-reading guides, use [`../observability/README.md`](../observability/README.md)
+and [`../troubleshooting/README.md`](../troubleshooting/README.md) for **decision trees** by
+symptom.
 
 ## Guides
 

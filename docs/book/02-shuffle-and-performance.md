@@ -39,6 +39,10 @@ Shuffle is expensive because it adds **network IO**, **disk IO** (map-side files
 spill), **serialization**, **memory pressure**, and **failure recovery** (lost shuffle
 blocks force recomputation).
 
+> **Common mistake:** treating **shuffle** time as “cluster is too small.” Often the
+> smallest fix is **less data through the shuffle** (filters, projections, a better
+> **join** plan) or **skew** work — not a linear increase in executor count.
+
 ## Key Takeaways
 
 - **Shuffle is often the most expensive Spark operation** because it combines network,
