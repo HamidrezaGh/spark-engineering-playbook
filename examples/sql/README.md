@@ -15,6 +15,8 @@ The examples are written to be readable on their own — open one file and you s
 | [`05-partition-pruning.sql`](05-partition-pruning.sql) | Verifying partition pruning, column pruning, and predicate pushdown from `EXPLAIN`, with the common ways each silently breaks. | Chapter 3 (Partitioning), Chapter 8 (File Formats), Chapter 9 (Spark SQL And Catalyst). |
 | [`06-aqe-in-action.sql`](06-aqe-in-action.sql) | Observing what AQE actually does at runtime: coalesce, dynamic switch to broadcast, skew join handling. | Chapter 6 (AQE), Chapter 4 (Joins), Chapter 5 (Data Skew). |
 | [`07-iceberg-merge.sql`](07-iceberg-merge.sql) | A scoped Iceberg `MERGE` with bounded predicates, snapshot inspection, validation gate, and rollback. | Chapter 13 (Iceberg And Spark), Chapter 24 (Incremental Processing And Backfills), [`docs/case-studies/emr-merge-memory-spill.md`](../../docs/case-studies/emr-merge-memory-spill.md). |
+| [`join-strategies/`](join-strategies/README.md) | Short `EXPLAIN` pair: **broadcast** vs **sort-merge** on the same join. | Chapter 4 (Joins), [`docs/observability/physical-plans.md`](../../docs/observability/physical-plans.md). |
+| [`iceberg-write-path/`](iceberg-write-path/README.md) | MERGE / **rewrite** / write-distribution **templates** (requires Iceberg). | Chapters 13, 17, [`docs/troubleshooting/iceberg-merge-issues.md`](../../docs/troubleshooting/iceberg-merge-issues.md). |
 
 ## How To Use These
 

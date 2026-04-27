@@ -18,12 +18,15 @@ Use this directory for diagrams that explain Spark execution, shuffle flow, join
 | [`broadcast-vs-sort-merge-join.md`](broadcast-vs-sort-merge-join.md) | [Chapter 4 — Joins](../docs/book/04-joins.md) | Side-by-side mechanics of the two most common production join strategies. |
 | [`iceberg-merge-on-s3.md`](iceberg-merge-on-s3.md) | [Chapter 13 — Iceberg And Spark](../docs/book/13-iceberg-and-spark.md), [`emr-merge-memory-spill.md`](../docs/case-studies/emr-merge-memory-spill.md) | What an Iceberg `MERGE` actually does on S3, and where it fails operationally. |
 | [`structured-streaming-checkpoint-state.md`](structured-streaming-checkpoint-state.md) | [Chapter 14 — Structured Streaming](../docs/book/14-structured-streaming.md), [`streaming-state-blowup.md`](../docs/case-studies/streaming-state-blowup.md) | How checkpoints, state stores, and watermarks tie together each micro-batch. |
+| [`aqe-optimization-loop.md`](aqe-optimization-loop.md) | [Chapter 6 — AQE](../docs/book/06-adaptive-query-execution.md) | How runtime stats feed the adaptive rewrite loop (high level). |
+| [`spark-ui-troubleshooting-flow.md`](spark-ui-troubleshooting-flow.md) | [Spark UI guide](../docs/observability/spark-ui-guide.md) | A stable tab order: Stages → SQL → Executors. |
+| [`emr-yarn-spark-deployment.md`](emr-yarn-spark-deployment.md) | [Chapter 11 — EMR / YARN](../docs/book/11-spark-on-yarn-and-emr.md) | Where driver and executors sit under YARN (conceptual). |
 
 ## Contributing A Diagram
 
 A diagram belongs in this directory if:
 
-- It teaches a production concept that a staff engineer would draw on a whiteboard during a design review or incident.
+- It teaches a production concept you would draw on a whiteboard during a design review or incident.
 - It can stand alone with a short explanation, the diagram itself, and a production interpretation.
 - The Mermaid source renders correctly in GitHub.
 

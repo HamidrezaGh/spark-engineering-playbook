@@ -1,228 +1,155 @@
 # Spark Engineering Playbook
 
-A production-grade Apache Spark handbook for engineers who want to make better Spark decisions
-in real systems, not just pass an interview.
+A **practical Apache Spark engineering** playbook for **understanding, debugging, tuning, and
+operating** production Spark workloads (batch and streaming, SQL-first with PySpark where execution
+and tooling matter). Depth comes from the content — not from self-labels or question lists.
 
-This repository is written from the point of view of someone who runs Spark on AWS EMR with
-object-store-backed storage. The emphasis is on production scenarios, debugging workflows, case
-studies, design review templates, Spark UI evidence, EXPLAIN-driven examples, operational tradeoffs,
-guardrails, and runbooks — not on API walkthroughs. Every chapter focuses on what actually matters
-when a job is slow, expensive, fragile, or hard to operate at scale.
+The examples in this repository assume a common real-world path: **Spark on YARN** (often **AWS
+EMR**) and **S3**-backed data, sometimes **Apache Iceberg**. Core Spark behavior is the same in
+other deployments; the operational notes call out where **object storage**, **YARN**, and
+**lakehouse** formats change the picture.
 
 ## Why this exists
 
-Many Spark resources explain APIs, transformations, and simple tuning flags. Production Spark work
-is different: jobs fail because of shuffle pressure, skew, memory spill, small files, unsafe joins,
-bad partitioning, object-storage behavior, dependency drift, and missing observability.
+In production, Spark work is less about reciting APIs and more about **diagnosing**:
 
-This playbook exists to capture practical Spark engineering judgment: how to read the Spark UI,
-reason from physical plans, diagnose production failures, choose the smallest safe fix, and turn
-incidents into reusable platform patterns.
+- A stage that was fast **yesterday** and slow **today** (skew, bad stats, layout change, or cluster health).
+- **Shuffle**-heavy jobs that dominate cost and **fail** with `FetchFailed` when executors or disks are stressed.
+- **Memory** and **spill** patterns that only show up at scale, especially with **Python** and **UDFs**.
+- **Write paths** that create **thousands of small files** or unsafe **overwrites** on object stores.
+- **Iceberg** (or similar) **MERGE** operations that are correct in SQL but **full scans** in practice.
 
-## What This Is
+This playbook exists to make those situations **boring to triage**: read the **physical plan**, read
+the **Spark UI**, follow a **decision tree**, and pick the **smallest** verifiable next step.
 
-A practical, opinionated reference covering:
+## What this repo covers
 
-- Spark execution internals: jobs, stages, tasks, shuffle, Catalyst, AQE.
-- Spark SQL behavior: physical plans, joins, exchanges, statistics, predicate pushdown.
-- Production debugging: Spark UI, event logs, YARN container kills, fetch failures, OOMs.
-- Tuning: shuffle partitions, executor sizing, broadcast joins, AQE, memory overhead.
-- AWS EMR / YARN operating model: cluster modes, instance fleets, Spot, IAM, S3 layout.
-- Lakehouse patterns: Iceberg, incremental processing, idempotent backfills, table maintenance.
-- Structured Streaming reliability: triggers, checkpointing, watermarks, exactly-once.
-- Reliability and correctness: schema evolution, output commits, small-files control.
-- Platform patterns: golden paths, guardrails, observability, cost.
+- **Execution model** — actions, jobs, stages, tasks, and why **shuffle** defines boundaries.
+- **SQL engine** — Catalyst, `EXPLAIN`, join strategies, **AQE**, and a bit of Tungsten.
+- **Performance** — shuffle, **partitioning**, **joins**, **skew**, **broadcast** tradeoffs, **caching** reality.
+- **Memory** — spill, OOM, PySpark **overhead**, and what the UI shows before you add heap.
+- **Storage** — **Parquet/ORC** behavior, read pruning, and **table design** for cost.
+- **Operations** — **EMR/YARN**, log and event log habits, and failure modes you see in the field.
+- **Lakehouse** — **Iceberg** snapshots, **MERGE** cost, and maintenance (compaction) as **scheduled** work.
+- **Streaming** — checkpoints, watermarks, state, and **sink** back-pressure.
+- **Reliability** — idempotency, **correct reruns**, and what “**safe to retry**” means for writes.
+- **Platform** — when to standardize (templates, guardrails, **metrics**) instead of re-tuning one job at a time.
 
-## What This Is Not
+## What this repo is *not*
 
-- Not an introduction to Spark. We assume you can already write a join and a `groupBy`.
-- Not a vendor pitch for Databricks, EMR, or any specific runtime; AWS EMR is the operating bias
-  because that's the most common production context the author has run, but the principles apply
-  elsewhere.
-- Not a config dump. Every tuning knob is paired with a reason, a tradeoff, and a way to validate the
-  change in the Spark UI.
-- Not generated filler. Each chapter is meant to read like notes from someone who has actually had
-  to fix the problem at 2am.
+- **Not a shortcut** or flash-card substitute for **running** Spark and reading a few real plans and UIs.
+- **Not** tied to a single **vendor** — EMR and S3 are a **bias** from how many teams actually run, not a requirement.
+- **Not a replacement** for the **official** [Spark](https://spark.apache.org/docs/latest/) and
+  **format** (e.g. Iceberg) **documentation** — this is a complement, a map, and a set of
+  checklists.
+- **Not a promise** of perfect coverage: chapters vary in depth; **TODO** / in-progress areas are
+  called out in the text when they exist.
 
-## Who This Is For
+## How to use this repo
 
-- Senior data engineers who want to move from "my job works" to "I understand why it works, why it
-  sometimes doesn't, and how to operate it safely."
-- Platform and infra engineers who own shared Spark / EMR infrastructure for many teams.
-- Tech leads preparing for design reviews, incident response, or cost reviews.
-- Engineers who want serious depth on Spark execution and operations—how plans behave under load, how failures show up in production—not reduced to interview trivia.
+| Goal | Start here |
+| --- | --- |
+| **Learn internals** in order | [`docs/book/README.md`](docs/book/README.md) — Chapters 1–6, then 7–10, then storage and platform chapters as needed. |
+| **Debug a slow or failing job** | [`docs/observability/spark-ui-guide.md`](docs/observability/spark-ui-guide.md) → [`docs/troubleshooting/`](docs/troubleshooting/README.md) (decision trees) → linked book chapters. |
+| **Tune** a workload you understand | `EXPLAIN` + UI evidence first, then [`docs/tuning/`](docs/tuning/README.md) and [`docs/configs/`](docs/configs/README.md) for targeted knobs. |
+| **Read physical plans** | [`docs/observability/physical-plans.md`](docs/observability/physical-plans.md) and [`examples/sql/01-explain-shuffle.sql`](examples/sql/01-explain-shuffle.sql). |
+| **EMR / YARN / S3 / Iceberg** | Book chapters 11, 13, 17, 18; patterns under [`docs/patterns/`](docs/patterns/README.md). |
 
-If you are brand new to Spark, this repo will be too dense. Start with the official Spark
-documentation and a short intro course, then come back here.
+**Navigate by problem:** [`docs/concept-map.md`](docs/concept-map.md) maps “why is X slow?”
+questions to **chapters and examples**.
 
-## Why This Is Different From Typical Spark Notes
+## Chapter map (book)
 
-Most Spark material optimizes for breadth or interview coverage.
-This playbook optimizes for **production decisions**: what to look at in the Spark UI when a stage
-is red, how YARN and EMR change failure modes, how object storage and Iceberg interact with commits
-and file layout, and how one incident becomes a guardrail for the next forty teams.
-It is denser on purpose — it assumes you already ship jobs and need the *why* behind the knobs.
+| # | Chapter |
+| ---: | --- |
+| 1 | [Execution model](docs/book/01-execution-model.md) |
+| 2 | [Shuffle and performance](docs/book/02-shuffle-and-performance.md) |
+| 3 | [Partitioning](docs/book/03-partitioning.md) |
+| 4 | [Joins](docs/book/04-joins.md) |
+| 5 | [Data skew](docs/book/05-data-skew.md) |
+| 6 | [Adaptive query execution (AQE)](docs/book/06-adaptive-query-execution.md) |
+| 7 | [Memory management](docs/book/07-memory-management.md) |
+| 8 | [File formats](docs/book/08-file-formats.md) |
+| 9 | [Spark SQL and Catalyst](docs/book/09-spark-sql-and-catalyst.md) |
+| 10 | [Caching and persistence](docs/book/10-caching-and-persistence.md) |
+| 11 | [Spark on AWS EMR and YARN](docs/book/11-spark-on-yarn-and-emr.md) |
+| 12 | [Production debugging](docs/book/12-production-debugging.md) |
+| 13 | [Iceberg and Spark](docs/book/13-iceberg-and-spark.md) |
+| 14 | [Structured streaming](docs/book/14-structured-streaming.md) |
+| 15 | [Platform patterns and guardrails](docs/book/15-platform-patterns.md) |
+| 16 | [Data correctness and idempotency](docs/book/16-data-correctness-and-idempotency.md) |
+| 17 | [Write path and output files](docs/book/17-spark-write-path-and-output-files.md) |
+| 18 | [S3 and object storage with Spark on EMR](docs/book/18-object-storage-with-spark.md) |
+| 19 | [Statistics and CBO](docs/book/19-statistics-and-cost-based-optimization.md) |
+| 20 | [Dependency management and packaging](docs/book/20-dependency-management-and-packaging.md) |
+| 21 | [Security and governance](docs/book/21-security-and-governance.md) |
+| 22 | [Testing and CI/CD](docs/book/22-testing-and-cicd.md) |
+| 23 | [Data modeling and table design](docs/book/23-data-modeling-and-table-design.md) |
+| 24 | [Incremental processing and backfills](docs/book/24-incremental-processing-and-backfills.md) |
+| 25 | [Cluster and workload isolation](docs/book/25-cluster-and-workload-isolation.md) |
 
-## How To Read This Repo
+**Self-check questions (optional depth):** [`docs/practical-spark-questions.md`](docs/practical-spark-questions.md)
 
-There are three reasonable entry points depending on your goal.
+**Glossary:** [`docs/glossary.md`](docs/glossary.md)
 
-### 1. Sequential learning path
+## Navigation aids
 
-Read the book chapters in order.
+| Resource | |
+| --- | --- |
+| **Troubleshooting (decision trees)** | [`docs/troubleshooting/README.md`](docs/troubleshooting/README.md) |
+| **Spark UI and plans** | [`docs/observability/README.md`](docs/observability/README.md) |
+| **Field guides (short)** | [`docs/field-guides/README.md`](docs/field-guides/README.md) |
+| **Checklists** | [`docs/checklists/README.md`](docs/checklists/README.md) |
+| **Tuning and configs** | [`docs/tuning/README.md`](docs/tuning/README.md), [`docs/configs/README.md`](docs/configs/README.md) |
+| **Case studies** | [`docs/case-studies/README.md`](docs/case-studies/README.md) |
+| **Diagrams** | [`diagrams/README.md`](diagrams/README.md) |
 
-Chapters 1–6 build the execution model, chapters 7–10 cover memory, formats, SQL, and caching,
-chapters 11–14 cover EMR/YARN, debugging, Iceberg, and streaming, and chapters 15–25 cover platform
-reliability, cost, isolation, and operating concerns.
+## Practical examples (runnable or clearly scoped)
 
-### 2. Incident-driven path
+- **EXPLAIN and shuffle** — [`examples/sql/01-explain-shuffle.sql`](examples/sql/01-explain-shuffle.sql)  
+  **Sample:** [`docs/assets/screenshots/explain-formatted-shuffle-output.txt`](docs/assets/screenshots/explain-formatted-shuffle-output.txt)
+- **Join strategies (broadcast vs sort-merge)** — [`examples/sql/join-strategies/`](examples/sql/join-strategies/README.md)
+- **Skew (PySpark)** — [`examples/pyspark/skew-demo/`](examples/pyspark/skew-demo/README.md) and [`examples/pyspark/skew_detector.py`](examples/pyspark/skew_detector.py)  
+  **Sample:** [`docs/assets/screenshots/skew-detector-output.txt`](docs/assets/screenshots/skew-detector-output.txt)
+- **Partitioning and file count** — [`examples/pyspark/partitioning-demo/`](examples/pyspark/partitioning-demo/README.md) and [`examples/pyspark/inspect_partitions.py`](examples/pyspark/inspect_partitions.py)
+- **Small-file audit** — [`examples/pyspark/file_count_audit.py`](examples/pyspark/file_count_audit.py)  
+  **Sample:** [`docs/assets/screenshots/file-count-audit-output.txt`](docs/assets/screenshots/file-count-audit-output.txt)
+- **Iceberg (templates)** — [`examples/sql/iceberg-write-path/`](examples/sql/iceberg-write-path/README.md) (requires Iceberg-enabled Spark)
 
-Start in [`docs/field-guides/`](docs/field-guides/README.md) with the symptom that matches your
-incident: slow job, OOM, skew, fetch failures, small files. Each guide points back to the chapter
-that explains the underlying behavior.
-
-### 3. Design-review path
-
-Use the patterns and chapters together. For example, before reviewing a new pipeline:
-
-1. Read [`docs/book/04-joins.md`](docs/book/04-joins.md) and
-   [`docs/book/05-data-skew.md`](docs/book/05-data-skew.md).
-2. Skim [`docs/checklists/pre-deploy-review.md`](docs/checklists/pre-deploy-review.md).
-3. Match the workload to a pattern in [`docs/patterns/`](docs/patterns/README.md).
-
-## Recommended Reading Path (By Topic)
-
-| Topic | Primary reading | Diagrams / examples |
-| --- | --- | --- |
-| Execution model | [`docs/book/01-execution-model.md`](docs/book/01-execution-model.md) | [`diagrams/spark-job-stage-task.md`](diagrams/spark-job-stage-task.md), [`examples/sql/01-explain-shuffle.sql`](examples/sql/01-explain-shuffle.sql) |
-| Shuffle and performance | [`docs/book/02-shuffle-and-performance.md`](docs/book/02-shuffle-and-performance.md) | [`diagrams/shuffle-read-write.md`](diagrams/shuffle-read-write.md), [`docs/tuning/shuffle-partitions.md`](docs/tuning/shuffle-partitions.md) |
-| Joins | [`docs/book/04-joins.md`](docs/book/04-joins.md) | [`diagrams/broadcast-vs-sort-merge-join.md`](diagrams/broadcast-vs-sort-merge-join.md), [`examples/sql/02-broadcast-vs-sort-merge-join.sql`](examples/sql/02-broadcast-vs-sort-merge-join.sql) |
-| Skew | [`docs/book/05-data-skew.md`](docs/book/05-data-skew.md) | [`docs/field-guides/debugging-skew.md`](docs/field-guides/debugging-skew.md), [`examples/sql/03-skew-detection.sql`](examples/sql/03-skew-detection.sql) |
-| Memory | [`docs/book/07-memory-management.md`](docs/book/07-memory-management.md) | [`docs/field-guides/debugging-oom.md`](docs/field-guides/debugging-oom.md), [`docs/tuning/memory-overhead.md`](docs/tuning/memory-overhead.md) |
-| EMR debugging | [`docs/book/11-spark-on-yarn-and-emr.md`](docs/book/11-spark-on-yarn-and-emr.md), [`docs/book/12-production-debugging.md`](docs/book/12-production-debugging.md) | [`docs/field-guides/debugging-slow-jobs.md`](docs/field-guides/debugging-slow-jobs.md), [`docs/field-guides/spark-ui-reading-guide.md`](docs/field-guides/spark-ui-reading-guide.md) |
-| Iceberg write path and merges | [`docs/book/13-iceberg-and-spark.md`](docs/book/13-iceberg-and-spark.md), [`docs/book/17-spark-write-path-and-output-files.md`](docs/book/17-spark-write-path-and-output-files.md) | [`diagrams/iceberg-merge-on-s3.md`](diagrams/iceberg-merge-on-s3.md), [`docs/patterns/large-iceberg-merge.md`](docs/patterns/large-iceberg-merge.md) |
-| Case studies | [`docs/case-studies/README.md`](docs/case-studies/README.md) | [`docs/case-studies/emr-merge-memory-spill.md`](docs/case-studies/emr-merge-memory-spill.md) and companion case files |
-
-## Repository Structure
-
-| Area | Path | Purpose |
-| --- | --- | --- |
-| Book | [`docs/book/`](docs/book/README.md) | Chapter-by-chapter handbook. The main reference. |
-| Field guides | [`docs/field-guides/`](docs/field-guides/README.md) | Incident-oriented debugging guides (slow jobs, OOM, skew, small files, Spark UI). |
-| Patterns | [`docs/patterns/`](docs/patterns/README.md) | Reusable production architectures (incremental pipelines, idempotent backfills, large merges). |
-| Tuning | [`docs/tuning/`](docs/tuning/README.md) | Focused tuning notes for common levers (shuffle partitions, executor sizing, broadcast). |
-| Configs | [`docs/configs/`](docs/configs/README.md) | Spark configuration field manual: what each knob does and when to touch it. |
-| Checklists | [`docs/checklists/`](docs/checklists/README.md) | Operational checklists for pre-deploy, incident triage, cost, and production readiness. |
-| Case studies | [`docs/case-studies/`](docs/case-studies/) | Anonymized production incidents with root cause and fix. |
-| Examples | [`examples/`](examples/README.md) | PySpark, Spark SQL, and config examples used by the chapters; see [Runnable examples](#runnable-examples-with-sample-output) below. |
-| Diagrams | [`diagrams/`](diagrams/README.md) | Sources for execution, storage, and platform diagrams. |
-| Templates | [`docs/templates/`](docs/templates/README.md) | Design review, incident postmortem, production readiness, and cost review templates. |
-| Glossary | [`docs/glossary.md`](docs/glossary.md) | Production-oriented Spark vocabulary. |
-| Q&A | [`docs/advanced-spark-questions.md`](docs/advanced-spark-questions.md) | The original question list that defines the bar for this handbook. |
-| Sample outputs | [`docs/assets/screenshots/`](docs/assets/screenshots/README.md) | Labeled text captures of EXPLAIN shape, skew detector, and file audit (not production screenshots). |
-
-## Try it locally
-
-From the repo root:
+### Run the bundled harness
 
 ```bash
 cd examples/local
 ./run_examples.sh
 ```
 
-This runs the bundled SQL and PySpark examples against the sample CSVs. You need Spark 3.4+ with
-`spark-sql` for SQL mode; PySpark in Python is enough for `./run_examples.sh pyspark` only. See
-[`examples/local/README.md`](examples/local/README.md) for prerequisites, modes (`sql`, `pyspark`, `all`), and troubleshooting.
+`./run_examples.sh sql` and `./run_examples.sh pyspark` are supported. See
+[`examples/local/README.md`](examples/local/README.md).
 
-## Runnable examples with sample output
+## Production troubleshooting (quick)
 
-These go beyond documentation-only snippets: you can run them locally and compare your terminal to the labeled samples in [`docs/assets/screenshots/`](docs/assets/screenshots/README.md).
+1. **Find one dominant slow stage** (Spark UI **Stages** tab).
+2. **Classify** — skew (long tail) vs even slowness (CPU, shuffle, spill, GC, or environment).
+3. **Map to operators** — **SQL** tab; read [`docs/observability/physical-plans.md`](docs/observability/physical-plans.md) if the join or scan is surprising.
+4. **Use a tree** — e.g. [`docs/troubleshooting/slow-job.md`](docs/troubleshooting/slow-job.md) or
+   [`docs/troubleshooting/skew-and-stragglers.md`](docs/troubleshooting/skew-and-stragglers.md).
+5. **One change, one verification run** — avoid multi-knob “tuning” without evidence.
 
-1. **EXPLAIN and shuffle boundaries** — Script:
-   [`examples/sql/01-explain-shuffle.sql`](examples/sql/01-explain-shuffle.sql). Annotated plan shape in
-   [`docs/assets/screenshots/explain-formatted-shuffle-output.txt`](docs/assets/screenshots/explain-formatted-shuffle-output.txt).
-   Run with `spark-sql` after you point `events` at your table, or use
-   [`examples/local/run_examples.sh`](examples/local/run_examples.sh) for the bundled CSVs.
+## CI and quality
 
-2. **Skew detector** — [`examples/pyspark/skew_detector.py`](examples/pyspark/skew_detector.py). Example:
-   `python3 examples/pyspark/skew_detector.py --demo` (no input files), or
-   `--input examples/local/data/events_sample.csv --format csv --header --key customer_id`.
-   Sample output in
-   [`docs/assets/screenshots/skew-detector-output.txt`](docs/assets/screenshots/skew-detector-output.txt).
+[`.github/workflows/docs-check.yml`](.github/workflows/docs-check.yml) runs **markdownlint** and
+**lychee** on Markdown, plus `compileall` for `examples/` Python and `bash`/`shellcheck` for shell
+scripts. See [`CONTRIBUTING.md`](CONTRIBUTING.md) to align with the same checks locally.
 
-3. **Small-file audit** — [`examples/pyspark/file_count_audit.py`](examples/pyspark/file_count_audit.py). Example:
-   `python3 examples/pyspark/file_count_audit.py --demo` (builds a temp multi-file layout and prints a real audit).
-   Sample output in
-   [`docs/assets/screenshots/file-count-audit-output.txt`](docs/assets/screenshots/file-count-audit-output.txt).
+## Contribute
 
-## Suggested Learning Path
-
-For an engineer with one to three years of Spark experience who wants depth beyond day-to-day tuning:
-
-1. **Foundations** — Chapters 1–3: execution model, shuffle, partitioning. Get the mental model right
-   before tuning anything.
-2. **Query behavior** — Chapters 4–6, 9, 19: joins, skew, AQE, Spark SQL/Catalyst, statistics. Most
-   production performance work lives here.
-3. **Runtime and memory** — Chapters 7, 10, 12: memory management, caching, production debugging.
-   Read alongside the field guides.
-4. **Storage layer** — Chapters 8, 13, 17, 18, 23: file formats, Iceberg, write path, S3, table
-   design. This is where data platforms succeed or fail.
-5. **Operations on EMR** — Chapter 11 plus the configs and checklists. Understand how EMR, YARN, and
-   S3 shape Spark behavior.
-6. **Platform thinking** — Chapters 15, 16, 20, 21, 22, 24, 25: correctness, packaging, security,
-   CI/CD, backfills, isolation, and shared guardrails.
-7. **Streaming** — Chapter 14: structured streaming, watermarks, state, exactly-once.
-
-Once those are internalized, use the field guides and case studies to keep the muscle memory fresh.
-
-## Production Bias
-
-Most chapters share a few opinions that are worth stating up front, because they shape the writing:
-
-- **Identify the bottleneck before tuning.** Random `spark.executor.memory` increases are usually a
-  sign someone skipped the Spark UI.
-- **Treat shuffle as a design event.** If you cannot say where the shuffles are in your job, you
-  cannot reason about its cost.
-- **Treat the Spark UI as the source of truth.** Logs lie about timing; the UI does not.
-- **Treat S3 as durable storage, not local disk.** Listing, throttling, commit semantics, and small
-  files are first-class concerns.
-- **Treat configs as a contract.** A tuning value without a reason or a way to validate it is
-  technical debt.
-- **Treat platform problems as platform problems.** If 40 teams all hit the same issue, the answer is
-  a guardrail, not 40 fixes.
-
-## Repo Maturity
-
-All book chapters (1–25) exist as real files in [`docs/book/`](docs/book/README.md); depth varies
-by topic. Favor the execution stack (1–6), debugging and EMR chapters (11–12), and lakehouse write
-paths (13, 17–18) when you need the most battle-tested prose. Shorter chapters are tightening toward
-the same bar — if something is still a stub, the Markdown says **TODO** or **In progress** inline.
-
-Automation: [`.github/workflows/docs-check.yml`](.github/workflows/docs-check.yml) runs Markdown
-lint (markdownlint), link checks, and lightweight Python and shell validation. For a human pass
-before a big docs merge, use
-[`docs/checklists/repo-quality-checklist.md`](docs/checklists/repo-quality-checklist.md).
-
-## Contributing
-
-This is currently a single-author, opinionated handbook. If you want to suggest corrections or
-production examples, open an issue with:
-
-- The chapter or page you are referencing.
-- The specific claim you are challenging or refining.
-- A concrete production scenario where the claim fails or could be sharper.
-
-Vague stylistic feedback is unlikely to be incorporated; concrete production experience is welcome.
-
-## Repository Metadata
-
-Suggested GitHub topics for discoverability:
-
-`apache-spark`, `spark-sql`, `aws-emr`, `data-engineering`, `data-platform`, `iceberg`, `yarn`, `s3`,
-`performance-tuning`, `distributed-systems`, `structured-streaming`, `lakehouse`.
+If you have a **concrete** production correction or a small runnable example, open an issue or PR
+with the exact chapter, claim, and scenario. Vague style-only nits are unlikely to land. See
+[`CONTRIBUTING.md`](CONTRIBUTING.md) for structure and quality gates.
 
 ## License
 
-This repository is released under the [MIT License](LICENSE). The content can be reused and modified
-with attribution. The author retains the right to republish or extend this material commercially in
-the future; the MIT grant covers others, not the copyright holder.
+[MIT](LICENSE) — see file for text.
+
+Using this material in interviews is a **side effect** of knowing Spark well; this repo is written
+to help you **operate and debug** systems, not to optimize a question bank.

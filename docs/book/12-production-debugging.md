@@ -303,7 +303,9 @@ The fastest way to make an incident longer is to start changing configs without 
 - **Revert what did not help.** Configs that did nothing are technical debt for the next person.
 - **Document why each surviving change is in place.** The reason should be a concrete observation in the Spark UI or a metric, not "the docs said to."
 
-A staff-level pattern is to run the slow job with `spark.eventLog.enabled=true`, then use the History Server in a sandbox to re-run plan analysis offline. You can compare two event log files side by side, see which stage diverged, and form a hypothesis without changing production at all.
+A **repeatable** pattern is to run the slow job with `spark.eventLog.enabled=true`, then use the
+History Server in a sandbox to re-run plan analysis offline. You can compare two event log files
+side by side, see which stage diverged, and form a hypothesis without changing production at all.
 
 ## Production Smells
 

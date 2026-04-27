@@ -2,7 +2,10 @@
 
 Use this page when you have an incident symptom and need a fast path to the right Spark UI evidence and playbook.
 
-Also see `docs/field-guides/spark-ui-reading-guide.md`.
+Also see [`../observability/spark-ui-guide.md`](../observability/spark-ui-guide.md) (canonical UI
+guide) and the **decision trees** in [`../troubleshooting/README.md`](../troubleshooting/README.md).
+The field guide [`spark-ui-reading-guide.md`](spark-ui-reading-guide.md) is a short index into the
+same material.
 
 ## Slow Job (But Succeeds)
 

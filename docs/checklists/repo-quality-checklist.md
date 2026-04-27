@@ -31,4 +31,8 @@ For each book chapter touched in a change:
 ## Automation
 
 - [ ] `markdownlint-cli2` passes locally: `npx markdownlint-cli2 "**/*.md" "#node_modules"`.
-- [ ] CI: [`docs-check.yml`](../../.github/workflows/docs-check.yml) (Markdown lint, link check, Python compile, shell checks) is green on the PR.
+- [ ] CI: [`docs-check.yml`](../../.github/workflows/docs-check.yml) (Markdown lint, **lychee** link
+      check, Python `compileall` for `examples/`, `bash` syntax and **shellcheck**) is green on the
+      PR. Optional: spellcheck in the editor; not enforced in CI.
+- [ ] Contributor-facing notes match [`CONTRIBUTING.md`](../../CONTRIBUTING.md) (chapter shape,
+      examples, how to add runnable snippets).

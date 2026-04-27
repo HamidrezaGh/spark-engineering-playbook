@@ -57,6 +57,11 @@ Shuffles sit *between* stages. The upstream stage performs a **shuffle write**
 (partitioning + writing shuffle files to local disk). The downstream stage performs a
 **shuffle read** (fetching those files over the network) and continues processing.
 
+> **Production lesson:** do not “tune Spark” by changing random `spark.*` values before you
+> know **which stage** is dominant and **which signal** in that stage (shuffle bytes, spill, GC, or
+> a long **task** tail) matches your hypothesis. The job/stage/task mental model is what makes the
+> Spark UI legible; without it, tuning is guesswork.
+
 ### Spark application vs job vs stage vs task
 
 These terms are easy to conflate because people say “the job” when they mean “the
@@ -495,7 +500,7 @@ WHERE e.event_date = '2026-04-25'
 GROUP BY c.campaign_id, e.event_date;
 ```
 
-If the job slows from 25 minutes to 2 hours, here's the staff-level loop:
+If the job slows from 25 minutes to 2 hours, here is a **production** triage loop:
 
 1. Open the **SQL** tab. Confirm there are two `Exchange` nodes (one for the join, one
       for the aggregation) — or only one if `campaigns` is small enough to broadcast.

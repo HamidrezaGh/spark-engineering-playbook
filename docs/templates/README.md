@@ -1,12 +1,15 @@
 # Templates
 
-Reusable templates for the kinds of documents staff-level Spark engineering work actually produces: design reviews, incident postmortems, production readiness checks, cost reviews, and content-authoring scaffolds.
+Reusable templates for the kinds of documents **platform and data** teams actually produce: design
+reviews, incident postmortems, production readiness checks, cost reviews, and content-authoring
+scaffolds.
 
 Use these when you start a new document, not as decoration. The questions in each template exist because at least one production incident has been caused by skipping them.
 
-## Staff-Level Review Templates
+## Review templates
 
-These are the four templates a Spark platform team uses regularly. Read [Chapter 15 — Staff-Level Spark Engineering](../book/15-staff-level-spark-engineering.md) for context on why each one exists.
+These are the four templates a Spark platform team uses regularly. Read [Chapter 15 — Platform
+patterns and guardrails](../book/15-platform-patterns.md) for context on why each one exists.
 
 | Template | When To Use |
 | --- | --- |
