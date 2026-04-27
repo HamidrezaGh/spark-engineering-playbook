@@ -22,6 +22,14 @@
 - **Failed tasks** with retries across **many** executors — environmental, not one bad key.
 - **GC** or **spill** not the main pattern — if shuffle stage fails with executor churn, look at the cluster.
 
+![Placeholder: Spark UI Executors tab — several executors with failed tasks or lost executors over time](../assets/screenshots/placeholder-spark-ui-executors-failed-tasks.png)
+
+Caption: When **loss** is distributed across many executors during **shuffle**, compare with a **single** long tail (skew). The fix is often **platform** (Spot, disk, YARN container size, network), not a join key change.
+
+**Logs:** a redacted **container** diagnostic (excerpt only — see [screenshots README](../assets/screenshots/README.md)) often pairs with the UI:
+
+![Placeholder: YARN or EMR container log snippet showing exit / preempt / OOM (use synthetic text only)](../assets/screenshots/placeholder-yarn-container-log-snippet.png)
+
 ## Logs and metrics
 
 - `yarn logs -applicationId` or EMR log aggregation; search **Exit code**, **Preempted**, **Disk**, **SIGKILL**.

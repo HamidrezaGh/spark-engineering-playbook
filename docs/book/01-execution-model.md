@@ -424,7 +424,7 @@ useful ticket on its own.
 
 ## Production Debug Loop
 
-This is the workflow staff engineers actually run during incidents. It is
+This is the workflow on-call engineers actually run during incidents. It is
 intentionally repetitive because it works.
 
 ### 1. Find the bottleneck
@@ -523,7 +523,7 @@ A nightly EMR job processed clickstream and joined it to a campaign dimension ta
 The job was stable at 25 minutes for a year and then quietly became 2 hours. Nothing
 in the code had changed.
 
-A staff engineer opened the Spark UI:
+The on-call engineer opened the Spark UI:
 
 - The slow stage was the aggregation, not the join.
 - Max task time in that stage was 40× median — clear long tail.

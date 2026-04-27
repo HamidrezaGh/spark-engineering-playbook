@@ -137,7 +137,7 @@ daily = events.filter("event_date = '2026-04-25'")
 
 The `repartition("event_date")` affects Spark runtime distribution. The `partitionBy("event_date")` affects the table/file layout. They are related in this write path, but they are not the same concept.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - What is the difference between Spark partitioning and table partitioning?
 - What is the difference between `repartition()` and `coalesce()`?

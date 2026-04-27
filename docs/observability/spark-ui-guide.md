@@ -44,12 +44,20 @@ cluster instability) in about 90 seconds.
 
 ## Stages tab
 
+![Placeholder: Spark UI stage timeline showing one skewed task running much longer than the others](../assets/screenshots/placeholder-spark-ui-skewed-stage.png)
+
+Caption: In **Stages** (and the task list inside a stage), compare **max** task duration to the **median**. A long tail usually means **data skew**, uneven **input splits**, or one executor holding hot work — not “needs more executors” by default.
+
 - **Duration** list — start here; long jobs are often one or two stages.
 - **Summary metrics (stage detail):**
   - **Input** — large on scan-dominant stages; compare to expectations after filters.
   - **Shuffle read / write** — large values mean a wide transformation or big join/aggregate.
-  - **Spill** — in-memory sort/agg/hash exceeded capacity; per-task work may be too big or skewed.
-  - **Task time** — long tail: skew; even spread: look at **which** metric (CPU, shuffle, GC) is high.
+- **Spill** — in-memory sort/agg/hash exceeded capacity; per-task work may be too big or skewed.
+- **Task time** — long tail: skew; even spread: look at **which** metric (CPU, shuffle, GC) is high.
+
+![Placeholder: Spark UI stage summary metrics highlighting shuffle read/write and spill columns](../assets/screenshots/placeholder-spark-ui-shuffle-spill.png)
+
+Caption: When **Shuffle Read/Write** or **Spill** dominate, pair this view with the **SQL** tab to see which **Exchange** or aggregate feeds the stage — then reduce bytes *before* that boundary when possible.
 
 ## Tasks table (inside a stage)
 

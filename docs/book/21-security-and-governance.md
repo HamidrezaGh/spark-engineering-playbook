@@ -110,7 +110,7 @@ Track:
 
 A production EMR job that writes `gold.customer_profile` should run on a cluster or role configuration with read access to approved silver S3 prefixes and Glue catalog objects, write access only to its target table, KMS permissions for required buckets, no broad delete permission outside its table, and no ability to read unrelated PII datasets.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - How do Spark jobs access data securely?
 - How do IAM roles, instance profiles, and EMR security configuration affect Spark jobs?
@@ -125,4 +125,4 @@ A production EMR job that writes `gold.customer_profile` should run on a cluster
 
 ## Real Use Case
 
-A team copies production customer data into a dev bucket for debugging. A staff-level platform prevents this by separating environment roles, enforcing table permissions, masking sensitive columns in lower environments, and auditing every read from PII-classified tables.
+A team copies production customer data into a dev bucket for debugging. A well-governed data platform prevents this by separating environment roles, enforcing table permissions, masking sensitive columns in lower environments, and auditing every read from PII-classified tables.

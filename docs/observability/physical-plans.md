@@ -6,7 +6,15 @@ This page ties **Catalyst** plan shapes to what runs on the cluster. Pair it wit
 - **Logical plan** — what the query *means* (unresolved → analyzed → optimized).
 - **Physical plan** — what Spark *will run*: scans, shuffles, joins, and codegen boundaries.
 
-`EXPLAIN FORMATTED` (Spark SQL) is usually easier to read than a flat tree. Example:
+`EXPLAIN FORMATTED` (Spark SQL) is usually easier to read than a flat tree. The **SQL** tab in the
+Spark UI shows the same operator family after the job runs; align those nodes with the slow stage
+you picked in **Stages**.
+
+![Placeholder: EXPLAIN or SQL tab fragment showing Exchange, join strategy, and AdaptiveSparkPlan](../assets/screenshots/placeholder-explain-physical-plan.png)
+
+Caption: **Physical plan** reading is easier when you scan for **scans** (filters/pushdown), each **Exchange** (shuffle / broadcast), and **join/aggregate** choice — then match that subtree to the expensive **stage** in the UI.
+
+Example:
 
 ```sql
 EXPLAIN FORMATTED

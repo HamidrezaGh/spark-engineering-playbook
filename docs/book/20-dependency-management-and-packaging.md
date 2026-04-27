@@ -110,7 +110,7 @@ spark-submit \
 
 The Spark and Scala suffix must match the runtime. The exact Iceberg version should be pinned by the platform's compatibility matrix.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - How do you package a Spark application for production?
 - What causes dependency conflicts in Spark jobs?

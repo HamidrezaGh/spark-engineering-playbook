@@ -6,7 +6,7 @@ what is **observable in Spark** vs what is a platform opinion.
 ## Tone
 
 - **Production-first:** tie claims to the Spark UI, `EXPLAIN`, metrics, and failure behavior.
-- **No hype:** avoid “this always works,” “industry best staff bar,” and unfalsifiable claims.
+- **No hype:** avoid “this always works,” vague “industry best” posturing, and unfalsifiable claims.
 - **Actionable:** prefer checklists, decision trees, and runnable examples over abstract lists.
 
 ## Layout

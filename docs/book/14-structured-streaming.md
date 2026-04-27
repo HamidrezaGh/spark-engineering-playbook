@@ -125,7 +125,7 @@ query = (
 
 This skeleton still needs production decisions for schema parsing, idempotency, trigger interval, table maintenance, and failure recovery.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - What is the difference between batch Spark and Structured Streaming?
 - What is a micro-batch?

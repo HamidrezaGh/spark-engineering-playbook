@@ -113,7 +113,7 @@ df.select("customer_id", "event_date", "amount") \
 
 This writes typed, columnar data. Whether ZSTD is better than Snappy depends on CPU budget, storage cost, and query patterns.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - Why is Parquet better than CSV for analytics?
 - What is column pruning?

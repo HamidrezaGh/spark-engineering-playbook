@@ -36,6 +36,10 @@ The four production patterns of skew:
 
 Skew differs from spill: spill says "this task's working set is too large for memory," which can come from skew but also from oversized partitions. Skew differs from scheduler delay: scheduler delay says "the driver was slow to dispatch tasks," which is a configuration or driver pressure problem. Diagnose what you have before you fix it.
 
+![Placeholder: Spark UI tasks table sorted by duration — one task is a large outlier](../assets/screenshots/placeholder-spark-ui-skewed-stage.png)
+
+Caption: **Skew** in the UI looks like a **max** task duration far above the **median**, often with that task also carrying most of the **shuffle read** (join/aggregate) or **input** (file/split) for the stage.
+
 ## Why Skew Is Worse Than "Large Data"
 
 Three production reasons skew is the most expensive performance problem:
@@ -44,7 +48,7 @@ Three production reasons skew is the most expensive performance problem:
 2. **It hides until a key turns hot.** A pipeline can run for nine months with mild skew, then a new merchant launches a viral product and one merchant accounts for 35% of the rows. The plan, the code, and the cluster all look the same. Only the data shape changed.
 3. **It causes cascading failures.** A skewed task often spills more, runs longer, and on a Spot or preemptible node, has a higher chance of being reclaimed mid-task. The retry runs the same skewed work over again. Wall-clock blows up.
 
-A staff-level review treats skew as a *data* problem, not a *cluster* problem. The fix is on the partitioning expression, the join key, or the upstream data, not on `spark.executor.memory`.
+A thorough review treats skew as a *data* problem, not a *cluster* problem. The fix is on the partitioning expression, the join key, or the upstream data, not on `spark.executor.memory`.
 
 ## Mental Model — Hot Keys And Long-Tail Tasks
 
@@ -532,7 +536,7 @@ Quick signals when you open the slow stage:
 
 For a stage with a clear long tail, the quickest diagnostic is one click: SQL tab → click the query → click the operator that feeds the slow stage → look for `numPartitions`, `numOutputRows` per partition, and the AQE annotations. Spark prints enough metadata for the diagnosis to be unambiguous.
 
-## Staff-Level Review Checklist
+## Review Checklist
 
 Before approving a Spark change that involves a wide transformation on a key with any business meaning:
 
@@ -565,7 +569,7 @@ A B2B subscription platform runs a daily analytics aggregation grouping events b
 
 The on-call team raised `spark.executor.memory` twice. The OOMs decreased but runtime stayed at 90 minutes.
 
-A staff engineer ran the top-key query and saw the flagship account at 35% of rows. The fix was three pieces:
+The top-key query showed the flagship account at 35% of rows. The fix was three pieces:
 
 1. Two-phase aggregation with `salt_buckets = 64` for the heaviest aggregation stage.
 2. A `top-1 key share` daily metric on the source table, with an alert at 25%.

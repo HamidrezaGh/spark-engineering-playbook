@@ -118,7 +118,7 @@ Check:
 
 This can still create too many files if `event_date` has many values or if 200 final partitions are not aligned with target file sizes.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - What happens internally when Spark writes files?
 - Why does each task usually write one or more output files?

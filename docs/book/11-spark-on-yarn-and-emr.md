@@ -196,7 +196,7 @@ spark-submit \
 
 These values are placeholders. A production config must fit the EMR instance type, workload shape, and queue capacity.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - Difference between Spark client mode and cluster mode?
 - Where does the driver run in client mode?

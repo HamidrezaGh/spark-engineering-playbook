@@ -113,7 +113,7 @@ ANALYZE TABLE sales COMPUTE STATISTICS FOR COLUMNS customer_id, country;
 
 The exact support and behavior depends on catalog and table format, but the principle is to give the optimizer trustworthy information.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - What statistics can Spark use during query planning?
 - What is cost-based optimization?

@@ -43,6 +43,10 @@ blocks force recomputation).
 > smallest fix is **less data through the shuffle** (filters, projections, a better
 > **join** plan) or **skew** work — not a linear increase in executor count.
 
+![Placeholder: Spark UI stage with high shuffle read/write and spill in summary metrics](../assets/screenshots/placeholder-spark-ui-shuffle-spill.png)
+
+Caption: **Shuffle**-heavy stages show up as large **Shuffle Read/Write**; **spill** means the in-memory **aggregate/sort** working set did not fit — confirm whether **partition count**, **row width**, or **skew** is the driver before raising memory alone.
+
 ## Key Takeaways
 
 - **Shuffle is often the most expensive Spark operation** because it combines network,
@@ -310,7 +314,7 @@ and another for the aggregation by `country`. A production review should ask whe
 `customers` is small enough to broadcast, whether columns are pruned before the join,
 and whether `country` has skew.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - What is a Spark shuffle?
 - Why is shuffle expensive?

@@ -140,7 +140,7 @@ A platform can define separate queues:
 - `backfill`: capped resources and off-peak windows.
 - `adhoc`: lower priority and runtime limits.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - How do you separate interactive, batch, streaming, and backfill workloads?
 - What is fair scheduling in Spark?
@@ -155,4 +155,4 @@ A platform can define separate queues:
 
 ## Real Use Case
 
-A year-end backfill launches with unrestricted dynamic allocation and consumes most of the shared EMR cluster. Streaming jobs fall behind. The staff-level fix creates a capped backfill queue, reserves capacity for streaming, adds runtime and executor guardrails, and publishes cost by application owner.
+A year-end backfill launches with unrestricted dynamic allocation and consumes most of the shared EMR cluster. Streaming jobs fall behind. The durable platform fix creates a capped backfill queue, reserves capacity for streaming, adds runtime and executor guardrails, and publishes cost by application owner.

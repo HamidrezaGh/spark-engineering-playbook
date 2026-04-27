@@ -1,6 +1,6 @@
 # Case Studies
 
-Anonymized production incidents, written up the way a staff engineer would write a post-incident review. Case studies aim for a consistent arc:
+Anonymized production incidents, written in the same structure as a post-incident review. Case studies aim for a consistent arc:
 
 - **Situation** — what the job was trying to do and the business context.
 - **Symptoms** — what the operator first noticed.
@@ -8,7 +8,7 @@ Anonymized production incidents, written up the way a staff engineer would write
 - **Root cause** — why it broke.
 - **Fix** — what was changed to resolve it, in the order it was applied.
 - **Result** — outcome after the fix, with before/after metrics.
-- **Staff-level lessons** — the platform/operating insights, not just the local fix.
+- **Lessons** — the platform/operating insights, not just the local fix.
 - **Guardrails added** — what the team built so the same incident is faster to diagnose next time.
 
 These are intentionally generic. No company, dataset, bucket, account, or volume here is a real one; the failure shapes are real, the numbers are illustrative.
@@ -21,9 +21,9 @@ These are intentionally generic. No company, dataset, bucket, account, or volume
 
 ## How To Read These
 
-These are not benchmarks or vendor pitches. They are the kind of write-ups a staff engineer would attach to a post-incident review or read during onboarding for a production rotation.
+These are not benchmarks or vendor pitches. They are the kind of write-ups you would attach to a post-incident review or read during onboarding for a production rotation.
 
-The intended audience is a senior or staff engineer who has seen Spark in production and wants the diagnostic loop, the smallest fix, and the platform-level lesson — not a tutorial. If you are new to Spark, read the relevant book chapter first and come back here.
+The intended audience is a senior engineer who has seen Spark in production and wants the diagnostic loop, the smallest fix, and the platform-level lesson — not a tutorial. If you are new to Spark, read the relevant book chapter first and come back here.
 
 The order in which to read them depends on what you are working on:
 

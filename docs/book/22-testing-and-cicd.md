@@ -115,7 +115,7 @@ def build_customer_daily(events):
 
 This function can be tested with a local Spark session using fixtures that include duplicate events, null customer IDs, and multiple dates.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - How do you unit test Spark transformations?
 - What should be tested with a local Spark session vs an integration environment?

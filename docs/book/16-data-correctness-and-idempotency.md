@@ -119,7 +119,7 @@ WHEN NOT MATCHED THEN INSERT *
 
 This is safer than append for reruns if the merge key is correct and staging data is validated.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - What does it mean for a Spark job to be idempotent?
 - How do you safely retry a failed Spark write?
@@ -134,4 +134,4 @@ This is safer than append for reruns if the merge key is correct and staging dat
 
 ## Real Use Case
 
-A billing pipeline recomputes daily invoices. Appending reruns creates duplicate invoices. The staff-level design writes each run to staging, validates totals against source transactions, merges into the gold invoice table by invoice ID and billing date, and records the source watermark and snapshot ID for audit.
+A billing pipeline recomputes daily invoices. Appending reruns creates duplicate invoices. A sound design writes each run to staging, validates totals against source transactions, merges into the gold invoice table by invoice ID and billing date, and records the source watermark and snapshot ID for audit.

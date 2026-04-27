@@ -118,7 +118,7 @@ WHEN NOT MATCHED THEN INSERT *
 
 This supports inserts, updates, and deletes if the source emits a reliable change feed.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - How do you process only changed data?
 - What is a high-watermark?
