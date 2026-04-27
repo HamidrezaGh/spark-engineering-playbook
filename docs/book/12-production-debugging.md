@@ -39,6 +39,8 @@ The loop to run, in order, every time:
 
    ![Placeholder: Spark UI — stage detail with task duration spread and shuffle/spill metrics](../assets/screenshots/placeholder-spark-ui-skewed-stage.png)
 
+   <!-- Screenshot placeholder: `placeholder-spark-ui-skewed-stage.png` — production debugging. Caption: Stages + Tasks for dominant slow stage. -->
+
    Caption: A **long tail** in task duration (or spill concentrated in a few tasks) steers the investigation toward **skew** or **split** issues; even slowness across tasks steers toward **operator cost**, **shuffle volume**, or **cluster health**.
 
 5. **Check input data shape.** Row count, file count, top keys, nulls.

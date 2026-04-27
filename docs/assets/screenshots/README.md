@@ -27,7 +27,18 @@ The `placeholder-*.png` files are **minimal stand-ins**. They keep Markdown imag
 | [`placeholder-spark-ui-executors-failed-tasks.png`](placeholder-spark-ui-executors-failed-tasks.png) | Executors tab: failed tasks, GC imbalance, or lost executors. |
 | [`placeholder-yarn-container-log-snippet.png`](placeholder-yarn-container-log-snippet.png) | Log excerpt style (pair with YARN/EMR docs — redact before commit). |
 
-Docs that **reference** these placeholders include [`../../observability/spark-ui-guide.md`](../../observability/spark-ui-guide.md), [`../../observability/physical-plans.md`](../../observability/physical-plans.md), [`../../book/02-shuffle-and-performance.md`](../../book/02-shuffle-and-performance.md), [`../../book/12-production-debugging.md`](../../book/12-production-debugging.md), [`../../book/05-data-skew.md`](../../book/05-data-skew.md), [`../../troubleshooting/slow-job.md`](../../troubleshooting/slow-job.md), [`../../troubleshooting/emr-yarn-failures.md`](../../troubleshooting/emr-yarn-failures.md), and [`../../troubleshooting/iceberg-merge-issues.md`](../../troubleshooting/iceberg-merge-issues.md).
+Docs that **reference** these placeholders include:
+
+- [`../../observability/spark-ui-guide.md`](../../observability/spark-ui-guide.md)
+- [`../../observability/physical-plans.md`](../../observability/physical-plans.md)
+- [`../../book/02-shuffle-and-performance.md`](../../book/02-shuffle-and-performance.md)
+- [`../../book/12-production-debugging.md`](../../book/12-production-debugging.md)
+- [`../../book/05-data-skew.md`](../../book/05-data-skew.md)
+- [`../../troubleshooting/slow-job.md`](../../troubleshooting/slow-job.md)
+- [`../../troubleshooting/emr-yarn-failures.md`](../../troubleshooting/emr-yarn-failures.md)
+- [`../../troubleshooting/iceberg-merge-issues.md`](../../troubleshooting/iceberg-merge-issues.md)
+- [`../../troubleshooting/join-performance.md`](../../troubleshooting/join-performance.md)
+- [`../../troubleshooting/skew-and-stragglers.md`](../../troubleshooting/skew-and-stragglers.md)
 
 ## Sample text outputs (regeneratable)
 

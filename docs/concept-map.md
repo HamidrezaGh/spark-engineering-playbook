@@ -1,6 +1,8 @@
 # Concept map: questions → chapters and examples
 
-Navigate by **symptom** or **question**. Depth is in the linked chapters, not in this table.
+Navigate by **symptom** or **question**. Depth is in the linked chapters, not in this table. For a
+one-page list of “mental model” entry points, see
+[`production-mental-models.md`](production-mental-models.md).
 
 | Question | Read this first | Example / tree |
 | --- | --- | --- |

@@ -25,6 +25,8 @@
 
 ![Placeholder: Spark UI stage metrics — duration skew vs even spread, shuffle and spill visible](../assets/screenshots/placeholder-spark-ui-shuffle-spill.png)
 
+<!-- Screenshot placeholder: `placeholder-spark-ui-shuffle-spill.png` — slow job triage. Caption: even slowness vs one straggler (skew) — see Stages task duration spread. -->
+
 Caption: A **dominant** stage with **even** task times often points to **total work** (shuffle/scan) or **CPU-heavy** operators; **one** slow task points to [skew and stragglers](skew-and-stragglers.md).
 
 ## Logs and metrics

@@ -12,6 +12,8 @@ you picked in **Stages**.
 
 ![Placeholder: EXPLAIN or SQL tab fragment showing Exchange, join strategy, and AdaptiveSparkPlan](../assets/screenshots/placeholder-explain-physical-plan.png)
 
+<!-- Screenshot placeholder: `placeholder-explain-physical-plan.png` — `EXPLAIN FORMATTED` or SQL tab. Caption: count `Exchange` nodes (shuffle cost); confirm `PushedFilters` / `PartitionFilters`; read final `AdaptiveSparkPlan` if AQE is on. -->
+
 Caption: **Physical plan** reading is easier when you scan for **scans** (filters/pushdown), each **Exchange** (shuffle / broadcast), and **join/aggregate** choice — then match that subtree to the expensive **stage** in the UI.
 
 Example:

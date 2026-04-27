@@ -38,6 +38,8 @@ Skew differs from spill: spill says "this task's working set is too large for me
 
 ![Placeholder: Spark UI tasks table sorted by duration — one task is a large outlier](../assets/screenshots/placeholder-spark-ui-skewed-stage.png)
 
+<!-- Screenshot placeholder: `placeholder-spark-ui-skewed-stage.png` — chapter: skew. Caption: one straggler → profile keys; max ≫ median. -->
+
 Caption: **Skew** in the UI looks like a **max** task duration far above the **median**, often with that task also carrying most of the **shuffle read** (join/aggregate) or **input** (file/split) for the stage.
 
 ## Why Skew Is Worse Than "Large Data"

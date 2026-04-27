@@ -25,6 +25,8 @@
 
 ![Placeholder: EXPLAIN or SQL tab — MERGE into Iceberg with large scan and join subtree](../assets/screenshots/placeholder-explain-physical-plan.png)
 
+<!-- Screenshot placeholder: `placeholder-explain-physical-plan.png` — Iceberg MERGE plan shape. Caption: large scan + join + write; compare to match predicate and file pruning. -->
+
 Caption: A **wide** `MERGE` plan (large **scan** + **Exchange** on join keys) is the usual signal when the SQL is *logically* small but the engine must **touch** most data files. Narrow predicates and file pruning first, then **rewrite** and maintenance jobs.
 
 ## Logs and metrics

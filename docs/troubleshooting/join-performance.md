@@ -28,6 +28,12 @@
 | `SortMergeJoin` + two large `Exchange` | Two big shuffles; ensure filters applied before |
 | `ShuffledHashJoin` | Less common; memory-sensitive — watch spill |
 
+![Placeholder: EXPLAIN or SQL tab — `SortMergeJoin` and two `Exchange` nodes on join keys](../assets/screenshots/placeholder-explain-physical-plan.png)
+
+<!-- Screenshot placeholder: `placeholder-explain-physical-plan.png` — join plan reading. Caption: two exchanges on large sides → two shuffles; confirm filters sit *below* exchange where possible. -->
+
+Caption: If join time is high, start from **static** `EXPLAIN` to see **which** `Exchange` keys and join family Spark chose; then use **SQL** + **AQE** final plan after the run to see rewrites (broadcast swap, coalesce, skew join).
+
 ## Logs and metrics
 
 - Stats collection: are `ANALYZE TABLE` or Iceberg/Delta stats current?
@@ -67,4 +73,4 @@
 - [ ] `EXPLAIN` captured in PR for new joins on large fact tables.
 - [ ] Document when broadcast is forbidden (e.g. slowly growing “small” tables).
 
-**See also:** [`../book/04-joins.md`](../book/04-joins.md), [`../configs/joins-and-broadcast.md`](../configs/joins-and-broadcast.md), [`../../examples/sql/join-strategies/README.md`](../../examples/sql/join-strategies/README.md).
+**See also:** [`../book/04-joins.md`](../book/04-joins.md), [`../configs/joins-and-broadcast.md`](../configs/joins-and-broadcast.md), [`../../examples/sql/join-strategies/README.md`](../../examples/sql/join-strategies/README.md), [case study: slow join from skewed key](../case-studies/slow-join-skew-case-study.md).

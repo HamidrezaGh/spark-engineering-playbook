@@ -24,11 +24,15 @@
 
 ![Placeholder: Spark UI Executors tab — several executors with failed tasks or lost executors over time](../assets/screenshots/placeholder-spark-ui-executors-failed-tasks.png)
 
+<!-- Screenshot placeholder: `placeholder-spark-ui-executors-failed-tasks.png` — many failed tasks on shuffle. Caption: distributed failures → cluster / Spot / disk, not one hot key. -->
+
 Caption: When **loss** is distributed across many executors during **shuffle**, compare with a **single** long tail (skew). The fix is often **platform** (Spot, disk, YARN container size, network), not a join key change.
 
 **Logs:** a redacted **container** diagnostic (excerpt only — see [screenshots README](../assets/screenshots/README.md)) often pairs with the UI:
 
 ![Placeholder: YARN or EMR container log snippet showing exit / preempt / OOM (use synthetic text only)](../assets/screenshots/placeholder-yarn-container-log-snippet.png)
+
+<!-- Screenshot placeholder: `placeholder-yarn-container-log-snippet.png` — redacted log strip. Caption: pair UI failures with container exit / preempt / OOM lines. -->
 
 ## Logs and metrics
 

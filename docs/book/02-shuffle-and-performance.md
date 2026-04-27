@@ -45,6 +45,8 @@ blocks force recomputation).
 
 ![Placeholder: Spark UI stage with high shuffle read/write and spill in summary metrics](../assets/screenshots/placeholder-spark-ui-shuffle-spill.png)
 
+<!-- Screenshot placeholder: `placeholder-spark-ui-shuffle-spill.png` — chapter: shuffle cost. Caption: high shuffle + spill → reduce bytes or fix partitions/skew before adding executors. -->
+
 Caption: **Shuffle**-heavy stages show up as large **Shuffle Read/Write**; **spill** means the in-memory **aggregate/sort** working set did not fit — confirm whether **partition count**, **row width**, or **skew** is the driver before raising memory alone.
 
 ## Key Takeaways
