@@ -1,5 +1,7 @@
 # Spark Engineering Playbook
 
+[![docs-check](https://github.com/HamidrezaGh/spark-engineering-playbook/actions/workflows/docs-check.yml/badge.svg?branch=main)](https://github.com/HamidrezaGh/spark-engineering-playbook/actions/workflows/docs-check.yml)
+
 A **practical Apache Spark engineering** playbook for **understanding, debugging, tuning, and
 operating** production Spark workloads (batch and streaming, SQL-first with PySpark where execution
 and tooling matter). The focus is **production debugging** and **operational reliability**: what
@@ -65,6 +67,7 @@ the **smallest** verifiable next step. See [Sample UI / plan screenshot placehol
 
 | Goal | Start here |
 | --- | --- |
+| **Mental model map (links to chapter anchors)** | [`docs/production-mental-models.md`](docs/production-mental-models.md) |
 | **Learn internals** in order | [`docs/book/README.md`](docs/book/README.md) — Chapters 1–6, then 7–10, then storage and platform chapters as needed. |
 | **Debug a slow or failing job** | [`docs/observability/spark-ui-guide.md`](docs/observability/spark-ui-guide.md) → [`docs/troubleshooting/`](docs/troubleshooting/README.md) (decision trees) → linked book chapters. |
 | **Tune** a workload you understand | `EXPLAIN` + UI evidence first, then [`docs/tuning/`](docs/tuning/README.md) and [`docs/configs/`](docs/configs/README.md) for targeted knobs. |

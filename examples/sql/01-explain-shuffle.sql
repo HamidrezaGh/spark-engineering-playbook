@@ -2,6 +2,10 @@
 -- Example: Identifying shuffle boundaries from a physical plan
 -- ============================================================================
 --
+-- TEACHING ASSETS: Markdown docs use a placeholder PNG for EXPLAIN / SQL tab samples; see
+--   docs/assets/screenshots/placeholder-explain-physical-plan.png
+--   and docs/observability/physical-plans.md (HTML comment with caption next to the image).
+--
 -- WHAT THIS DEMONSTRATES
 --   How to read EXPLAIN FORMATTED output to find:
 --     * Where the stage boundary is (Exchange node).

@@ -169,7 +169,7 @@ The job has stayed at its original ~22 minute runtime for over a year since the 
 
 ## Lessons
 
-The local lesson is "compact your tables." The platform-level lessons are more important.
+The local lesson is "compact your tables." The platform lessons are more important.
 
 1. **File count is a first-class table metric.** Every table on the platform should have a per-partition file count metric, a total file count metric, and an alert on growth. Without these, small-files growth is invisible until it is expensive.
 

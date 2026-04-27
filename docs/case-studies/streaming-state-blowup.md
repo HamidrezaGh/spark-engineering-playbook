@@ -187,7 +187,7 @@ The streaming query has now been stable for over six months with no on-call page
 
 ## Lessons
 
-The local lesson is "watermark your streaming aggregations." The platform-level lessons are more important.
+The local lesson is "watermark your streaming aggregations." The platform lessons are more important.
 
 1. **State store size is a streaming SLA.** Treat it like any other SLA: monitor, alert, set a budget, and act on a regression. A streaming job whose state size is not graphed is a streaming job that will eventually fail in this exact shape.
 

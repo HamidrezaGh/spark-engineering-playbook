@@ -46,6 +46,8 @@ cluster instability) in about 90 seconds.
 
 ![Placeholder: Spark UI stage timeline showing one skewed task running much longer than the others](../assets/screenshots/placeholder-spark-ui-skewed-stage.png)
 
+<!-- Screenshot placeholder: `placeholder-spark-ui-skewed-stage.png` — replace with a real Stages or Tasks capture. Caption: max task time ≫ median (skew, split skew, or hot partition). -->
+
 Caption: In **Stages** (and the task list inside a stage), compare **max** task duration to the **median**. A long tail usually means **data skew**, uneven **input splits**, or one executor holding hot work — not “needs more executors” by default.
 
 - **Duration** list — start here; long jobs are often one or two stages.
@@ -56,6 +58,8 @@ Caption: In **Stages** (and the task list inside a stage), compare **max** task 
 - **Task time** — long tail: skew; even spread: look at **which** metric (CPU, shuffle, GC) is high.
 
 ![Placeholder: Spark UI stage summary metrics highlighting shuffle read/write and spill columns](../assets/screenshots/placeholder-spark-ui-shuffle-spill.png)
+
+<!-- Screenshot placeholder: `placeholder-spark-ui-shuffle-spill.png` — stage summary: shuffle and spill. Caption: pair with SQL tab to find the `Exchange` feeding this stage. -->
 
 Caption: When **Shuffle Read/Write** or **Spill** dominate, pair this view with the **SQL** tab to see which **Exchange** or aggregate feeds the stage — then reduce bytes *before* that boundary when possible.
 
@@ -80,6 +84,14 @@ Caption: When **Shuffle Read/Write** or **Spill** dominate, pair this view with 
 **See also (plan reading):** [`physical-plans.md`](physical-plans.md).
 
 ## Executors tab
+
+![Placeholder: Spark UI Executors tab — one executor with far more shuffle or failed tasks than peers](../assets/screenshots/placeholder-spark-ui-executors-failed-tasks.png)
+
+<!-- Screenshot placeholder: `placeholder-spark-ui-executors-failed-tasks.png` — Executors tab: failed tasks, GC imbalance, or skew packed on one host. Caption: many failures across executors → environment; one hot executor + skew → key or partition shape. -->
+
+Caption: Compare **per-executor** shuffle and task time to the **Stages** straggler: the same **hot
+partition** often shows up as one executor doing most of the work, while **cluster-wide** failures
+point to Spot, disk, or YARN (see [EMR / YARN failures](../troubleshooting/emr-yarn-failures.md)).
 
 - **Task time / shuffle / GC** by executor: uneven shuffle often tracks **skew** (one executor
   holds the hot task).

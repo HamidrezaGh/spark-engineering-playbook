@@ -12,6 +12,7 @@ and **format**.
   [`field-guides/README.md`](field-guides/README.md)
 - **By question:** [`concept-map.md`](concept-map.md)
 - **By UI and plan:** [`observability/README.md`](observability/README.md)
+- **Mental models (index of chapter anchors):** [`production-mental-models.md`](production-mental-models.md)
 - **Checklists (short):** [`checklists/README.md`](checklists/README.md)
 - **Self-check depth:** [`practical-spark-questions.md`](practical-spark-questions.md) (older name:
   [`advanced-spark-questions.md`](advanced-spark-questions.md) stub)

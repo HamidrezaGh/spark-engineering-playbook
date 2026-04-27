@@ -26,6 +26,14 @@
 | Spill on a few tasks only | Skewed partition working set in sort/agg/join |
 | Skewed executors tab | Same executor may hold hot task — secondary signal |
 
+![Placeholder: Spark UI task list — one task with duration far above the rest](../assets/screenshots/placeholder-spark-ui-skewed-stage.png)
+
+<!-- Screenshot placeholder: `placeholder-spark-ui-skewed-stage.png` — skewed stage / tasks. Caption: sort by duration; match outlier to shuffle read vs input vs spill. -->
+
+Caption: **Skew** is one **task** (or a few) at the end of a stage, not a uniformly slow stage.
+Compare **per-task** shuffle read and **input** to the median, then profile join / group keys
+([`../../examples/sql/03-skew-detection.sql`](../../examples/sql/03-skew-detection.sql)).
+
 ## Logs and metrics
 
 - Task-level metrics in Spark UI: **Shuffle Read**, **Input Size**, **Spill**.

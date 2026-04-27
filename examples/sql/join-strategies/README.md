@@ -38,6 +38,12 @@ Join strategy is chosen from **estimates and thresholds**. A silent regression i
 **See:** [`../../../docs/observability/physical-plans.md`](../../../docs/observability/physical-plans.md),
 [`../02-broadcast-vs-sort-merge-join.sql`](../02-broadcast-vs-sort-merge-join.sql) (long-form comments).
 
+**Screenshot placeholder (teaching):** the handbook uses
+[`../../../docs/assets/screenshots/placeholder-explain-physical-plan.png`](../../../docs/assets/screenshots/placeholder-explain-physical-plan.png)
+in [`../../../docs/observability/physical-plans.md`](../../../docs/observability/physical-plans.md). Replace
+with your own `EXPLAIN` capture when learning; the HTML `<!-- ... -->` caption there describes what
+to look for.
+
 ## Sample output
 
 Annotated fragments: [`explain_output.md`](explain_output.md).
