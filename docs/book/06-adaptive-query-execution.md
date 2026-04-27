@@ -113,7 +113,7 @@ result.explain("formatted")
 
 The formatted plan can show an adaptive plan. In the Spark UI, the final plan may reveal that Spark converted a join or coalesced partitions after seeing real shuffle sizes.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - What is Adaptive Query Execution?
 - What problems does AQE solve?

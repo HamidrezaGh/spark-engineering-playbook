@@ -140,7 +140,7 @@ A platform can define separate queues:
 - `backfill`: capped resources and off-peak windows.
 - `adhoc`: lower priority and runtime limits.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - How do you separate interactive, batch, streaming, and backfill workloads?
 - What is fair scheduling in Spark?

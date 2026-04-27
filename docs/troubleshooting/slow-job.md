@@ -23,6 +23,10 @@
 - **High spill** — memory pressure (see [memory-spill-oom](memory-spill-oom.md)).
 - **High shuffle read/write** — wide transformations or large joins (see [shuffle-heavy-job](shuffle-heavy-job.md)).
 
+![Placeholder: Spark UI stage metrics — duration skew vs even spread, shuffle and spill visible](../assets/screenshots/placeholder-spark-ui-shuffle-spill.png)
+
+Caption: A **dominant** stage with **even** task times often points to **total work** (shuffle/scan) or **CPU-heavy** operators; **one** slow task points to [skew and stragglers](skew-and-stragglers.md).
+
 ## Logs and metrics
 
 - YARN/EMR: container logs for **FetchFailedException**, preemption, disk full.

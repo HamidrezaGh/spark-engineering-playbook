@@ -138,7 +138,7 @@ spark.read.parquet("s3://lake/events/").where("event_date = '2026-04-25'")
 
 This is efficient only if the table layout and metadata let Spark avoid listing and scanning irrelevant S3 objects.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - Why is S3 not the same as HDFS?
 - Why are rename operations expensive or unsafe on object stores?

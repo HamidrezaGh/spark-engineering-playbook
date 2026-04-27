@@ -36,6 +36,10 @@ The four production patterns of skew:
 
 Skew differs from spill: spill says "this task's working set is too large for memory," which can come from skew but also from oversized partitions. Skew differs from scheduler delay: scheduler delay says "the driver was slow to dispatch tasks," which is a configuration or driver pressure problem. Diagnose what you have before you fix it.
 
+![Placeholder: Spark UI tasks table sorted by duration — one task is a large outlier](../assets/screenshots/placeholder-spark-ui-skewed-stage.png)
+
+Caption: **Skew** in the UI looks like a **max** task duration far above the **median**, often with that task also carrying most of the **shuffle read** (join/aggregate) or **input** (file/split) for the stage.
+
 ## Why Skew Is Worse Than "Large Data"
 
 Three production reasons skew is the most expensive performance problem:

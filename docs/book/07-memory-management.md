@@ -122,7 +122,7 @@ spark.conf.set("spark.executor.memoryOverhead", "3g")
 
 This can be reasonable for a PySpark workload with moderate executor heap needs and significant Python/native overhead. It is not a universal setting.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - Explain Spark executor memory.
 - What is the difference between execution memory and storage memory?

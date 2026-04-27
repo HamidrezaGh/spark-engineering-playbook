@@ -122,7 +122,7 @@ WHEN NOT MATCHED THEN INSERT *
 
 This is simple syntax, but the production cost depends on how many target files must be scanned and rewritten.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - How does Spark write to an Iceberg table?
 - What is the difference between Spark partitioning and Iceberg hidden partitioning?

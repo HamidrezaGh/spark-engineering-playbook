@@ -23,6 +23,10 @@
   - Multiple **Exchange** nodes if join keys or distribution are wrong.
 - **Bytes read** from table vs **bytes** in source — a huge ratio suggests **no pruning**.
 
+![Placeholder: EXPLAIN or SQL tab — MERGE into Iceberg with large scan and join subtree](../assets/screenshots/placeholder-explain-physical-plan.png)
+
+Caption: A **wide** `MERGE` plan (large **scan** + **Exchange** on join keys) is the usual signal when the SQL is *logically* small but the engine must **touch** most data files. Narrow predicates and file pruning first, then **rewrite** and maintenance jobs.
+
 ## Logs and metrics
 
 - Iceberg **metadata** size (snapshots, manifest lists) — if planning is slow, reduce snapshot retention or use metadata tables to inspect.

@@ -119,7 +119,7 @@ WHEN NOT MATCHED THEN INSERT *
 
 This is safer than append for reruns if the merge key is correct and staging data is validated.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - What does it mean for a Spark job to be idempotent?
 - How do you safely retry a failed Spark write?

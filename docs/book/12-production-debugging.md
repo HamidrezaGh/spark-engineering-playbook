@@ -36,6 +36,11 @@ The loop to run, in order, every time:
 2. **Find the slowest or failed stage.** Not the slowest job — the slowest stage. Tuning is per stage.
 3. **Read the plan.** Confirm the operators are what you expected.
 4. **Look at task distribution.** Even? Long-tail? Concentrated spill?
+
+   ![Placeholder: Spark UI — stage detail with task duration spread and shuffle/spill metrics](../assets/screenshots/placeholder-spark-ui-skewed-stage.png)
+
+   Caption: A **long tail** in task duration (or spill concentrated in a few tasks) steers the investigation toward **skew** or **split** issues; even slowness across tasks steers toward **operator cost**, **shuffle volume**, or **cluster health**.
+
 5. **Check input data shape.** Row count, file count, top keys, nulls.
 6. **Check runtime logs.** Container kills, fetch failures, GC, executor losses.
 7. **Apply the smallest safe fix.** Change one thing. Re-measure.

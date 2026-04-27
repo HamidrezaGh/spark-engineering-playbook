@@ -112,7 +112,7 @@ query.explain("formatted")
 
 The formatted plan should show whether Spark pushed filters to the scan, pruned columns, inserted an exchange for the aggregation, and used adaptive execution.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - What is Catalyst Optimizer?
 - What is a logical plan?

@@ -123,7 +123,7 @@ PARTITIONED BY (days(revenue_date));
 
 Daily partitioning fits common time-window analytics and keeps partition pruning simple.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - How do you choose table partition columns?
 - When is partitioning harmful?

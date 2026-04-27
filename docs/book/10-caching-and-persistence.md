@@ -125,7 +125,7 @@ features.unpersist()
 
 Caching is justified because two downstream actions reuse the same filtered feature set.
 
-## Interview-Style Questions Covered
+## Self-check (concept review)
 
 - What is the difference between `cache()` and `persist()`?
 - When should you cache a DataFrame?
