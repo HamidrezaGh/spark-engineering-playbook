@@ -130,7 +130,7 @@ Join key quality is more important than any tuning knob. The four production-gra
 3. **Are the keys clean?** `"  US"` and `"US"` and `"us"` are three different join keys. Normalize before the join.
 4. **Are there duplicate keys on the build side?** A many-to-many join multiplies output rows. If `customers` has two rows for `customer_id = 42` and `orders` has 1,000, the join produces 2,000 rows for that key. Duplicate-key explosions are the most common output cardinality bug.
 
-A staff-level review checks key quality before strategy.
+A thorough review checks key quality before strategy.
 
 ## Partition Pruning And Column Pruning Before Joins
 
@@ -476,7 +476,7 @@ JOIN customers c
 
 The plan will show `cast(customer_id#10 as string)` (or similar). The cast can disable hash-based shuffle co-partitioning, slow the join, and reduce the chance AQE makes it broadcast. Fix the schema at ingestion, not in every query that touches it.
 
-## Staff-Level Review Checklist
+## Review Checklist
 
 Before approving a Spark SQL change that includes a join, confirm each of these. If you cannot confirm one from the plan or the code, that is the next question to ask.
 

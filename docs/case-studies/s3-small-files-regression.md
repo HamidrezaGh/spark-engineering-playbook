@@ -167,13 +167,13 @@ The producer-side change reduced the rate at which new small files were created,
 
 The job has stayed at its original ~22 minute runtime for over a year since the fix.
 
-## Staff-Level Lessons
+## Lessons
 
 The local lesson is "compact your tables." The platform-level lessons are more important.
 
 1. **File count is a first-class table metric.** Every table on the platform should have a per-partition file count metric, a total file count metric, and an alert on growth. Without these, small-files growth is invisible until it is expensive.
 
-2. **Partitioning is a permanent decision; over-partitioning is the most common version of this mistake.** Adding a partition column "for performance" almost never improves performance and almost always multiplies the small-file problem. A staff-level table design review should treat any new partition column as a multi-year cost commitment.
+2. **Partitioning is a permanent decision; over-partitioning is the most common version of this mistake.** Adding a partition column "for performance" almost never improves performance and almost always multiplies the small-file problem. A table design review should treat any new partition column as a multi-year cost commitment.
 
 3. **Compaction failures are SLA-critical, not best-effort.** A compaction job that fails silently for six months is a production incident in slow motion. Compaction failures should page; their dashboards should be on the on-call's homepage, not buried.
 

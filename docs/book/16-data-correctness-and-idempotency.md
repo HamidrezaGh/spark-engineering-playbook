@@ -134,4 +134,4 @@ This is safer than append for reruns if the merge key is correct and staging dat
 
 ## Real Use Case
 
-A billing pipeline recomputes daily invoices. Appending reruns creates duplicate invoices. The staff-level design writes each run to staging, validates totals against source transactions, merges into the gold invoice table by invoice ID and billing date, and records the source watermark and snapshot ID for audit.
+A billing pipeline recomputes daily invoices. Appending reruns creates duplicate invoices. A sound design writes each run to staging, validates totals against source transactions, merges into the gold invoice table by invoice ID and billing date, and records the source watermark and snapshot ID for audit.

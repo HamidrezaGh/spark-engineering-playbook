@@ -185,7 +185,7 @@ After fixes 1–3, state size dropped to ~600 MB and the operational issues went
 
 The streaming query has now been stable for over six months with no on-call pages.
 
-## Staff-Level Lessons
+## Lessons
 
 The local lesson is "watermark your streaming aggregations." The platform-level lessons are more important.
 

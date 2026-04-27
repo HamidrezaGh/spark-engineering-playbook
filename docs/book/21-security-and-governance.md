@@ -125,4 +125,4 @@ A production EMR job that writes `gold.customer_profile` should run on a cluster
 
 ## Real Use Case
 
-A team copies production customer data into a dev bucket for debugging. A staff-level platform prevents this by separating environment roles, enforcing table permissions, masking sensitive columns in lower environments, and auditing every read from PII-classified tables.
+A team copies production customer data into a dev bucket for debugging. A well-governed data platform prevents this by separating environment roles, enforcing table permissions, masking sensitive columns in lower environments, and auditing every read from PII-classified tables.

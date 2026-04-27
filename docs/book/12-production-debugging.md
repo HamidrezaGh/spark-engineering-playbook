@@ -2,7 +2,7 @@
 
 Production debugging is evidence collection under time pressure. The on-call engineer is not paid to be smart; they are paid to be systematic. The Spark UI, the persisted event logs, and the runtime logs (YARN, EMR step, CloudWatch) hold the evidence. Tuning knobs do not.
 
-This chapter is a runbook. It walks through a real-shaped incident — "the job was 20 minutes yesterday and 2 hours today" — step by step, and it lists the symptom-to-evidence-to-cause tables a staff engineer would actually use during a 2 AM page.
+This chapter is a runbook. It walks through a real-shaped incident — "the job was 20 minutes yesterday and 2 hours today" — step by step, and it lists the symptom-to-evidence-to-cause tables you would actually use during a 2 AM page.
 
 ## What You Should Be Able To Answer
 
@@ -30,7 +30,7 @@ A surprising number of "Spark" incidents are platform incidents — S3 throttlin
 
 ## The Triage Loop
 
-The loop a staff engineer runs, in order, every time:
+The loop to run, in order, every time:
 
 1. **What changed?** Code, data, config, cluster, dependencies, schedule, upstream input.
 2. **Find the slowest or failed stage.** Not the slowest job — the slowest stage. Tuning is per stage.
@@ -177,7 +177,7 @@ The fix was 20 minutes of code. The guardrails were 90 minutes of code. The guar
 
 ## Symptom → Evidence → Cause Tables
 
-These are the tables a staff engineer would print and tape to the wall. They are organized by the first signal you see, because that is what the on-call engineer has at the start.
+These are the tables to print and keep nearby. They are organized by the first signal you see, because that is what the on-call engineer has at the start.
 
 ### Symptom: One Task Much Slower Than Others
 
@@ -362,7 +362,7 @@ Runtime returns to ~28 minutes. Two weeks later, the metric fires on a different
 
 A nightly EMR job processes clickstream and joins it to a campaign dimension table. The job was stable at 25 minutes for nine months and then quietly became 2 hours one Tuesday. Nothing in the code had changed.
 
-A staff engineer opened the persisted event log in the Spark History Server (the cluster had terminated hours ago). The slow stage was the aggregation, not the join. Max task time in that stage was 40× median. A profile query on the clickstream showed one new `campaign_id` had been launched and was producing ~35% of all rows for that day.
+The on-call engineer opened the persisted event log in the Spark History Server (the cluster had terminated hours ago). The slow stage was the aggregation, not the join. Max task time in that stage was 40× median. A profile query on the clickstream showed one new `campaign_id` had been launched and was producing ~35% of all rows for that day.
 
 The fix was AQE skew join handling, plus two-phase aggregation on the heavy aggregation stage, plus a `top-1 key concentration` guardrail metric on the source table. The slow stage went back to ~30 minutes; the guardrail caught a similar shift two weeks later.
 
